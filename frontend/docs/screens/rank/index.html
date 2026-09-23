@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achei — Ranking Comunitário | Unochapecó</title>
+
+  <!-- Fonte Oficial: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Biblioteca Oficial de Ícones: Boxicons v2 -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN com Configuração da Marca Oficial -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              blue: '#1C4398',        // Azul Royal Oficial
+              blueHover: '#153375',
+              lilac: '#AC80CE',       // Roxo Lilás Oficial
+              lilacHover: '#986BBD',
+              yellow: '#FFDC5D',      // Amarelo Solar Oficial
+              yellowHover: '#E8C545',
+              dark: '#232724',        // Grafite Escuro Oficial (textos e títulos)
+              gray: '#E1E1E1',        // Cinza Claro Oficial (bordas e divisórias)
+              surface: '#FFFFFF',
+              bg: '#F8F9FA',          // Fundo suave de tela
+            },
+            status: {
+              foundText: '#1C4398',   // Azul Royal Oficial
+              foundBg: '#EFF6FF',
+              lostText: '#B91C1C',
+              lostBg: '#FEF2F2',
+              returnedText: '#854D0E',
+              returnedBg: '#FEF3C7',
+            }
+          },
+          borderRadius: {
+            'custom': '12px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilização suave para scrollbars */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #E1E1E1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #AC80CE;
+    }
+
+    /* Ocultar barra de rolagem horizontal */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* REGRAS DO MODO SIMULADOR MOBILE */
+    body.mobile-simulator-active {
+      background-color: #0f172a !important;
+    }
+
+    body.mobile-simulator-active #viewWrapper {
+      max-width: 412px !important;
+      height: 840px !important;
+      margin: 1.5rem auto !important;
+      border: 12px solid #232724 !important;
+      border-radius: 46px !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      position: relative !important;
+      background-color: #F8F9FA !important;
+    }
+
+    body.mobile-simulator-active #phoneDynamicIsland {
+      display: flex !important;
+    }
+
+    body.mobile-simulator-active header {
+      top: 0 !important;
+    }
+
+    body.mobile-simulator-active .desktop-sidebar {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .desktop-search-input {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .desktop-campus-badge {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .desktop-btn-publish {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .feed-column {
+      grid-column: span 12 / span 12 !important;
+      width: 100% !important;
+    }
+
+    body.mobile-simulator-active .mobile-bottom-nav {
+      display: flex !important;
+      position: sticky !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      z-index: 50 !important;
+    }
+  </style>
+</head>
+<body class="bg-brand-bg text-brand-dark font-sans min-h-screen selection:bg-brand-yellow selection:text-brand-dark pb-20 lg:pb-10 transition-colors duration-300">
+
+  <!-- ======================================================== -->
+  <!-- BARRA DE CONTROLE DO PROTÓTIPO (DESKTOP X MOBILE + TELAS)-->
+  <!-- ======================================================== -->
+  <aside class="bg-brand-dark text-white text-xs py-2 px-4 sticky top-0 z-50 flex items-center justify-between border-b border-black/20 shadow-md">
+    <div class="flex items-center gap-3">
+      <span class="font-bold text-brand-yellow flex items-center gap-1.5">
+        <i class="bx bx-slider-alt text-base"></i>
+        Achei • Ranking Comunitário
+      </span>
+      <span class="hidden sm:inline text-slate-500">|</span>
+      
+      <!-- Navegação rápida entre telas do protótipo -->
+      <nav class="hidden md:flex items-center gap-2 text-slate-300">
+        <a href="../home/index.html" class="hover:text-brand-yellow transition-colors">Home</a>
+        <span>•</span>
+        <a href="../login/index.html" class="hover:text-brand-yellow transition-colors">Login</a>
+        <span>•</span>
+        <a href="../register/index.html" class="hover:text-brand-yellow transition-colors">Cadastro</a>
+        <span>•</span>
+        <a href="../password/index.html" class="hover:text-brand-yellow transition-colors">Recuperar Senha</a>
+        <span>•</span>
+        <a href="../perfio/index.html" class="hover:text-brand-yellow transition-colors">Perfil</a>
+        <span>•</span>
+        <span class="text-white font-bold underline decoration-brand-yellow decoration-2">Ranking</span>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="setViewMode('desktop')" id="btnDesktop" class="px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs">
+        <i class="bx bx-laptop text-sm"></i>
+        <span>Desktop</span>
+      </button>
+      <button onclick="setViewMode('mobile')" id="btnMobile" class="px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all">
+        <i class="bx bx-mobile-alt text-sm"></i>
+        <span>Mobile (Simulador 390px)</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- CONTAINER PRINCIPAL                                      -->
+  <!-- ======================================================== -->
+  <div id="viewWrapper" class="w-full transition-all duration-300 mx-auto">
+
+    <!-- STATUS BAR / NOTCH DO CELULAR (visível no simulador mobile) -->
+    <div id="phoneDynamicIsland" class="hidden items-center justify-between px-6 pt-3 pb-2 bg-brand-blue text-white text-[11px] font-semibold select-none sticky top-0 z-50">
+      <span>9:41</span>
+      <div class="w-24 h-4 bg-black/40 rounded-full flex items-center justify-end px-2">
+        <span class="w-2 h-2 rounded-full bg-slate-900 border border-white/20"></span>
+      </div>
+      <div class="flex items-center gap-1.5 text-xs text-white">
+        <i class="bx bx-wifi text-sm"></i>
+        <i class="bx bxs-battery text-base"></i>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 1. NAVBAR SUPERIOR (STICKY)                               -->
+    <!-- ======================================================== -->
+    <header class="bg-brand-blue text-white sticky top-9 z-40 shadow-sm border-b border-brand-blueHover">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        
+        <!-- Logo Achei & Unochapecó -->
+        <div class="flex items-center gap-4">
+          <a href="../home/index.html" class="flex items-center gap-2.5 group">
+            <span class="w-9 h-9 bg-brand-yellow text-brand-dark rounded-lg flex items-center justify-center font-extrabold text-xl shadow-sm transition-transform group-hover:scale-105">
+              <i class="bx bx-search"></i>
+            </span>
+            <div class="flex flex-col">
+              <span class="text-xl font-extrabold tracking-tight leading-none text-white">Achei</span>
+              <span class="text-[10px] font-semibold text-brand-yellow uppercase tracking-wider">Unochapecó</span>
+            </div>
+          </a>
+
+          <!-- Seletor de Campus Institucional (Desktop) -->
+          <div class="desktop-campus-badge hidden md:flex items-center gap-1.5 px-2.5 py-1 bg-white/10 rounded-md text-xs font-medium text-slate-100 hover:bg-white/15 cursor-pointer transition-colors">
+            <i class="bx bx-trophy text-sm text-brand-yellow"></i>
+            <span>Mural de Líderes do Campus</span>
+          </div>
+        </div>
+
+        <!-- Campo de Busca Central (Desktop) -->
+        <div class="desktop-search-input hidden md:flex flex-1 max-w-lg mx-4">
+          <div class="relative w-full">
+            <i class="bx bx-search text-slate-400 text-lg absolute left-3.5 top-2.5"></i>
+            <input 
+              type="text" 
+              placeholder="Buscar estudante, servidor ou setor no ranking..." 
+              class="w-full pl-10 pr-12 py-2 bg-white/10 hover:bg-white/15 focus:bg-white text-white focus:text-brand-dark placeholder:text-slate-300 focus:placeholder:text-slate-400 rounded-lg text-sm border border-white/20 focus:border-white focus:outline-none transition-all"
+            />
+          </div>
+        </div>
+
+        <!-- Ações do Topo -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Botão Publicar Item -->
+          <button class="desktop-btn-publish hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-bold text-xs rounded-lg transition-colors shadow-sm">
+            <i class="bx bx-plus text-base"></i>
+            <span>Publicar Item</span>
+          </button>
+
+          <!-- Perfil do Usuário com Roxo Lilás Oficial (#AC80CE) -->
+          <a href="../perfio/index.html" class="flex items-center gap-2 pl-2 border-l border-white/15 cursor-pointer hover:opacity-90 transition-opacity">
+            <div class="w-8 h-8 rounded-full bg-brand-lilac text-white flex items-center justify-center font-bold text-xs ring-2 ring-white/30 shadow-xs">
+              LM
+            </div>
+            <span class="hidden xl:inline text-xs font-semibold text-white">Lucas Mendes</span>
+          </a>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ======================================================== -->
+    <!-- 2. CORPO PRINCIPAL COM LAYOUT RESPONSIVO                  -->
+    <!-- ======================================================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
+
+      <!-- BANNER DE DESTAQUE DO RANKING -->
+      <div class="bg-gradient-to-r from-brand-blue via-brand-blue to-brand-blueHover text-white rounded-custom p-6 sm:p-8 shadow-xs mb-6 relative overflow-hidden">
+        <!-- Efeitos visuais suaves com Roxo Lilás e Amarelo Solar -->
+        <div class="absolute -right-8 -top-8 w-56 h-56 rounded-full bg-brand-lilac/25 blur-3xl pointer-events-none"></div>
+        <div class="absolute -left-12 -bottom-12 w-48 h-48 rounded-full bg-brand-yellow/15 blur-2xl pointer-events-none"></div>
+
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-2 max-w-2xl">
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-bold text-brand-yellow uppercase tracking-wider">
+              <i class="bx bx-medal text-sm"></i>
+              Reconhecimento Acadêmico Unochapecó
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              Ranking de Solidariedade Comunitária
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+              Descubra quem são os heróis que mais devolvem itens, os guardiões que mais encontram pertences e quem são os alunos mais distraídos do campus.
+            </p>
+          </div>
+
+          <!-- Filtro de Período (Mês, Semestre, Geral) -->
+          <div class="bg-white/10 border border-white/20 p-1 rounded-xl flex items-center gap-1 self-start md:self-center shrink-0">
+            <button onclick="setPeriod('month')" id="btnPeriodMonth" class="px-3 py-1.5 rounded-lg bg-brand-yellow text-brand-dark font-bold text-xs shadow-xs transition-all">
+              Este Mês
+            </button>
+            <button onclick="setPeriod('semester')" id="btnPeriodSem" class="px-3 py-1.5 rounded-lg bg-transparent text-slate-200 hover:text-white font-medium text-xs transition-all">
+              Semestre 2026/1
+            </button>
+            <button onclick="setPeriod('all')" id="btnPeriodAll" class="px-3 py-1.5 rounded-lg bg-transparent text-slate-200 hover:text-white font-medium text-xs transition-all">
+              Geral
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SELETOR DAS 3 CATEGORIAS DO RANKING: DEVOLVER, ACHAR, PERDER -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+        
+        <!-- Categoria 1: Mais Devolveram (Heróis) -->
+        <button 
+          onclick="setRankingCategory('returned')" 
+          id="catReturnedBtn" 
+          class="p-4 rounded-custom bg-white border-2 border-brand-blue text-left shadow-xs transition-all flex items-center justify-between"
+        >
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-brand-yellow text-brand-dark flex items-center justify-center font-extrabold text-2xl shadow-xs shrink-0">
+              <i class="bx bx-check-shield"></i>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-brand-blue">Top Devoluções</span>
+              <h3 class="text-sm font-extrabold text-brand-dark">Mais Devolveram</h3>
+              <p class="text-xs text-slate-500">Heróis do campus</p>
+            </div>
+          </div>
+          <i class="bx bx-chevron-right text-xl text-brand-blue"></i>
+        </button>
+
+        <!-- Categoria 2: Mais Acharam (Guardiões) -->
+        <button 
+          onclick="setRankingCategory('found')" 
+          id="catFoundBtn" 
+          class="p-4 rounded-custom bg-white border border-brand-gray hover:border-slate-300 text-left shadow-xs transition-all flex items-center justify-between opacity-80 hover:opacity-100"
+        >
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-brand-blue text-white flex items-center justify-center font-extrabold text-2xl shadow-xs shrink-0">
+              <i class="bx bx-search"></i>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Top Localizadores</span>
+              <h3 class="text-sm font-extrabold text-brand-dark">Mais Acharam</h3>
+              <p class="text-xs text-slate-500">Guardiões dos blocos</p>
+            </div>
+          </div>
+          <i class="bx bx-chevron-right text-xl text-slate-400"></i>
+        </button>
+
+        <!-- Categoria 3: Mais Perderam (Mais Distraídos) -->
+        <button 
+          onclick="setRankingCategory('lost')" 
+          id="catLostBtn" 
+          class="p-4 rounded-custom bg-white border border-brand-gray hover:border-slate-300 text-left shadow-xs transition-all flex items-center justify-between opacity-80 hover:opacity-100"
+        >
+          <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-xl bg-brand-lilac text-white flex items-center justify-center font-extrabold text-2xl shadow-xs shrink-0">
+              <i class="bx bx-help-circle"></i>
+            </div>
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Mais Distraídos</span>
+              <h3 class="text-sm font-extrabold text-brand-dark">Mais Perderam</h3>
+              <p class="text-xs text-slate-500">Precisam de atenção!</p>
+            </div>
+          </div>
+          <i class="bx bx-chevron-right text-xl text-slate-400"></i>
+        </button>
+
+      </div>
+
+      <!-- LAYOUT DE 2 COLUNAS: SIDEBAR ESQUERDA + PÓDIO E LISTA PRINCIPAL -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- ==================================================== -->
+        <!-- COLUNA ESQUERDA: REGRAS, SELOS & IMPACTO DO CAMPUS   -->
+        <!-- ==================================================== -->
+        <aside class="desktop-sidebar hidden lg:block lg:col-span-4 sticky top-[115px] space-y-5 self-start max-h-[calc(100vh-8.5rem)] overflow-y-auto custom-scrollbar pr-1">
+          
+          <!-- Card de Estatísticas do Semestre -->
+          <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+            <div class="flex items-center justify-between border-b border-brand-gray pb-2">
+              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                <i class="bx bx-bar-chart-alt-2 text-brand-blue text-sm"></i>
+                Impacto da Comunidade
+              </h3>
+              <span class="text-[11px] font-bold text-brand-blue">Unochapecó</span>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+              <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 border border-brand-gray">
+                <span class="text-slate-600 font-medium">Total de Pertences Devolvidos</span>
+                <span class="font-extrabold text-sm text-brand-dark">342 itens</span>
+              </div>
+              <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 border border-brand-gray">
+                <span class="text-slate-600 font-medium">Taxa de Sucesso na Resolução</span>
+                <span class="font-extrabold text-sm text-brand-blue">94.2%</span>
+              </div>
+              <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-50 border border-brand-gray">
+                <span class="text-slate-600 font-medium">Tempo Médio para Devolução</span>
+                <span class="font-extrabold text-sm text-brand-lilac">48 minutos</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card de Medalhas & Reconhecimentos -->
+          <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5 border-b border-brand-gray pb-2">
+              <i class="bx bx-award text-brand-yellow text-sm"></i>
+              Selos de Destaque Comunitário
+            </h3>
+
+            <div class="space-y-3 text-xs">
+              
+              <div class="flex items-start gap-2.5 p-2 rounded-lg bg-slate-50 border border-brand-gray">
+                <div class="w-8 h-8 rounded-lg bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-base shrink-0 mt-0.5">
+                  <i class="bx bx-crown"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-brand-dark text-xs">Guardião de Ouro</h4>
+                  <p class="text-slate-500 text-[11px]">Devolveu mais de 10 itens com sucesso no campus.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-2.5 p-2 rounded-lg bg-slate-50 border border-brand-gray">
+                <div class="w-8 h-8 rounded-lg bg-brand-blue text-white flex items-center justify-center font-bold text-base shrink-0 mt-0.5">
+                  <i class="bx bx-compass"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-brand-dark text-xs">Detetive de Pistas</h4>
+                  <p class="text-slate-500 text-[11px]">Enviou mais de 5 pistas corretas para colegas.</p>
+                </div>
+              </div>
+
+              <div class="flex items-start gap-2.5 p-2 rounded-lg bg-slate-50 border border-brand-gray">
+                <div class="w-8 h-8 rounded-lg bg-brand-lilac text-white flex items-center justify-center font-bold text-base shrink-0 mt-0.5">
+                  <i class="bx bx-ghost"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-brand-dark text-xs">Rei da Distração</h4>
+                  <p class="text-slate-500 text-[11px]">Esqueceu 5+ pertences e encontrou todos de volta!</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Card de Regras e Fair Play -->
+          <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-2 text-xs text-slate-500">
+            <h4 class="font-bold text-slate-700 flex items-center gap-1.5">
+              <i class="bx bx-info-circle text-brand-blue"></i>
+              Como funciona a pontuação?
+            </h4>
+            <p>
+              A pontuação é computada somente após confirmação mútua do dono e quem encontrou através da verificação institucional.
+            </p>
+          </div>
+
+        </aside>
+
+        <!-- ==================================================== -->
+        <!-- COLUNA CENTRAL: PÓDIO TOP 3 + LISTA CLASSIFICADA     -->
+        <!-- ==================================================== -->
+        <section class="feed-column col-span-1 lg:col-span-8 space-y-5">
+
+          <!-- SUA POSIÇÃO PESSOAL (DESTAQUE PARA O ALUNO LOGADO) -->
+          <div class="bg-brand-blue text-white rounded-custom p-4 shadow-sm flex items-center justify-between border border-brand-blueHover">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center font-extrabold text-sm shadow-xs">
+                #8
+              </div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <h4 class="font-extrabold text-sm text-white">Sua Posição no Ranking</h4>
+                  <!-- Badge 100% tipográfica -->
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-white/20 text-brand-yellow">
+                    TOP 10
+                  </span>
+                </div>
+                <p class="text-xs text-slate-200" id="userRankingSummary">
+                  Lucas Mendes • 2 devoluções confirmadas no Bloco R
+                </p>
+              </div>
+            </div>
+
+            <a href="../perfio/index.html" class="px-3 py-1.5 bg-white text-brand-blue font-bold text-xs rounded-lg hover:bg-slate-100 transition-colors shadow-xs">
+              Ver Meu Perfil
+            </a>
+          </div>
+
+          <!-- ================================================== -->
+          <!-- PÓDIO TOP 3 (1º, 2º E 3º LUGAR)                   -->
+          <!-- ================================================== -->
+          <div class="bg-white border border-brand-gray rounded-custom p-5 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-brand-gray pb-2">
+              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5" id="podiumTitle">
+                <i class="bx bxs-medal text-brand-yellow text-base"></i>
+                Pódio dos Heróis da Devolução
+              </h3>
+              <span class="text-xs text-slate-400">Atualizado a cada 15 min</span>
+            </div>
+
+            <!-- Grade do Pódio em 3 Colunas Verticais -->
+            <div class="grid grid-cols-3 gap-2 sm:gap-4 items-end pt-4 pb-2" id="podiumContainer">
+              
+              <!-- 2º LUGAR -->
+              <div class="flex flex-col items-center text-center space-y-2 order-1">
+                <div class="relative">
+                  <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-brand-lilac text-white flex items-center justify-center font-extrabold text-lg sm:text-xl shadow-md ring-2 ring-brand-gray">
+                    CR
+                  </div>
+                  <span class="absolute -bottom-2 -right-1 w-6 h-6 rounded-full bg-slate-200 text-brand-dark font-extrabold text-xs flex items-center justify-center border-2 border-white shadow-xs">
+                    2º
+                  </span>
+                </div>
+
+                <div class="space-y-0.5">
+                  <h4 class="font-bold text-xs sm:text-sm text-brand-dark line-clamp-1">Camila Rocha</h4>
+                  <p class="text-[10px] text-slate-500 line-clamp-1">Arquitetura • Bloco B</p>
+                </div>
+
+                <!-- Barra do Pódio 2º Lugar -->
+                <div class="w-full bg-slate-100 border border-brand-gray rounded-t-xl py-3 px-1 text-center">
+                  <span class="text-base sm:text-xl font-extrabold text-brand-dark">14</span>
+                  <p class="text-[10px] text-slate-500 font-bold uppercase">Devolvidos</p>
+                </div>
+              </div>
+
+              <!-- 1º LUGAR (MAIS ELEVADO) -->
+              <div class="flex flex-col items-center text-center space-y-2 order-2 -mt-4">
+                <div class="relative">
+                  <i class="bx bxs-crown text-2xl text-brand-yellow absolute -top-5 left-1/2 -translate-x-1/2"></i>
+                  <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-brand-yellow text-brand-dark flex items-center justify-center font-extrabold text-xl sm:text-2xl shadow-lg ring-4 ring-brand-yellow/30">
+                    PO
+                  </div>
+                  <span class="absolute -bottom-2 -right-1 w-7 h-7 rounded-full bg-brand-yellow text-brand-dark font-extrabold text-sm flex items-center justify-center border-2 border-white shadow-xs">
+                    1º
+                  </span>
+                </div>
+
+                <div class="space-y-0.5">
+                  <h4 class="font-extrabold text-xs sm:text-base text-brand-dark line-clamp-1">Portaria Bloco G</h4>
+                  <p class="text-[10px] sm:text-xs text-brand-blue font-semibold line-clamp-1">Equipe de Segurança</p>
+                </div>
+
+                <!-- Barra do Pódio 1º Lugar (Mais alta) -->
+                <div class="w-full bg-brand-yellow/30 border-2 border-brand-yellow rounded-t-xl py-5 px-1 text-center shadow-xs">
+                  <span class="text-xl sm:text-2xl font-extrabold text-brand-dark">38</span>
+                  <p class="text-[10px] text-brand-dark font-extrabold uppercase">Devolvidos</p>
+                </div>
+              </div>
+
+              <!-- 3º LUGAR -->
+              <div class="flex flex-col items-center text-center space-y-2 order-3">
+                <div class="relative">
+                  <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-brand-blue text-white flex items-center justify-center font-extrabold text-lg sm:text-xl shadow-md ring-2 ring-brand-gray">
+                    MS
+                  </div>
+                  <span class="absolute -bottom-2 -right-1 w-6 h-6 rounded-full bg-slate-100 text-brand-dark font-extrabold text-xs flex items-center justify-center border-2 border-white shadow-xs">
+                    3º
+                  </span>
+                </div>
+
+                <div class="space-y-0.5">
+                  <h4 class="font-bold text-xs sm:text-sm text-brand-dark line-clamp-1">Matheus Silva</h4>
+                  <p class="text-[10px] text-slate-500 line-clamp-1">C. Computação • Bloco R</p>
+                </div>
+
+                <!-- Barra do Pódio 3º Lugar -->
+                <div class="w-full bg-slate-100 border border-brand-gray rounded-t-xl py-2 px-1 text-center">
+                  <span class="text-base sm:text-xl font-extrabold text-brand-dark">11</span>
+                  <p class="text-[10px] text-slate-500 font-bold uppercase">Devolvidos</p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ================================================== -->
+          <!-- LISTA CLASSIFICADA: 4º AO 10º LUGAR                -->
+          <!-- ================================================== -->
+          <div class="bg-white border border-brand-gray rounded-custom overflow-hidden shadow-xs">
+            <div class="px-5 py-3 border-b border-brand-gray bg-slate-50 flex items-center justify-between text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <span>Posição & Nome</span>
+              <span id="columnMetricTitle">Total Devolvidos</span>
+            </div>
+
+            <div class="divide-y divide-brand-gray" id="rankingList">
+              
+              <!-- 4º Lugar -->
+              <div class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 text-center font-extrabold text-sm text-slate-400">4º</span>
+                  <div class="w-9 h-9 rounded-xl bg-slate-100 text-brand-dark flex items-center justify-center font-bold text-xs border border-brand-gray">
+                    BC
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark flex items-center gap-1.5">
+                      Biblioteca Central (Balcão)
+                      <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-brand-yellow text-brand-dark">Setor</span>
+                    </h4>
+                    <p class="text-xs text-slate-500">Recepção de Achados e Perdidos</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="font-extrabold text-base text-brand-dark">9</span>
+                  <span class="text-xs text-slate-400 block font-medium">itens</span>
+                </div>
+              </div>
+
+              <!-- 5º Lugar -->
+              <div class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 text-center font-extrabold text-sm text-slate-400">5º</span>
+                  <div class="w-9 h-9 rounded-xl bg-brand-lilac text-white flex items-center justify-center font-bold text-xs">
+                    BS
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark">Beatriz Souza</h4>
+                    <p class="text-xs text-slate-500">Direito • Bloco B</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="font-extrabold text-base text-brand-dark">7</span>
+                  <span class="text-xs text-slate-400 block font-medium">itens</span>
+                </div>
+              </div>
+
+              <!-- 6º Lugar -->
+              <div class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 text-center font-extrabold text-sm text-slate-400">6º</span>
+                  <div class="w-9 h-9 rounded-xl bg-brand-blue text-white flex items-center justify-center font-bold text-xs">
+                    CV
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark">Prof. Carlos Vianna</h4>
+                    <p class="text-xs text-slate-500">Engenharia Civil • Bloco R</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="font-extrabold text-base text-brand-dark">5</span>
+                  <span class="text-xs text-slate-400 block font-medium">itens</span>
+                </div>
+              </div>
+
+              <!-- 7º Lugar -->
+              <div class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 text-center font-extrabold text-sm text-slate-400">7º</span>
+                  <div class="w-9 h-9 rounded-xl bg-slate-100 text-brand-dark flex items-center justify-center font-bold text-xs border border-brand-gray">
+                    CC
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark">Cantina Bloco R</h4>
+                    <p class="text-xs text-slate-500">Ponto de Apoio dos Alunos</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="font-extrabold text-base text-brand-dark">4</span>
+                  <span class="text-xs text-slate-400 block font-medium">itens</span>
+                </div>
+              </div>
+
+              <!-- 8º Lugar (Você!) -->
+              <div class="p-4 flex items-center justify-between bg-brand-yellow/15 border-l-4 border-l-brand-yellow">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 text-center font-extrabold text-sm text-brand-blue">8º</span>
+                  <div class="w-9 h-9 rounded-xl bg-brand-lilac text-white flex items-center justify-center font-bold text-xs ring-2 ring-brand-yellow">
+                    LM
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark flex items-center gap-1.5">
+                      Lucas Mendes
+                      <span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-brand-blue text-white">Você</span>
+                    </h4>
+                    <p class="text-xs text-slate-500">Ciência da Computação • Bloco R</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="font-extrabold text-base text-brand-dark">2</span>
+                  <span class="text-xs text-slate-500 block font-medium">itens</span>
+                </div>
+              </div>
+
+              <!-- 9º Lugar -->
+              <div class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 text-center font-extrabold text-sm text-slate-400">9º</span>
+                  <div class="w-9 h-9 rounded-xl bg-slate-100 text-brand-dark flex items-center justify-center font-bold text-xs border border-brand-gray">
+                    TA
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark">Thiago Antunes</h4>
+                    <p class="text-xs text-slate-500">Engenharia Civil • Bloco R</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="font-extrabold text-base text-brand-dark">2</span>
+                  <span class="text-xs text-slate-400 block font-medium">itens</span>
+                </div>
+              </div>
+
+              <!-- 10º Lugar -->
+              <div class="p-4 flex items-center justify-between hover:bg-slate-50 transition-colors">
+                <div class="flex items-center gap-3">
+                  <span class="w-6 text-center font-extrabold text-sm text-slate-400">10º</span>
+                  <div class="w-9 h-9 rounded-xl bg-slate-100 text-brand-dark flex items-center justify-center font-bold text-xs border border-brand-gray">
+                    GR
+                  </div>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark">Gabriel Ramos</h4>
+                    <p class="text-xs text-slate-500">Medicina • Bloco G</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <span class="font-extrabold text-base text-brand-dark">1</span>
+                  <span class="text-xs text-slate-400 block font-medium">item</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+    <!-- ======================================================== -->
+    <!-- 3. BARRA DE NAVEGAÇÃO INFERIOR DOCK (MOBILE & SIMULADOR) -->
+    <!-- ======================================================== -->
+    <nav class="mobile-bottom-nav lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-brand-gray shadow-lg px-4 py-2 flex items-center justify-around">
+      
+      <!-- Tab 1: Feed -->
+      <a href="../home/index.html" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-brand-blue text-[11px] font-medium transition-colors">
+        <i class="bx bx-home-circle text-2xl"></i>
+        <span>Feed</span>
+      </a>
+
+      <!-- Tab 2: Ranking (Ativo nesta tela) -->
+      <a href="#" class="flex flex-col items-center gap-0.5 text-brand-blue font-bold text-[11px]">
+        <i class="bx bxs-trophy text-2xl"></i>
+        <span>Ranking</span>
+      </a>
+
+      <!-- Tab Central: Botão Novo Post Elevado (Amarelo Solar #FFDC5D) -->
+      <button class="-mt-6 w-12 h-12 rounded-full bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark flex items-center justify-center font-extrabold text-2xl shadow-md border-4 border-white transition-transform active:scale-95" title="Publicar Novo Item">
+        <i class="bx bx-plus"></i>
+      </button>
+
+      <!-- Tab 4: Pistas -->
+      <a href="../home/index.html" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-brand-blue text-[11px] font-medium transition-colors">
+        <div class="relative">
+          <i class="bx bx-bell text-2xl"></i>
+          <span class="absolute top-0 right-0 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-white"></span>
+        </div>
+        <span>Pistas</span>
+      </a>
+
+      <!-- Tab 5: Perfil -->
+      <a href="../perfio/index.html" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-brand-blue text-[11px] font-medium transition-colors">
+        <i class="bx bx-user text-2xl"></i>
+        <span>Perfil</span>
+      </a>
+
+    </nav>
+
+  </div>
+
+  <!-- SCRIPT DE INTERAÇÃO DO RANKING -->
+  <script>
+    // Alternador de Visualização Desktop / Simulador Mobile
+    function setViewMode(mode) {
+      const btnDesktop = document.getElementById('btnDesktop');
+      const btnMobile = document.getElementById('btnMobile');
+
+      if (mode === 'mobile') {
+        document.body.classList.add('mobile-simulator-active');
+        btnMobile.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnDesktop.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      } else {
+        document.body.classList.remove('mobile-simulator-active');
+        btnDesktop.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnMobile.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      }
+    }
+
+    // Alternador de Período
+    function setPeriod(period) {
+      const bMonth = document.getElementById('btnPeriodMonth');
+      const bSem = document.getElementById('btnPeriodSem');
+      const bAll = document.getElementById('btnPeriodAll');
+
+      [bMonth, bSem, bAll].forEach(b => {
+        b.className = 'px-3 py-1.5 rounded-lg bg-transparent text-slate-200 hover:text-white font-medium text-xs transition-all';
+      });
+
+      if (period === 'month') {
+        bMonth.className = 'px-3 py-1.5 rounded-lg bg-brand-yellow text-brand-dark font-bold text-xs shadow-xs transition-all';
+      } else if (period === 'semester') {
+        bSem.className = 'px-3 py-1.5 rounded-lg bg-brand-yellow text-brand-dark font-bold text-xs shadow-xs transition-all';
+      } else if (period === 'all') {
+        bAll.className = 'px-3 py-1.5 rounded-lg bg-brand-yellow text-brand-dark font-bold text-xs shadow-xs transition-all';
+      }
+    }
+
+    // Dados dinâmicos para as 3 categorias solicitadas pelo usuário: Devolver, Achar e Perder
+    const rankingData = {
+      returned: {
+        title: "Pódio dos Heróis da Devolução",
+        metricTitle: "Total Devolvidos",
+        userSummary: "Lucas Mendes • 2 devoluções confirmadas no Bloco R",
+        podium: [
+          { pos: "2º", name: "Camila Rocha", sub: "Arquitetura • Bloco B", score: "14", initials: "CR", color: "bg-brand-lilac" },
+          { pos: "1º", name: "Portaria Bloco G", sub: "Equipe de Segurança", score: "38", initials: "PO", color: "bg-brand-yellow", isWinner: true },
+          { pos: "3º", name: "Matheus Silva", sub: "C. Computação • Bloco R", score: "11", initials: "MS", color: "bg-brand-blue" }
+        ],
+        list: [
+          { pos: "4º", name: "Biblioteca Central (Balcão)", sub: "Recepção de Achados e Perdidos", score: "9 itens", initials: "BC", isSector: true },
+          { pos: "5º", name: "Beatriz Souza", sub: "Direito • Bloco B", score: "7 itens", initials: "BS" },
+          { pos: "6º", name: "Prof. Carlos Vianna", sub: "Engenharia Civil • Bloco R", score: "5 itens", initials: "CV" },
+          { pos: "7º", name: "Cantina Bloco R", sub: "Ponto de Apoio dos Alunos", score: "4 itens", initials: "CC" },
+          { pos: "8º", name: "Lucas Mendes", sub: "Ciência da Computação • Bloco R", score: "2 itens", initials: "LM", isUser: true },
+          { pos: "9º", name: "Thiago Antunes", sub: "Engenharia Civil • Bloco R", score: "2 itens", initials: "TA" },
+          { pos: "10º", name: "Gabriel Ramos", sub: "Medicina • Bloco G", score: "1 item", initials: "GR" }
+        ]
+      },
+      found: {
+        title: "Pódio dos Guardiões (Quem Mais Achou)",
+        metricTitle: "Total Achados",
+        userSummary: "Lucas Mendes • 3 itens encontrados e cadastrados",
+        podium: [
+          { pos: "2º", name: "Prof. Carlos Vianna", sub: "Engenharia Civil • Bloco R", score: "21", initials: "CV", color: "bg-brand-blue" },
+          { pos: "1º", name: "Biblioteca Central", sub: "Equipe de Apoio e Acervo", score: "45", initials: "BC", color: "bg-brand-yellow", isWinner: true },
+          { pos: "3º", name: "Beatriz Souza", sub: "Direito • Bloco B", score: "16", initials: "BS", color: "bg-brand-lilac" }
+        ],
+        list: [
+          { pos: "4º", name: "Portaria Central Bloco G", sub: "Recepção", score: "14 itens", initials: "PO", isSector: true },
+          { pos: "5º", name: "Camila Rocha", sub: "Arquitetura • Bloco B", score: "11 itens", initials: "CR" },
+          { pos: "6º", name: "Matheus Silva", sub: "C. Computação • Bloco R", score: "9 itens", initials: "MS" },
+          { pos: "7º", name: "Secretaria Acadêmica", sub: "Bloco A (Reitoria)", score: "6 itens", initials: "SA", isSector: true },
+          { pos: "8º", name: "Thiago Antunes", sub: "Engenharia Civil • Bloco R", score: "4 itens", initials: "TA" },
+          { pos: "9º", name: "Lucas Mendes", sub: "Ciência da Computação • Bloco R", score: "3 itens", initials: "LM", isUser: true },
+          { pos: "10º", name: "Larissa Dornelles", sub: "Enfermagem • Bloco G", score: "2 itens", initials: "LD" }
+        ]
+      },
+      lost: {
+        title: "Pódio dos Mais Distraídos (Quem Mais Perdeu)",
+        metricTitle: "Total Perdidos",
+        userSummary: "Lucas Mendes • 1 item esquecido (Mochila Azul)",
+        podium: [
+          { pos: "2º", name: "Letícia Farias", sub: "C. Computação • Bloco R", score: "8", initials: "LF", color: "bg-brand-lilac" },
+          { pos: "1º", name: "Gabriel Ramos", sub: "Medicina • Bloco G", score: "11", initials: "GR", color: "bg-brand-yellow", isWinner: true },
+          { pos: "3º", name: "Thiago Antunes", sub: "Engenharia Civil • Bloco R", score: "6", initials: "TA", color: "bg-brand-blue" }
+        ],
+        list: [
+          { pos: "4º", name: "Eduardo Silveira", sub: "Administração • Bloco B", score: "5 itens", initials: "ES" },
+          { pos: "5º", name: "Mariana Costa", sub: "Arquitetura • Bloco B", score: "4 itens", initials: "MC" },
+          { pos: "6º", name: "Felipe Zanin", sub: "Agronomia • Bloco E", score: "3 itens", initials: "FZ" },
+          { pos: "7º", name: "Juliana Becker", sub: "Psicologia • Bloco C", score: "2 itens", initials: "JB" },
+          { pos: "8º", name: "Rodrigo Fontana", sub: "Educação Física • Ginásio", score: "2 itens", initials: "RF" },
+          { pos: "9º", name: "Lucas Mendes", sub: "Ciência da Computação • Bloco R", score: "1 item", initials: "LM", isUser: true },
+          { pos: "10º", name: "Vanessa Pires", sub: "Design Visual • Bloco B", score: "1 item", initials: "VP" }
+        ]
+      }
+    };
+
+    function setRankingCategory(cat) {
+      const catRet = document.getElementById('catReturnedBtn');
+      const catFound = document.getElementById('catFoundBtn');
+      const catLost = document.getElementById('catLostBtn');
+
+      [catRet, catFound, catLost].forEach(b => {
+        b.className = 'p-4 rounded-custom bg-white border border-brand-gray hover:border-slate-300 text-left shadow-xs transition-all flex items-center justify-between opacity-80 hover:opacity-100';
+      });
+
+      if (cat === 'returned') {
+        catRet.className = 'p-4 rounded-custom bg-white border-2 border-brand-blue text-left shadow-xs transition-all flex items-center justify-between opacity-100';
+      } else if (cat === 'found') {
+        catFound.className = 'p-4 rounded-custom bg-white border-2 border-brand-blue text-left shadow-xs transition-all flex items-center justify-between opacity-100';
+      } else if (cat === 'lost') {
+        catLost.className = 'p-4 rounded-custom bg-white border-2 border-brand-blue text-left shadow-xs transition-all flex items-center justify-between opacity-100';
+      }
+
+      renderRanking(cat);
+    }
+
+    function renderRanking(cat) {
+      const data = rankingData[cat];
+
+      document.getElementById('podiumTitle').innerHTML = `<i class="bx bxs-medal text-brand-yellow text-base"></i> ${data.title}`;
+      document.getElementById('columnMetricTitle').innerText = data.metricTitle;
+      document.getElementById('userRankingSummary').innerText = data.userSummary;
+
+      // Render Pódio
+      const p = data.podium;
+      const podiumHtml = `
+        <!-- 2º LUGAR -->
+        <div class="flex flex-col items-center text-center space-y-2 order-1">
+          <div class="relative">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl ${p[0].color} text-white flex items-center justify-center font-extrabold text-lg sm:text-xl shadow-md ring-2 ring-brand-gray">
+              ${p[0].initials}
+            </div>
+            <span class="absolute -bottom-2 -right-1 w-6 h-6 rounded-full bg-slate-200 text-brand-dark font-extrabold text-xs flex items-center justify-center border-2 border-white shadow-xs">
+              2º
+            </span>
+          </div>
+          <div class="space-y-0.5">
+            <h4 class="font-bold text-xs sm:text-sm text-brand-dark line-clamp-1">${p[0].name}</h4>
+            <p class="text-[10px] text-slate-500 line-clamp-1">${p[0].sub}</p>
+          </div>
+          <div class="w-full bg-slate-100 border border-brand-gray rounded-t-xl py-3 px-1 text-center">
+            <span class="text-base sm:text-xl font-extrabold text-brand-dark">${p[0].score}</span>
+            <p class="text-[10px] text-slate-500 font-bold uppercase">${data.metricTitle.replace('Total ', '')}</p>
+          </div>
+        </div>
+
+        <!-- 1º LUGAR -->
+        <div class="flex flex-col items-center text-center space-y-2 order-2 -mt-4">
+          <div class="relative">
+            <i class="bx bxs-crown text-2xl text-brand-yellow absolute -top-5 left-1/2 -translate-x-1/2"></i>
+            <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-2xl bg-brand-yellow text-brand-dark flex items-center justify-center font-extrabold text-xl sm:text-2xl shadow-lg ring-4 ring-brand-yellow/30">
+              ${p[1].initials}
+            </div>
+            <span class="absolute -bottom-2 -right-1 w-7 h-7 rounded-full bg-brand-yellow text-brand-dark font-extrabold text-sm flex items-center justify-center border-2 border-white shadow-xs">
+              1º
+            </span>
+          </div>
+          <div class="space-y-0.5">
+            <h4 class="font-extrabold text-xs sm:text-base text-brand-dark line-clamp-1">${p[1].name}</h4>
+            <p class="text-[10px] sm:text-xs text-brand-blue font-semibold line-clamp-1">${p[1].sub}</p>
+          </div>
+          <div class="w-full bg-brand-yellow/30 border-2 border-brand-yellow rounded-t-xl py-5 px-1 text-center shadow-xs">
+            <span class="text-xl sm:text-2xl font-extrabold text-brand-dark">${p[1].score}</span>
+            <p class="text-[10px] text-brand-dark font-extrabold uppercase">${data.metricTitle.replace('Total ', '')}</p>
+          </div>
+        </div>
+
+        <!-- 3º LUGAR -->
+        <div class="flex flex-col items-center text-center space-y-2 order-3">
+          <div class="relative">
+            <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl ${p[2].color} text-white flex items-center justify-center font-extrabold text-lg sm:text-xl shadow-md ring-2 ring-brand-gray">
+              ${p[2].initials}
+            </div>
+            <span class="absolute -bottom-2 -right-1 w-6 h-6 rounded-full bg-slate-100 text-brand-dark font-extrabold text-xs flex items-center justify-center border-2 border-white shadow-xs">
+              3º
+            </span>
+          </div>
+          <div class="space-y-0.5">
+            <h4 class="font-bold text-xs sm:text-sm text-brand-dark line-clamp-1">${p[2].name}</h4>
+            <p class="text-[10px] text-slate-500 line-clamp-1">${p[2].sub}</p>
+          </div>
+          <div class="w-full bg-slate-100 border border-brand-gray rounded-t-xl py-2 px-1 text-center">
+            <span class="text-base sm:text-xl font-extrabold text-brand-dark">${p[2].score}</span>
+            <p class="text-[10px] text-slate-500 font-bold uppercase">${data.metricTitle.replace('Total ', '')}</p>
+          </div>
+        </div>
+      `;
+      document.getElementById('podiumContainer').innerHTML = podiumHtml;
+
+      // Render Lista
+      let listHtml = '';
+      data.list.forEach(item => {
+        const isUserClass = item.isUser ? 'bg-brand-yellow/15 border-l-4 border-l-brand-yellow' : 'hover:bg-slate-50';
+        const tagHtml = item.isUser 
+          ? `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-brand-blue text-white">Você</span>`
+          : (item.isSector ? `<span class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-brand-yellow text-brand-dark">Setor</span>` : '');
+
+        listHtml += `
+          <div class="p-4 flex items-center justify-between ${isUserClass} transition-colors">
+            <div class="flex items-center gap-3">
+              <span class="w-6 text-center font-extrabold text-sm ${item.isUser ? 'text-brand-blue' : 'text-slate-400'}">${item.pos}</span>
+              <div class="w-9 h-9 rounded-xl ${item.isUser ? 'bg-brand-lilac text-white ring-2 ring-brand-yellow' : 'bg-slate-100 text-brand-dark border border-brand-gray'} flex items-center justify-center font-bold text-xs">
+                ${item.initials}
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-brand-dark flex items-center gap-1.5">
+                  ${item.name}
+                  ${tagHtml}
+                </h4>
+                <p class="text-xs text-slate-500">${item.sub}</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="font-extrabold text-base text-brand-dark">${item.score.split(' ')[0]}</span>
+              <span class="text-xs text-slate-400 block font-medium">${item.score.split(' ')[1] || 'itens'}</span>
+            </div>
+          </div>
+        `;
+      });
+      document.getElementById('rankingList').innerHTML = listHtml;
+    }
+  </script>
+
+</body>
+</html>
