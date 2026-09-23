@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achei — Perfil do Usuário | Unochapecó</title>
+
+  <!-- Fonte Oficial: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Biblioteca Oficial de Ícones: Boxicons v2 -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN com Configuração da Marca Oficial -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              blue: '#1C4398',        // Azul Royal Oficial
+              blueHover: '#153375',
+              lilac: '#AC80CE',       // Roxo Lilás Oficial
+              lilacHover: '#986BBD',
+              yellow: '#FFDC5D',      // Amarelo Solar Oficial
+              yellowHover: '#E8C545',
+              dark: '#232724',        // Grafite Escuro Oficial (textos e títulos)
+              gray: '#E1E1E1',        // Cinza Claro Oficial (bordas e divisórias)
+              surface: '#FFFFFF',
+              bg: '#F8F9FA',          // Fundo suave de tela
+            },
+            status: {
+              foundText: '#1C4398',   // Azul Royal Oficial
+              foundBg: '#EFF6FF',
+              lostText: '#B91C1C',
+              lostBg: '#FEF2F2',
+              returnedText: '#854D0E',
+              returnedBg: '#FEF3C7',
+            }
+          },
+          borderRadius: {
+            'custom': '12px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilização suave para scrollbars */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #E1E1E1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #AC80CE;
+    }
+
+    /* Ocultar barra de rolagem horizontal */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* REGRAS DO MODO SIMULADOR MOBILE */
+    body.mobile-simulator-active {
+      background-color: #0f172a !important;
+    }
+
+    body.mobile-simulator-active #viewWrapper {
+      max-width: 412px !important;
+      height: 840px !important;
+      margin: 1.5rem auto !important;
+      border: 12px solid #232724 !important;
+      border-radius: 46px !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      position: relative !important;
+      background-color: #F8F9FA !important;
+    }
+
+    body.mobile-simulator-active #phoneDynamicIsland {
+      display: flex !important;
+    }
+
+    body.mobile-simulator-active header {
+      top: 0 !important;
+    }
+
+    body.mobile-simulator-active .desktop-sidebar {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .desktop-search-input {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .desktop-campus-badge {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .desktop-btn-publish {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .feed-column {
+      grid-column: span 12 / span 12 !important;
+      width: 100% !important;
+    }
+
+    body.mobile-simulator-active .mobile-bottom-nav {
+      display: flex !important;
+      position: sticky !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      z-index: 50 !important;
+    }
+  </style>
+</head>
+<body class="bg-brand-bg text-brand-dark font-sans min-h-screen selection:bg-brand-yellow selection:text-brand-dark pb-20 lg:pb-10 transition-colors duration-300">
+
+  <!-- ======================================================== -->
+  <!-- BARRA DE CONTROLE DO PROTÓTIPO (DESKTOP X MOBILE + TELAS)-->
+  <!-- ======================================================== -->
+  <aside class="bg-brand-dark text-white text-xs py-2 px-4 sticky top-0 z-50 flex items-center justify-between border-b border-black/20 shadow-md">
+    <div class="flex items-center gap-3">
+      <span class="font-bold text-brand-yellow flex items-center gap-1.5">
+        <i class="bx bx-slider-alt text-base"></i>
+        Achei • Perfil
+      </span>
+      <span class="hidden sm:inline text-slate-500">|</span>
+      
+      <!-- Navegação rápida entre telas do protótipo -->
+      <nav class="hidden md:flex items-center gap-2 text-slate-300">
+        <a href="../home/index.html" class="hover:text-brand-yellow transition-colors">Home</a>
+        <span>•</span>
+        <a href="../login/index.html" class="hover:text-brand-yellow transition-colors">Login</a>
+        <span>•</span>
+        <a href="../register/index.html" class="hover:text-brand-yellow transition-colors">Cadastro</a>
+        <span>•</span>
+        <a href="../password/index.html" class="hover:text-brand-yellow transition-colors">Recuperar Senha</a>
+        <span>•</span>
+        <span class="text-white font-bold underline decoration-brand-yellow decoration-2">Perfil</span>
+        <span>•</span>
+        <a href="../rank/index.html" class="hover:text-brand-yellow transition-colors">Ranking</a>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="setViewMode('desktop')" id="btnDesktop" class="px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs">
+        <i class="bx bx-laptop text-sm"></i>
+        <span>Desktop</span>
+      </button>
+      <button onclick="setViewMode('mobile')" id="btnMobile" class="px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all">
+        <i class="bx bx-mobile-alt text-sm"></i>
+        <span>Mobile (Simulador 390px)</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- CONTAINER PRINCIPAL                                      -->
+  <!-- ======================================================== -->
+  <div id="viewWrapper" class="w-full transition-all duration-300 mx-auto">
+
+    <!-- STATUS BAR / NOTCH DO CELULAR (visível no simulador mobile) -->
+    <div id="phoneDynamicIsland" class="hidden items-center justify-between px-6 pt-3 pb-2 bg-brand-blue text-white text-[11px] font-semibold select-none sticky top-0 z-50">
+      <span>9:41</span>
+      <div class="w-24 h-4 bg-black/40 rounded-full flex items-center justify-end px-2">
+        <span class="w-2 h-2 rounded-full bg-slate-900 border border-white/20"></span>
+      </div>
+      <div class="flex items-center gap-1.5 text-xs text-white">
+        <i class="bx bx-wifi text-sm"></i>
+        <i class="bx bxs-battery text-base"></i>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 1. NAVBAR SUPERIOR (STICKY)                               -->
+    <!-- ======================================================== -->
+    <header class="bg-brand-blue text-white sticky top-9 z-40 shadow-sm border-b border-brand-blueHover">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        
+        <!-- Logo Achei & Unochapecó -->
+        <div class="flex items-center gap-4">
+          <a href="../home/index.html" class="flex items-center gap-2.5 group">
+            <span class="w-9 h-9 bg-brand-yellow text-brand-dark rounded-lg flex items-center justify-center font-extrabold text-xl shadow-sm transition-transform group-hover:scale-105">
+              <i class="bx bx-search"></i>
+            </span>
+            <div class="flex flex-col">
+              <span class="text-xl font-extrabold tracking-tight leading-none text-white">Achei</span>
+              <span class="text-[10px] font-semibold text-brand-yellow uppercase tracking-wider">Unochapecó</span>
+            </div>
+          </a>
+
+          <!-- Seletor de Campus Institucional (Desktop) -->
+          <div class="desktop-campus-badge hidden md:flex items-center gap-1.5 px-2.5 py-1 bg-white/10 rounded-md text-xs font-medium text-slate-100 hover:bg-white/15 cursor-pointer transition-colors">
+            <i class="bx bx-buildings text-sm text-brand-yellow"></i>
+            <span>Campus Chapecó (Sede)</span>
+            <i class="bx bx-chevron-down text-xs opacity-70"></i>
+          </div>
+        </div>
+
+        <!-- Campo de Busca Central (Desktop) -->
+        <div class="desktop-search-input hidden md:flex flex-1 max-w-lg mx-4">
+          <div class="relative w-full">
+            <i class="bx bx-search text-slate-400 text-lg absolute left-3.5 top-2.5"></i>
+            <input 
+              type="text" 
+              placeholder="Buscar em minhas publicações ou itens..." 
+              class="w-full pl-10 pr-12 py-2 bg-white/10 hover:bg-white/15 focus:bg-white text-white focus:text-brand-dark placeholder:text-slate-300 focus:placeholder:text-slate-400 rounded-lg text-sm border border-white/20 focus:border-white focus:outline-none transition-all"
+            />
+            <span class="absolute right-3 top-2 px-1.5 py-0.5 bg-white/20 text-white text-[10px] font-mono rounded">/</span>
+          </div>
+        </div>
+
+        <!-- Ações do Topo -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Botão Publicar Item -->
+          <button class="desktop-btn-publish hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-bold text-xs rounded-lg transition-colors shadow-sm">
+            <i class="bx bx-plus text-base"></i>
+            <span>Publicar Item</span>
+          </button>
+
+          <!-- Notificações -->
+          <button class="relative w-9 h-9 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors" title="Pistas e Alertas">
+            <i class="bx bx-bell text-xl"></i>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-brand-blue"></span>
+          </button>
+
+          <!-- Avatar Ativo (Perfil) com Roxo Lilás Oficial (#AC80CE) -->
+          <div class="flex items-center gap-2 pl-2 border-l border-white/15 cursor-pointer">
+            <div class="w-8 h-8 rounded-full bg-brand-lilac text-white flex items-center justify-center font-bold text-xs ring-2 ring-brand-yellow shadow-xs">
+              LM
+            </div>
+            <span class="hidden xl:inline text-xs font-semibold text-white">Lucas Mendes</span>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ======================================================== -->
+    <!-- 2. CORPO PRINCIPAL COM LAYOUT RESPONSIVO                  -->
+    <!-- ======================================================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
+
+      <!-- BANNER DE CAPA & CABEÇALHO DO PERFIL -->
+      <div class="bg-white border border-brand-gray rounded-custom overflow-hidden shadow-xs mb-6">
+        
+        <!-- Capa com Gradiente Institucional Azul Royal + Roxo Lilás -->
+        <div class="h-32 sm:h-44 bg-gradient-to-r from-brand-blue via-brand-blue to-brand-lilac relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-48 h-48 rounded-full bg-brand-yellow/15 blur-2xl"></div>
+          <div class="absolute left-10 -top-10 w-40 h-40 rounded-full bg-white/10 blur-xl"></div>
+          
+          <div class="absolute top-3 right-3 sm:top-4 sm:right-4 flex items-center gap-2">
+            <span class="px-2.5 py-1 rounded-md bg-black/30 backdrop-blur-md text-white text-[11px] font-semibold border border-white/15 flex items-center gap-1">
+              <i class="bx bx-buildings text-brand-yellow"></i>
+              <span>Unochapecó • Campus Chapecó</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Conteúdo do Perfil: Avatar + Dados Principais + Ações -->
+        <div class="px-4 sm:px-6 pb-6 pt-0 relative">
+          
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-12 sm:-mt-16 mb-4">
+            
+            <!-- Avatar e Identificação -->
+            <div class="flex flex-col sm:flex-row sm:items-end gap-3.5">
+              <!-- Avatar com Roxo Lilás Oficial (#AC80CE) -->
+              <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-brand-lilac text-white flex items-center justify-center font-extrabold text-3xl shadow-md ring-4 ring-white shrink-0">
+                LM
+              </div>
+
+              <div class="space-y-1">
+                <div class="flex items-center gap-2">
+                  <h1 class="text-xl sm:text-2xl font-extrabold text-brand-dark">
+                    Lucas Mendes
+                  </h1>
+                  <!-- Badge Verificado: 100% tipográfico -->
+                  <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-yellow text-brand-dark">
+                    VERIFICADO
+                  </span>
+                </div>
+
+                <p class="text-xs sm:text-sm font-semibold text-brand-blue">
+                  Ciência da Computação • 6º Período
+                </p>
+
+                <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500 pt-0.5">
+                  <span class="flex items-center gap-1">
+                    <i class="bx bx-map-pin text-brand-lilac"></i>
+                    Frequenta o Bloco R (Informática)
+                  </span>
+                  <span>•</span>
+                  <span class="font-mono text-[11px] text-slate-400">
+                    lucas.mendes@unochapeco.edu.br
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Botões de Ação do Perfil -->
+            <div class="flex items-center gap-2 pt-2 sm:pt-0">
+              <button class="px-3.5 py-2 bg-slate-50 hover:bg-slate-100 text-brand-dark border border-brand-gray font-semibold text-xs rounded-lg transition-colors flex items-center gap-1.5 shadow-xs">
+                <i class="bx bx-edit text-base text-slate-600"></i>
+                <span>Editar Perfil</span>
+              </button>
+
+              <button class="px-4 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs rounded-lg transition-colors flex items-center gap-1.5 shadow-xs">
+                <i class="bx bx-plus text-base"></i>
+                <span>+ Novo Post</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Grade de Indicadores de Impacto Comunitário (Sem Verde!) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-4 border-t border-brand-gray">
+            
+            <div class="p-3 rounded-xl bg-slate-50 border border-brand-gray">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Publicações</p>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span class="text-2xl font-extrabold text-brand-dark">3</span>
+                <span class="text-xs text-slate-400 font-medium">itens</span>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-50 border border-brand-gray">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Devolvidos</p>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span class="text-2xl font-extrabold text-brand-blue">2</span>
+                <span class="text-xs text-slate-400 font-medium">resolvidos</span>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-50 border border-brand-gray">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Pistas Enviadas</p>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span class="text-2xl font-extrabold text-brand-lilac">7</span>
+                <span class="text-xs text-slate-400 font-medium">ajudas</span>
+              </div>
+            </div>
+
+            <div class="p-3 rounded-xl bg-slate-50 border border-brand-gray">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-slate-500">Reputação DCE</p>
+              <div class="flex items-baseline gap-1 mt-1">
+                <span class="text-2xl font-extrabold text-brand-yellow">100%</span>
+                <span class="text-xs text-slate-400 font-medium">confiança</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- LAYOUT DE 2 COLUNAS: SIDEBAR ESQUERDA + ABAS DE CONTEÚDO -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- ==================================================== -->
+        <!-- COLUNA ESQUERDA: PREFERÊNCIAS & BLOCOS (SIDEBAR)     -->
+        <!-- ==================================================== -->
+        <aside class="desktop-sidebar hidden lg:block lg:col-span-4 sticky top-[115px] space-y-5 self-start max-h-[calc(100vh-8.5rem)] overflow-y-auto custom-scrollbar pr-1">
+          
+          <!-- Card de Notificações por Bloco -->
+          <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+            <div class="flex items-center justify-between border-b border-brand-gray pb-2">
+              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                <i class="bx bx-bell text-brand-blue text-sm"></i>
+                Alertas por Bloco
+              </h3>
+              <span class="text-[11px] text-brand-blue font-semibold hover:underline cursor-pointer">Configurar</span>
+            </div>
+
+            <p class="text-xs text-slate-600">
+              Você recebe avisos imediatos quando itens são publicados nestes locais:
+            </p>
+
+            <div class="space-y-2 text-xs font-medium">
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-brand-gray">
+                <span class="flex items-center gap-2">
+                  <i class="bx bx-laptop text-brand-blue"></i>
+                  Bloco R (Informática)
+                </span>
+                <span class="text-[10px] font-bold text-brand-blue bg-white px-2 py-0.5 rounded border border-brand-gray">Ativo</span>
+              </div>
+
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-brand-gray">
+                <span class="flex items-center gap-2">
+                  <i class="bx bx-book-bookmark text-brand-lilac"></i>
+                  Biblioteca Central
+                </span>
+                <span class="text-[10px] font-bold text-brand-blue bg-white px-2 py-0.5 rounded border border-brand-gray">Ativo</span>
+              </div>
+
+              <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-brand-gray">
+                <span class="flex items-center gap-2">
+                  <i class="bx bx-coffee text-slate-400"></i>
+                  Cantina Central
+                </span>
+                <span class="text-[10px] font-bold text-slate-500 bg-white px-2 py-0.5 rounded border border-brand-gray">Pausado</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Informações de Segurança Acadêmica -->
+          <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+            <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5 border-b border-brand-gray pb-2">
+              <i class="bx bx-shield-quarter text-brand-blue text-sm"></i>
+              Segurança & Verificação
+            </h3>
+
+            <div class="space-y-2.5 text-xs text-slate-600">
+              <div class="flex items-start gap-2">
+                <i class="bx bx-check text-brand-blue text-base mt-0.5"></i>
+                <span>E-mail institucional autenticado com sucesso.</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="bx bx-check text-brand-blue text-base mt-0.5"></i>
+                <span>Vínculo acadêmico ativo na Unochapecó.</span>
+              </div>
+              <div class="flex items-start gap-2">
+                <i class="bx bx-check text-brand-blue text-base mt-0.5"></i>
+                <span>Autorizado a retirar itens sob custódia de portarias.</span>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-brand-gray">
+              <a href="../password/index.html" class="text-xs font-semibold text-brand-blue hover:underline flex items-center gap-1">
+                <i class="bx bx-key"></i>
+                <span>Alterar minha senha</span>
+              </a>
+            </div>
+          </div>
+
+        </aside>
+
+        <!-- ==================================================== -->
+        <!-- COLUNA DIREITA: ABAS E LISTAGEM DE POSTS DO USUÁRIO  -->
+        <!-- ==================================================== -->
+        <section class="feed-column col-span-1 lg:col-span-8 space-y-4">
+          
+          <!-- ABAS DE NAVEGAÇÃO DO PERFIL -->
+          <div class="bg-white border border-brand-gray rounded-custom p-1.5 shadow-xs flex items-center gap-1 overflow-x-auto no-scrollbar">
+            <button onclick="switchProfileTab('posts')" id="tabPostsBtn" class="flex-1 sm:flex-initial px-4 py-2 rounded-lg bg-brand-blue text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0">
+              <i class="bx bx-layer"></i>
+              <span>Minhas Publicações (3)</span>
+            </button>
+            <button onclick="switchProfileTab('hints')" id="tabHintsBtn" class="flex-1 sm:flex-initial px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all flex items-center justify-center gap-1.5 shrink-0">
+              <i class="bx bx-message-dots text-brand-lilac"></i>
+              <span>Minhas Pistas (7)</span>
+            </button>
+            <button onclick="switchProfileTab('saved')" id="tabSavedBtn" class="flex-1 sm:flex-initial px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all flex items-center justify-center gap-1.5 shrink-0">
+              <i class="bx bx-bookmark"></i>
+              <span>Itens Salvos (4)</span>
+            </button>
+          </div>
+
+          <!-- CONTEÚDO DA ABA 1: MINHAS PUBLICAÇÕES -->
+          <div id="postsContent" class="space-y-4">
+            
+            <!-- ITEM 1: PERDIDO (MOCHILA AZUL NO BLOCO R) -->
+            <article class="bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-3.5 hover:border-slate-300 transition-all">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <!-- Badge 100% tipográfica -->
+                  <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-status-lostBg text-status-lostText">
+                    PERDIDO
+                  </span>
+                  <span class="text-xs text-slate-400">Publicado há 20 minutos</span>
+                </div>
+
+                <div class="flex items-center gap-1">
+                  <button class="px-2.5 py-1 rounded bg-slate-50 hover:bg-slate-100 text-brand-dark border border-brand-gray text-xs font-semibold flex items-center gap-1">
+                    <i class="bx bx-check"></i>
+                    <span>Marcar Devolvido</span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <h3 class="text-base font-bold text-brand-dark">
+                  Mochila Azul Escura com Notebook Dell
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Esqueci no banco ao lado da porta do Laboratório 03 do Bloco R logo após a aula das 10h. Contém cadernos com meu nome e um estojo preto.
+                </p>
+              </div>
+
+              <!-- Foto do Item -->
+              <div class="rounded-lg overflow-hidden bg-slate-100 border border-brand-gray max-h-56 flex items-center justify-center">
+                <img 
+                  src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80" 
+                  alt="Mochila Azul" 
+                  class="w-full h-48 object-cover"
+                />
+              </div>
+
+              <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-brand-gray">
+                <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-brand-gray">
+                  <i class="bx bx-map-pin text-brand-blue text-sm"></i>
+                  <span>Bloco R — Laboratório 03</span>
+                </div>
+
+                <div class="flex items-center gap-3 text-xs text-slate-500 font-semibold">
+                  <span class="text-brand-lilac flex items-center gap-1">
+                    <i class="bx bx-message-dots text-base"></i>
+                    3 pistas recebidas
+                  </span>
+                  <span>•</span>
+                  <span>14 curtidas</span>
+                </div>
+              </div>
+            </article>
+
+            <!-- ITEM 2: DEVOLVIDO (CHAVEIRO UNOCHAPECÓ) -->
+            <article class="bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-3.5 hover:border-slate-300 transition-all bg-gradient-to-r from-white via-white to-amber-50/20">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <!-- Badge 100% tipográfica -->
+                  <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-status-returnedBg text-status-returnedText">
+                    DEVOLVIDO
+                  </span>
+                  <span class="text-xs text-slate-400">Resolvido na semana passada</span>
+                </div>
+
+                <span class="text-xs font-bold text-brand-blue flex items-center gap-1">
+                  <i class="bx bx-check-shield"></i>
+                  Confirmado pelo Dono
+                </span>
+              </div>
+
+              <div class="space-y-1">
+                <h3 class="text-base font-bold text-brand-dark">
+                  Chaveiro Unochapecó com Chave de Armário
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Encontrado na praça de convivência do Bloco R e devolvido ao colega Pedro da Engenharia após contato no Achei.
+                </p>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 border-t border-brand-gray text-xs">
+                <div class="inline-flex items-center gap-1.5 font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-brand-gray">
+                  <i class="bx bx-map-pin text-brand-blue text-sm"></i>
+                  <span>Bloco R — Convivência</span>
+                </div>
+
+                <span class="text-slate-500 font-medium">Caso arquivado com sucesso</span>
+              </div>
+            </article>
+
+            <!-- ITEM 3: ACHADO (ESTOJO FABER-CASTELL) -->
+            <article class="bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-3.5 hover:border-slate-300 transition-all">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <!-- Badge 100% tipográfica -->
+                  <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-status-foundBg text-status-foundText">
+                    ACHADO
+                  </span>
+                  <span class="text-xs text-slate-400">Publicado há 2 dias</span>
+                </div>
+
+                <span class="text-xs text-slate-500 font-medium">Aguardando dono</span>
+              </div>
+
+              <div class="space-y-1">
+                <h3 class="text-base font-bold text-brand-dark">
+                  Estojo Faber-Castell Preto com Canetas Stabilo
+                </h3>
+                <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Esquecido na mesa 14 do segundo andar da Biblioteca Central. Deixei com a recepcionista Márcia no balcão de empréstimos.
+                </p>
+              </div>
+
+              <div class="flex items-center justify-between pt-2 border-t border-brand-gray text-xs">
+                <div class="inline-flex items-center gap-1.5 font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-brand-gray">
+                  <i class="bx bx-map-pin text-brand-blue text-sm"></i>
+                  <span>Biblioteca Central — Balcão</span>
+                </div>
+
+                <button class="px-3 py-1 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-bold rounded text-xs transition-colors">
+                  Editar
+                </button>
+              </div>
+            </article>
+
+          </div>
+
+          <!-- CONTEÚDO DA ABA 2: MINHAS PISTAS (INICIALMENTE OCULTO) -->
+          <div id="hintsContent" class="hidden space-y-4">
+            <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+              <div class="flex items-center justify-between border-b border-brand-gray pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-full bg-brand-lilac text-white flex items-center justify-center font-bold text-xs">
+                    <i class="bx bx-message-dots"></i>
+                  </span>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark">Pista deixada em: Calculadora Casio Bloco R</h4>
+                    <p class="text-xs text-slate-500">Ontem às 14:30</p>
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-brand-blue bg-blue-50 px-2 py-0.5 rounded border border-brand-gray">Útil</span>
+              </div>
+
+              <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-brand-gray">
+                "Vi o professor Carlos guardando no armário dos professores da sala 204 logo que acabou a aula!"
+              </p>
+            </div>
+
+            <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+              <div class="flex items-center justify-between border-b border-brand-gray pb-2">
+                <div class="flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-full bg-brand-lilac text-white flex items-center justify-center font-bold text-xs">
+                    <i class="bx bx-message-dots"></i>
+                  </span>
+                  <div>
+                    <h4 class="font-bold text-sm text-brand-dark">Pista deixada em: Carteira Bloco B</h4>
+                    <p class="text-xs text-slate-500">Há 3 dias</p>
+                  </div>
+                </div>
+                <span class="text-[11px] font-bold text-brand-yellow text-brand-dark px-2 py-0.5 rounded">Resolvido</span>
+              </div>
+
+              <p class="text-xs text-slate-700 bg-slate-50 p-3 rounded-lg border border-brand-gray">
+                "A estudante do DCE acabou de levar até a recepção do Bloco B!"
+              </p>
+            </div>
+          </div>
+
+          <!-- CONTEÚDO DA ABA 3: ITENS SALVOS (INICIALMENTE OCULTO) -->
+          <div id="savedContent" class="hidden space-y-4">
+            <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-2 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-lg bg-slate-100 border border-brand-gray flex items-center justify-center text-slate-400">
+                  <i class="bx bx-headphone text-2xl"></i>
+                </div>
+                <div>
+                  <h4 class="font-bold text-sm text-brand-dark">Fone JBL Tune 510</h4>
+                  <p class="text-xs text-slate-500">Biblioteca Central • Salvo ontem</p>
+                </div>
+              </div>
+              
+              <a href="../home/index.html" class="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-brand-blue font-bold text-xs rounded-lg border border-brand-gray">
+                Ver no Feed
+              </a>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+
+    </main>
+
+    <!-- ======================================================== -->
+    <!-- 3. BARRA DE NAVEGAÇÃO INFERIOR DOCK (MOBILE & SIMULADOR) -->
+    <!-- ======================================================== -->
+    <nav class="mobile-bottom-nav lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-brand-gray shadow-lg px-4 py-2 flex items-center justify-around">
+      
+      <!-- Tab 1: Feed -->
+      <a href="../home/index.html" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-brand-blue text-[11px] font-medium transition-colors">
+        <i class="bx bx-home-circle text-2xl"></i>
+        <span>Feed</span>
+      </a>
+
+      <!-- Tab 2: Ranking -->
+      <a href="../rank/index.html" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-brand-blue text-[11px] font-medium transition-colors">
+        <i class="bx bx-trophy text-2xl"></i>
+        <span>Ranking</span>
+      </a>
+
+      <!-- Tab Central: Botão Novo Post Elevado (Amarelo Solar #FFDC5D) -->
+      <button class="-mt-6 w-12 h-12 rounded-full bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark flex items-center justify-center font-extrabold text-2xl shadow-md border-4 border-white transition-transform active:scale-95" title="Publicar Novo Item">
+        <i class="bx bx-plus"></i>
+      </button>
+
+      <!-- Tab 4: Pistas -->
+      <a href="../home/index.html" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-brand-blue text-[11px] font-medium transition-colors">
+        <div class="relative">
+          <i class="bx bx-bell text-2xl"></i>
+          <span class="absolute top-0 right-0 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-white"></span>
+        </div>
+        <span>Pistas</span>
+      </a>
+
+      <!-- Tab 5: Perfil (Ativo nesta tela) -->
+      <a href="#" class="flex flex-col items-center gap-0.5 text-brand-blue font-bold text-[11px]">
+        <i class="bx bxs-user text-2xl"></i>
+        <span>Perfil</span>
+      </a>
+
+    </nav>
+
+  </div>
+
+  <!-- SCRIPT DE INTERAÇÃO -->
+  <script>
+    // Alternador de Visualização Desktop / Simulador Mobile
+    function setViewMode(mode) {
+      const btnDesktop = document.getElementById('btnDesktop');
+      const btnMobile = document.getElementById('btnMobile');
+
+      if (mode === 'mobile') {
+        document.body.classList.add('mobile-simulator-active');
+        btnMobile.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnDesktop.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      } else {
+        document.body.classList.remove('mobile-simulator-active');
+        btnDesktop.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnMobile.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      }
+    }
+
+    // Alternador de Abas de Conteúdo no Perfil
+    function switchProfileTab(tabName) {
+      const postsContent = document.getElementById('postsContent');
+      const hintsContent = document.getElementById('hintsContent');
+      const savedContent = document.getElementById('savedContent');
+
+      const tabPostsBtn = document.getElementById('tabPostsBtn');
+      const tabHintsBtn = document.getElementById('tabHintsBtn');
+      const tabSavedBtn = document.getElementById('tabSavedBtn');
+
+      [postsContent, hintsContent, savedContent].forEach(el => el.classList.add('hidden'));
+      [tabPostsBtn, tabHintsBtn, tabSavedBtn].forEach(b => {
+        b.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all flex items-center justify-center gap-1.5 shrink-0';
+      });
+
+      if (tabName === 'posts') {
+        postsContent.classList.remove('hidden');
+        tabPostsBtn.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-lg bg-brand-blue text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0';
+      } else if (tabName === 'hints') {
+        hintsContent.classList.remove('hidden');
+        tabHintsBtn.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-lg bg-brand-blue text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0';
+      } else if (tabName === 'saved') {
+        savedContent.classList.remove('hidden');
+        tabSavedBtn.className = 'flex-1 sm:flex-initial px-4 py-2 rounded-lg bg-brand-blue text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 shrink-0';
+      }
+    }
+  </script>
+
+</body>
+</html>
