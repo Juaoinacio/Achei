@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achei — Recuperação de Senha | Unochapecó</title>
+
+  <!-- Fonte Oficial: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Biblioteca Oficial de Ícones: Boxicons v2 -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN com Configuração da Marca Oficial -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              blue: '#1C4398',        // Azul Royal Oficial
+              blueHover: '#153375',
+              lilac: '#AC80CE',       // Roxo Lilás Oficial
+              lilacHover: '#986BBD',
+              yellow: '#FFDC5D',      // Amarelo Solar Oficial
+              yellowHover: '#E8C545',
+              dark: '#232724',        // Grafite Escuro Oficial (textos e títulos)
+              gray: '#E1E1E1',        // Cinza Claro Oficial (bordas e divisórias)
+              surface: '#FFFFFF',
+              bg: '#F8F9FA',          // Fundo suave de tela
+            }
+          },
+          borderRadius: {
+            'custom': '12px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* REGRAS DO MODO SIMULADOR MOBILE */
+    body.mobile-simulator-active {
+      background-color: #0f172a !important;
+    }
+
+    body.mobile-simulator-active #viewWrapper {
+      max-width: 412px !important;
+      height: 840px !important;
+      margin: 1.5rem auto !important;
+      border: 12px solid #232724 !important;
+      border-radius: 46px !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      position: relative !important;
+      background-color: #F8F9FA !important;
+    }
+
+    body.mobile-simulator-active #phoneDynamicIsland {
+      display: flex !important;
+    }
+
+    body.mobile-simulator-active .desktop-hero-side {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .form-side {
+      width: 100% !important;
+      padding: 1.5rem 1.25rem !important;
+    }
+  </style>
+</head>
+<body class="bg-brand-bg text-brand-dark font-sans min-h-screen selection:bg-brand-yellow selection:text-brand-dark transition-colors duration-300">
+
+  <!-- ======================================================== -->
+  <!-- BARRA DE CONTROLE DO PROTÓTIPO (DESKTOP X MOBILE + TELAS)-->
+  <!-- ======================================================== -->
+  <aside class="bg-brand-dark text-white text-xs py-2 px-4 sticky top-0 z-50 flex items-center justify-between border-b border-black/20 shadow-md">
+    <div class="flex items-center gap-3">
+      <span class="font-bold text-brand-yellow flex items-center gap-1.5">
+        <i class="bx bx-slider-alt text-base"></i>
+        Achei • Recuperar Senha
+      </span>
+      <span class="hidden sm:inline text-slate-500">|</span>
+      
+      <!-- Navegação rápida entre telas do protótipo -->
+      <nav class="hidden md:flex items-center gap-2 text-slate-300">
+        <a href="../home/index.html" class="hover:text-brand-yellow transition-colors">Home</a>
+        <span>•</span>
+        <a href="../login/index.html" class="hover:text-brand-yellow transition-colors">Login</a>
+        <span>•</span>
+        <a href="../register/index.html" class="hover:text-brand-yellow transition-colors">Cadastro</a>
+        <span>•</span>
+        <span class="text-white font-bold underline decoration-brand-yellow decoration-2">Recuperar Senha</span>
+        <span>•</span>
+        <a href="../perfio/index.html" class="hover:text-brand-yellow transition-colors">Perfil</a>
+        <span>•</span>
+        <a href="../rank/index.html" class="hover:text-brand-yellow transition-colors">Ranking</a>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="setViewMode('desktop')" id="btnDesktop" class="px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs">
+        <i class="bx bx-laptop text-sm"></i>
+        <span>Desktop</span>
+      </button>
+      <button onclick="setViewMode('mobile')" id="btnMobile" class="px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all">
+        <i class="bx bx-mobile-alt text-sm"></i>
+        <span>Mobile (Simulador 390px)</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- CONTAINER PRINCIPAL                                      -->
+  <!-- ======================================================== -->
+  <div id="viewWrapper" class="w-full min-h-[calc(100vh-41px)] transition-all duration-300 flex flex-col justify-center items-center p-0 lg:p-6">
+
+    <!-- STATUS BAR / NOTCH DO CELULAR (visível no simulador mobile) -->
+    <div id="phoneDynamicIsland" class="hidden items-center justify-between px-6 pt-3 pb-2 bg-brand-blue text-white text-[11px] font-semibold select-none sticky top-0 z-50 w-full">
+      <span>9:41</span>
+      <div class="w-24 h-4 bg-black/40 rounded-full flex items-center justify-end px-2">
+        <span class="w-2 h-2 rounded-full bg-slate-900 border border-white/20"></span>
+      </div>
+      <div class="flex items-center gap-1.5 text-xs text-white">
+        <i class="bx bx-wifi text-sm"></i>
+        <i class="bx bxs-battery text-base"></i>
+      </div>
+    </div>
+
+    <!-- CARD PRINCIPAL DE RECUPERAÇÃO (SPLIT SCREEN EM DESKTOP) -->
+    <div class="w-full max-w-5xl bg-white border border-brand-gray rounded-none lg:rounded-2xl shadow-sm overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[560px]">
+
+      <!-- LADO ESQUERDO: ORIENTAÇÕES DE SEGURANÇA (DESKTOP) -->
+      <div class="desktop-hero-side hidden lg:flex lg:col-span-5 bg-gradient-to-br from-brand-blue via-brand-blue to-brand-blueHover text-white p-10 flex-col justify-between relative overflow-hidden">
+        
+        <!-- Efeitos com Roxo Lilás Oficial (#AC80CE) -->
+        <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-brand-lilac/25 blur-2xl pointer-events-none"></div>
+        <div class="absolute -bottom-20 -left-12 w-64 h-64 rounded-full bg-brand-yellow/15 blur-3xl pointer-events-none"></div>
+
+        <!-- Topo da lateral -->
+        <div class="space-y-4 relative z-10">
+          <a href="../home/index.html" class="flex items-center gap-3 group">
+            <span class="w-10 h-10 bg-brand-yellow text-brand-dark rounded-xl flex items-center justify-center font-extrabold text-2xl shadow-sm transition-transform group-hover:scale-105">
+              <i class="bx bx-search"></i>
+            </span>
+            <div class="flex flex-col">
+              <span class="text-2xl font-extrabold tracking-tight leading-none text-white">Achei</span>
+              <span class="text-xs font-bold text-brand-yellow uppercase tracking-wider">Unochapecó</span>
+            </div>
+          </a>
+
+          <div class="pt-4">
+            <h2 class="text-2xl font-extrabold leading-snug">
+              Recuperação segura de acesso ao Achei.
+            </h2>
+            <p class="text-sm text-slate-200 mt-2 leading-relaxed">
+              Enviaremos um link de redefinição criptografado diretamente para sua caixa de entrada institucional da Unochapecó.
+            </p>
+          </div>
+        </div>
+
+        <!-- Dicas de Segurança -->
+        <div class="relative z-10 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 space-y-3">
+          <div class="flex items-center gap-2 text-xs font-bold text-brand-yellow uppercase tracking-wider">
+            <i class="bx bx-info-circle text-base"></i>
+            <span>Dicas da TI Acadêmica</span>
+          </div>
+
+          <ul class="text-xs text-slate-200 space-y-2">
+            <li class="flex items-start gap-2">
+              <i class="bx bx-check text-brand-yellow mt-0.5"></i>
+              <span>O link tem validade de 30 minutos por motivos de segurança.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="bx bx-check text-brand-yellow mt-0.5"></i>
+              <span>Verifique a pasta de spam ou lixo eletrônico caso não receba em 2 minutos.</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <i class="bx bx-check text-brand-yellow mt-0.5"></i>
+              <span>Nunca compartilhe seu código com terceiros no campus.</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Rodapé da lateral -->
+        <div class="text-xs text-slate-300 relative z-10 flex items-center justify-between border-t border-white/15 pt-3">
+          <span>Suporte: ti@unochapeco.edu.br</span>
+          <span class="font-mono text-[11px] text-brand-yellow">uno.edu.br</span>
+        </div>
+
+      </div>
+
+      <!-- LADO DIREITO: ÁREA INTERATIVA DE RECUPERAÇÃO -->
+      <div class="form-side col-span-1 lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between bg-white">
+        
+        <!-- Topo Mobile -->
+        <div class="lg:hidden flex items-center justify-between border-b border-brand-gray pb-4 mb-4">
+          <a href="../home/index.html" class="flex items-center gap-2.5">
+            <span class="w-8 h-8 bg-brand-yellow text-brand-dark rounded-lg flex items-center justify-center font-extrabold text-lg">
+              <i class="bx bx-search"></i>
+            </span>
+            <div class="flex flex-col">
+              <span class="text-lg font-extrabold tracking-tight leading-none text-brand-blue">Achei</span>
+              <span class="text-[9px] font-bold text-brand-lilac uppercase tracking-wider">Unochapecó</span>
+            </div>
+          </a>
+
+          <a href="../login/index.html" class="text-xs font-semibold text-brand-blue hover:underline">
+            Voltar ao Login
+          </a>
+        </div>
+
+        <!-- SELETOR DE ETAPAS PARA TESTES DO PROTÓTIPO -->
+        <div class="flex items-center gap-1.5 p-1 bg-slate-100 rounded-lg text-xs font-bold w-fit mb-4">
+          <button onclick="switchStep(1)" id="btnStep1" class="px-3 py-1 rounded-md bg-white text-brand-dark shadow-xs transition-all">
+            1. Solicitar
+          </button>
+          <button onclick="switchStep(2)" id="btnStep2" class="px-3 py-1 rounded-md bg-transparent text-slate-500 hover:text-brand-dark transition-all">
+            2. Enviado
+          </button>
+          <button onclick="switchStep(3)" id="btnStep3" class="px-3 py-1 rounded-md bg-transparent text-slate-500 hover:text-brand-dark transition-all">
+            3. Nova Senha
+          </button>
+        </div>
+
+        <!-- ==================================================== -->
+        <!-- ETAPA 1: SOLICITAR LINK (DEFAULT)                    -->
+        <!-- ==================================================== -->
+        <div id="step1View" class="space-y-6">
+          <div class="space-y-1.5">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-tight">
+              Esqueceu sua senha?
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Não se preocupe! Digite seu e-mail institucional e enviaremos as orientações para recuperar sua conta.
+            </p>
+          </div>
+
+          <form onsubmit="event.preventDefault(); switchStep(2);" class="space-y-4">
+            <div class="space-y-1.5">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                E-mail Universitário Cadastrado
+              </label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-3 text-slate-400 text-lg">
+                  <i class="bx bx-envelope"></i>
+                </span>
+                <input 
+                  id="recoveryEmail" 
+                  type="email" 
+                  required 
+                  placeholder="seu.nome@unochapeco.edu.br" 
+                  value="lucas.mendes@unochapeco.edu.br" 
+                  class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-brand-gray rounded-lg text-sm text-brand-dark placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all"
+                />
+              </div>
+            </div>
+
+            <!-- Botão Principal: Amarelo Solar (#FFDC5D) com Texto Grafite (#232724) -->
+            <button 
+              type="submit" 
+              class="w-full py-3 px-4 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-sm rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 mt-4 active:scale-[0.99]"
+            >
+              <span>Enviar Link de Recuperação</span>
+              <i class="bx bx-send text-lg"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- ==================================================== -->
+        <!-- ETAPA 2: E-MAIL ENVIADO (CONFIRMAÇÃO)                -->
+        <!-- ==================================================== -->
+        <div id="step2View" class="hidden space-y-6">
+          <div class="w-14 h-14 rounded-2xl bg-brand-yellow text-brand-dark flex items-center justify-center text-3xl font-bold shadow-xs">
+            <i class="bx bx-mail-send"></i>
+          </div>
+
+          <div class="space-y-1.5">
+            <h1 class="text-2xl font-extrabold text-brand-dark tracking-tight">
+              E-mail Enviado com Sucesso!
+            </h1>
+            <p class="text-sm text-slate-600 leading-relaxed">
+              Enviamos um link com código de verificação para: <br />
+              <strong class="text-brand-blue" id="targetEmailDisplay">lucas.mendes@unochapeco.edu.br</strong>
+            </p>
+          </div>
+
+          <div class="p-3.5 bg-slate-50 border border-brand-gray rounded-xl space-y-2 text-xs text-slate-600">
+            <p class="font-semibold text-brand-dark flex items-center gap-1.5">
+              <i class="bx bx-time text-brand-blue text-sm"></i>
+              O link expira em 30 minutos
+            </p>
+            <p>
+              Abra sua caixa de entrada no e-mail institucional e clique no botão de redefinição para cadastrar sua nova senha.
+            </p>
+          </div>
+
+          <div class="space-y-2 pt-2">
+            <button 
+              onclick="switchStep(3)" 
+              class="w-full py-3 px-4 bg-brand-blue hover:bg-brand-blueHover text-white font-extrabold text-sm rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2"
+            >
+              <span>Avançar para Definir Nova Senha (Simulação)</span>
+              <i class="bx bx-right-arrow-alt text-lg"></i>
+            </button>
+
+            <button 
+              onclick="switchStep(1)" 
+              class="w-full py-2.5 px-4 bg-transparent hover:bg-slate-50 text-slate-600 font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-1"
+            >
+              <i class="bx bx-refresh text-base"></i>
+              <span>Não recebi, reenviar e-mail</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ==================================================== -->
+        <!-- ETAPA 3: CADASTRAR NOVA SENHA                        -->
+        <!-- ==================================================== -->
+        <div id="step3View" class="hidden space-y-6">
+          <div class="space-y-1.5">
+            <h1 class="text-2xl font-extrabold text-brand-dark tracking-tight">
+              Definir Nova Senha
+            </h1>
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Crie uma senha forte e segura para voltar a acessar a plataforma Achei Unochapecó.
+            </p>
+          </div>
+
+          <form onsubmit="event.preventDefault(); handleNewPassword();" class="space-y-3.5">
+            <!-- Campo Nova Senha -->
+            <div class="space-y-1">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Nova Senha
+              </label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-2.5 text-slate-400 text-lg">
+                  <i class="bx bx-lock-alt"></i>
+                </span>
+                <input 
+                  id="newPass1" 
+                  type="password" 
+                  required 
+                  placeholder="Mínimo 8 caracteres" 
+                  class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-brand-gray rounded-lg text-sm text-brand-dark placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all"
+                />
+                <button 
+                  type="button" 
+                  onclick="togglePass('newPass1', 'eyeNew1')" 
+                  class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
+                >
+                  <i id="eyeNew1" class="bx bx-show text-lg"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Campo Confirmar Nova Senha -->
+            <div class="space-y-1">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Confirmar Nova Senha
+              </label>
+              <div class="relative">
+                <span class="absolute left-3.5 top-2.5 text-slate-400 text-lg">
+                  <i class="bx bx-check-shield"></i>
+                </span>
+                <input 
+                  id="newPass2" 
+                  type="password" 
+                  required 
+                  placeholder="Repita a nova senha" 
+                  class="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-brand-gray rounded-lg text-sm text-brand-dark placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all"
+                />
+                <button 
+                  type="button" 
+                  onclick="togglePass('newPass2', 'eyeNew2')" 
+                  class="absolute right-3 top-2.5 text-slate-400 hover:text-slate-600"
+                >
+                  <i id="eyeNew2" class="bx bx-show text-lg"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Botão Salvar: Amarelo Solar (#FFDC5D) com Texto Grafite (#232724) -->
+            <button 
+              type="submit" 
+              class="w-full py-3 px-4 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-sm rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 mt-4 active:scale-[0.99]"
+            >
+              <span>Salvar Nova Senha & Entrar</span>
+              <i class="bx bx-check-circle text-lg"></i>
+            </button>
+          </form>
+        </div>
+
+        <!-- Rodapé do Formulário: Voltar ao Login -->
+        <div class="pt-4 border-t border-brand-gray flex items-center justify-between text-xs text-slate-600 mt-6">
+          <a href="../login/index.html" class="font-bold text-brand-blue hover:underline flex items-center gap-1">
+            <i class="bx bx-left-arrow-alt text-base"></i>
+            <span>Voltar para o Login</span>
+          </a>
+
+          <a href="../home/index.html" class="hover:text-brand-dark transition-colors">
+            Acessar como Visitante
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SCRIPT DE INTERAÇÃO -->
+  <script>
+    // Alternador de Visualização Desktop / Simulador Mobile
+    function setViewMode(mode) {
+      const btnDesktop = document.getElementById('btnDesktop');
+      const btnMobile = document.getElementById('btnMobile');
+
+      if (mode === 'mobile') {
+        document.body.classList.add('mobile-simulator-active');
+        btnMobile.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnDesktop.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      } else {
+        document.body.classList.remove('mobile-simulator-active');
+        btnDesktop.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnMobile.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      }
+    }
+
+    // Alternar entre etapas da recuperação
+    function switchStep(stepNumber) {
+      const step1 = document.getElementById('step1View');
+      const step2 = document.getElementById('step2View');
+      const step3 = document.getElementById('step3View');
+
+      const btn1 = document.getElementById('btnStep1');
+      const btn2 = document.getElementById('btnStep2');
+      const btn3 = document.getElementById('btnStep3');
+
+      [step1, step2, step3].forEach(el => el.classList.add('hidden'));
+      [btn1, btn2, btn3].forEach(b => {
+        b.className = 'px-3 py-1 rounded-md bg-transparent text-slate-500 hover:text-brand-dark transition-all';
+      });
+
+      if (stepNumber === 1) {
+        step1.classList.remove('hidden');
+        btn1.className = 'px-3 py-1 rounded-md bg-white text-brand-dark shadow-xs transition-all';
+      } else if (stepNumber === 2) {
+        step2.classList.remove('hidden');
+        btn2.className = 'px-3 py-1 rounded-md bg-white text-brand-dark shadow-xs transition-all';
+        const mail = document.getElementById('recoveryEmail').value;
+        if (mail) document.getElementById('targetEmailDisplay').innerText = mail;
+      } else if (stepNumber === 3) {
+        step3.classList.remove('hidden');
+        btn3.className = 'px-3 py-1 rounded-md bg-white text-brand-dark shadow-xs transition-all';
+      }
+    }
+
+    function togglePass(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'bx bx-hide text-lg';
+      } else {
+        input.type = 'password';
+        icon.className = 'bx bx-show text-lg';
+      }
+    }
+
+    function handleNewPassword() {
+      const p1 = document.getElementById('newPass1').value;
+      const p2 = document.getElementById('newPass2').value;
+
+      if (!p1 || p1.length < 8) {
+        alert('A senha deve ter no mínimo 8 caracteres.');
+        return;
+      }
+
+      if (p1 !== p2) {
+        alert('As senhas não coincidem. Digite novamente.');
+        return;
+      }
+
+      alert('Nova senha redefinida com sucesso! Você já pode entrar.');
+      window.location.href = '../login/index.html';
+    }
+  </script>
+
+</body>
+</html>
