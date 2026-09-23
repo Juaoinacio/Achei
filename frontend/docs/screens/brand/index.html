@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achei — Guia de Marca & Design System (Unochapecó)</title>
+  
+  <!-- Fonte Oficial: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Biblioteca Oficial de Ícones: Boxicons v2 -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN com Configuração da Marca -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              blue: '#1C4398',        // Azul Royal Oficial
+              blueHover: '#153375',
+              navy: '#1C4398',        // Alias institucional
+              navyHover: '#153375',
+              lilac: '#AC80CE',       // Roxo Lilás Oficial
+              lilacHover: '#986BBD',
+              yellow: '#FFDC5D',      // Amarelo Solar Oficial
+              yellowHover: '#E8C545',
+              yellowLight: '#FFFBEB',
+              dark: '#232724',        // Grafite Escuro Oficial (textos e títulos)
+              gray: '#E1E1E1',        // Cinza Claro Oficial (bordas e divisórias)
+              surface: '#FFFFFF',
+              bg: '#F8F9FA',
+            },
+            status: {
+              foundText: '#047857',
+              foundBg: '#ECFDF5',
+              lostText: '#B91C1C',
+              lostBg: '#FEF2F2',
+              returnedText: '#854D0E',
+              returnedBg: '#FEF3C7',
+            }
+          },
+          borderRadius: {
+            'custom': '12px',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-brand-bg text-slate-900 font-sans min-h-screen py-10 px-4 md:px-12 selection:bg-brand-yellowLight selection:text-brand-navy">
+
+  <!-- Container Central -->
+  <div class="max-w-6xl mx-auto space-y-12">
+
+    <!-- Cabeçalho Principal -->
+    <header class="bg-white border border-slate-200 rounded-custom p-6 md:p-8 shadow-sm flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+      <div class="space-y-2">
+        <div class="inline-flex items-center gap-2 px-3 py-1 bg-brand-yellowLight text-brand-navy text-xs font-semibold rounded-full uppercase tracking-wider">
+          <i class="bx bxs-graduation text-sm text-brand-yellow"></i>
+          Unochapecó • Design System v1
+        </div>
+        <h1 class="text-3xl md:text-4xl font-extrabold text-brand-navy tracking-tight flex items-center gap-3">
+          <span class="p-2 bg-brand-navy text-white rounded-lg inline-flex items-center justify-center">
+            <i class="bx bx-search text-2xl"></i>
+          </span>
+          Achei
+        </h1>
+        <p class="text-slate-600 text-sm md:text-base max-w-xl">
+          Manual interativo de identidade visual, ícones (<strong>Boxicons v2</strong>) e componentes para a plataforma comunitária de achados e perdidos da <strong>Unochapecó</strong>.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="#icones" class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold text-sm rounded-lg transition-colors inline-flex items-center gap-2">
+          <i class="bx bx-category-alt text-base"></i>
+          <span>Ícones Boxicons v2</span>
+        </a>
+        <a href="#componentes" class="px-4 py-2.5 bg-brand-yellow hover:bg-brand-yellowHover text-brand-navy font-bold text-sm rounded-lg transition-colors shadow-sm inline-flex items-center gap-2">
+          <span>Componentes</span>
+          <i class="bx bx-down-arrow-alt text-base"></i>
+        </a>
+      </div>
+    </header>
+
+    <!-- Seção 1: Paleta de Cores Oficial -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <div>
+          <h2 class="text-xl md:text-2xl font-bold text-brand-navy flex items-center gap-2">
+            <i class="bx bx-palette text-brand-blue"></i>
+            1. Paleta de Cores Oficial
+          </h2>
+          <p class="text-slate-500 text-sm">As 5 cores oficiais da nossa marca (clique no card para copiar o código HEX).</p>
+        </div>
+        <span id="copyFeedback" class="text-xs font-bold text-brand-blue bg-blue-50 border border-brand-gray px-3 py-1 rounded-full opacity-0 transition-opacity">
+          Copiado!
+        </span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- Cor 1: Azul Royal -->
+        <div onclick="copyColor('#1C4398')" class="cursor-pointer group bg-white border border-slate-200 rounded-custom p-4 shadow-sm hover:shadow-md transition-all">
+          <div class="h-24 rounded-lg bg-[#1C4398] flex items-end p-3 text-white transition-transform group-hover:scale-[1.02]">
+            <span class="text-xs font-mono uppercase bg-black/40 px-2 py-0.5 rounded">#1C4398</span>
+          </div>
+          <div class="mt-3">
+            <h3 class="font-bold text-brand-dark text-sm">Azul Royal</h3>
+            <p class="text-xs text-slate-500 mt-1">Navbar, cabeçalho e presença institucional.</p>
+          </div>
+        </div>
+
+        <!-- Cor 2: Roxo Lilás -->
+        <div onclick="copyColor('#AC80CE')" class="cursor-pointer group bg-white border border-slate-200 rounded-custom p-4 shadow-sm hover:shadow-md transition-all">
+          <div class="h-24 rounded-lg bg-[#AC80CE] flex items-end p-3 text-white transition-transform group-hover:scale-[1.02]">
+            <span class="text-xs font-mono uppercase bg-black/40 px-2 py-0.5 rounded">#AC80CE</span>
+          </div>
+          <div class="mt-3">
+            <h3 class="font-bold text-brand-dark text-sm">Roxo Lilás</h3>
+            <p class="text-xs text-slate-500 mt-1">Contraste harmônico, badges e detalhes.</p>
+          </div>
+        </div>
+
+        <!-- Cor 3: Amarelo Solar -->
+        <div onclick="copyColor('#FFDC5D')" class="cursor-pointer group bg-white border border-slate-200 rounded-custom p-4 shadow-sm hover:shadow-md transition-all">
+          <div class="h-24 rounded-lg bg-[#FFDC5D] flex items-end p-3 text-brand-dark transition-transform group-hover:scale-[1.02]">
+            <span class="text-xs font-mono uppercase bg-black/20 font-bold px-2 py-0.5 rounded">#FFDC5D</span>
+          </div>
+          <div class="mt-3">
+            <h3 class="font-bold text-brand-dark text-sm">Amarelo Solar</h3>
+            <p class="text-xs text-slate-500 mt-1">Botão "+ Novo Post", pistas e alertas.</p>
+          </div>
+        </div>
+
+        <!-- Cor 4: Grafite Escuro -->
+        <div onclick="copyColor('#232724')" class="cursor-pointer group bg-white border border-slate-200 rounded-custom p-4 shadow-sm hover:shadow-md transition-all">
+          <div class="h-24 rounded-lg bg-[#232724] flex items-end p-3 text-white transition-transform group-hover:scale-[1.02]">
+            <span class="text-xs font-mono uppercase bg-black/40 px-2 py-0.5 rounded">#232724</span>
+          </div>
+          <div class="mt-3">
+            <h3 class="font-bold text-brand-dark text-sm">Grafite Escuro</h3>
+            <p class="text-xs text-slate-500 mt-1">Textos principais, títulos e ícones escuros.</p>
+          </div>
+        </div>
+
+        <!-- Cor 5: Cinza Claro -->
+        <div onclick="copyColor('#E1E1E1')" class="cursor-pointer group bg-white border border-slate-200 rounded-custom p-4 shadow-sm hover:shadow-md transition-all">
+          <div class="h-24 rounded-lg bg-[#E1E1E1] border border-slate-300 flex items-end p-3 text-brand-dark transition-transform group-hover:scale-[1.02]">
+            <span class="text-xs font-mono uppercase bg-white/80 px-2 py-0.5 rounded border border-slate-200">#E1E1E1</span>
+          </div>
+          <div class="mt-3">
+            <h3 class="font-bold text-brand-dark text-sm">Cinza Claro</h3>
+            <p class="text-xs text-slate-500 mt-1">Bordas sutis, linhas e fundos neutros.</p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Seção 2: Tipografia (Plus Jakarta Sans) -->
+    <section class="space-y-4">
+      <div class="border-b border-slate-200 pb-3">
+        <h2 class="text-xl md:text-2xl font-bold text-brand-navy flex items-center gap-2">
+          <i class="bx bx-font-family text-brand-blue"></i>
+          2. Tipografia Oficial: Plus Jakarta Sans
+        </h2>
+        <p class="text-slate-500 text-sm">Hierarquia de texto limpa, geométrica e de alta legibilidade em celulares e PCs.</p>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-custom p-6 md:p-8 space-y-6 shadow-sm">
+        
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-xs uppercase font-bold tracking-wider text-slate-400">Headline 1 • Bold (700) • 32px</span>
+          <p class="text-3xl md:text-4xl font-bold text-brand-navy mt-1">
+            Achados e Perdidos Comunitário Unochapecó
+          </p>
+        </div>
+
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-xs uppercase font-bold tracking-wider text-slate-400">Headline 2 • SemiBold (600) • 24px</span>
+          <p class="text-2xl font-semibold text-slate-800 mt-1">
+            Feed de Pertences Encontrados nos Blocos
+          </p>
+        </div>
+
+        <div class="border-b border-slate-100 pb-4">
+          <span class="text-xs uppercase font-bold tracking-wider text-slate-400">Body • Medium (500) • 16px</span>
+          <p class="text-base font-medium text-slate-700 mt-1 leading-relaxed max-w-2xl">
+            Perdeu sua garrafa térmica, caderno ou chaves no campus? A comunidade acadêmica da Unochapecó compartilha avisos em tempo real para conectar você ao seu item.
+          </p>
+        </div>
+
+        <div>
+          <span class="text-xs uppercase font-bold tracking-wider text-slate-400">Caption & Metadata • Regular / Medium • 13px</span>
+          <div class="flex items-center gap-3 mt-2 text-xs text-slate-500 font-medium">
+            <span class="flex items-center gap-1"><i class="bx bx-map-pin text-brand-blue"></i> Bloco R - Sala 204</span>
+            <span>•</span>
+            <span class="flex items-center gap-1"><i class="bx bx-time-five"></i> Há 15 minutos</span>
+            <span>•</span>
+            <span class="text-brand-blue font-semibold flex items-center gap-1"><i class="bx bx-user-circle"></i> Lucas Mendes (Ciência da Computação)</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Seção 3: Biblioteca Oficial de Ícones: Boxicons v2 -->
+    <section id="icones" class="space-y-4">
+      <div class="border-b border-slate-200 pb-3">
+        <h2 class="text-xl md:text-2xl font-bold text-brand-navy flex items-center gap-2">
+          <i class="bx bx-cube-alt text-brand-blue"></i>
+          3. Biblioteca Oficial de Ícones: Boxicons v2
+        </h2>
+        <p class="text-slate-500 text-sm">Conjunto oficial de ícones padronizados para navegação, ações sociais e categorias de objetos.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Grupo 1: Navegação Principal -->
+        <div class="bg-white border border-slate-200 rounded-custom p-6 space-y-4 shadow-sm">
+          <h3 class="font-bold text-brand-navy text-sm uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <i class="bx bx-navigation text-brand-blue"></i>
+            Navegação & Estrutura
+          </h3>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-home-alt-2 text-xl text-brand-navy"></i>
+              <span>bx-home-alt-2 (Feed)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-compass text-xl text-brand-blue"></i>
+              <span>bx-compass (Explorar)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bxs-plus-circle text-xl text-brand-yellow"></i>
+              <span>bxs-plus-circle (Post)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-bell text-xl text-slate-700"></i>
+              <span>bx-bell (Alertas)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-user text-xl text-slate-700"></i>
+              <span>bx-user (Perfil)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-menu text-xl text-slate-700"></i>
+              <span>bx-menu (Gaveta)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grupo 2: Ações & Pistas -->
+        <div class="bg-white border border-slate-200 rounded-custom p-6 space-y-4 shadow-sm">
+          <h3 class="font-bold text-brand-navy text-sm uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <i class="bx bx-conversation text-brand-blue"></i>
+            Ações & Engajamento
+          </h3>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-search text-xl text-brand-blue"></i>
+              <span>bx-search (Busca)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-map-pin text-xl text-rose-500"></i>
+              <span>bx-map-pin (Local)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-message-dots text-xl text-brand-blue"></i>
+              <span>bx-message-dots (Pistas)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-share-alt text-xl text-slate-700"></i>
+              <span>bx-share-alt (Compartilhar)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-camera text-xl text-brand-yellow"></i>
+              <span>bx-camera (Foto)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-check-shield text-xl text-brand-blue"></i>
+              <span>bx-check-shield (Devolvido)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grupo 3: Categorias de Pertences -->
+        <div class="bg-white border border-slate-200 rounded-custom p-6 space-y-4 shadow-sm">
+          <h3 class="font-bold text-brand-navy text-sm uppercase tracking-wider text-slate-400 flex items-center gap-2">
+            <i class="bx bx-purchase-tag-alt text-brand-blue"></i>
+            Categorias de Pertences
+          </h3>
+          <div class="grid grid-cols-2 gap-3 text-xs">
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-devices text-xl text-slate-700"></i>
+              <span>bx-devices (Eletrônicos)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-id-card text-xl text-slate-700"></i>
+              <span>bx-id-card (Documentos)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-key text-xl text-slate-700"></i>
+              <span>bx-key (Chaves)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-book-open text-xl text-slate-700"></i>
+              <span>bx-book-open (Cadernos/Livros)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-glasses text-xl text-slate-700"></i>
+              <span>bx-glasses (Óculos)</span>
+            </div>
+            <div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <i class="bx bx-closet text-xl text-slate-700"></i>
+              <span>bx-closet (Casacos/Roupas)</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Seção 4: Biblioteca de Componentes UI -->
+    <section id="componentes" class="space-y-6">
+      <div class="border-b border-slate-200 pb-3">
+        <h2 class="text-xl md:text-2xl font-bold text-brand-navy flex items-center gap-2">
+          <i class="bx bx-layer text-brand-blue"></i>
+          4. Biblioteca de Componentes UI
+        </h2>
+        <p class="text-slate-500 text-sm">Cantos moderados (10px a 12px), sombras sutis e ícones Boxicons integrados.</p>
+      </div>
+
+      <!-- Grid de Componentes: Botões, Badges e Inputs -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <!-- Coluna 1: Botões -->
+        <div class="bg-white border border-slate-200 rounded-custom p-6 space-y-4 shadow-sm">
+          <h3 class="font-bold text-brand-navy text-sm uppercase tracking-wider text-slate-400">Botões de Ação</h3>
+          
+          <button class="w-full py-2.5 px-4 bg-brand-yellow hover:bg-brand-yellowHover text-brand-navy font-bold text-sm rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2">
+            <i class="bx bx-plus text-lg"></i>
+            + Publicar Novo Item
+          </button>
+
+          <button class="w-full py-2.5 px-4 bg-brand-blue hover:bg-brand-blueHover text-white font-semibold text-sm rounded-lg transition-colors shadow-sm flex items-center justify-center gap-2">
+            <i class="bx bx-comment-dots text-lg"></i>
+            Dar uma Pista / Comentar
+          </button>
+
+          <button class="w-full py-2.5 px-4 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-semibold text-sm rounded-lg transition-colors flex items-center justify-center gap-2">
+            <i class="bx bx-show text-lg"></i>
+            Ver Detalhes do Post
+          </button>
+        </div>
+
+        <!-- Coluna 2: Badges de Status -->
+        <div class="bg-white border border-slate-200 rounded-custom p-6 space-y-4 shadow-sm">
+          <h3 class="font-bold text-brand-navy text-sm uppercase tracking-wider text-slate-400">Badges de Status</h3>
+          
+          <div class="space-y-3">
+            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <span class="text-xs text-slate-600 font-medium">Item Localizado:</span>
+              <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wide bg-status-foundBg text-status-foundText">
+                Achado
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <span class="text-xs text-slate-600 font-medium">Item Procurado:</span>
+              <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wide bg-status-lostBg text-status-lostText">
+                Perdido
+              </span>
+            </div>
+
+            <div class="flex items-center justify-between p-2 rounded-lg bg-slate-50 border border-slate-100">
+              <span class="text-xs text-slate-600 font-medium">Caso Resolvido:</span>
+              <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wide bg-status-returnedBg text-status-returnedText">
+                Devolvido
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Coluna 3: Busca & Chips -->
+        <div class="bg-white border border-slate-200 rounded-custom p-6 space-y-4 shadow-sm">
+          <h3 class="font-bold text-brand-navy text-sm uppercase tracking-wider text-slate-400">Busca & Filtros de Bloco</h3>
+          
+          <div class="relative">
+            <input 
+              type="text" 
+              placeholder="Buscar item, bloco ou sala..." 
+              class="w-full pl-9 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-lg text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:bg-white transition-all"
+            />
+            <i class="bx bx-search text-slate-400 text-lg absolute left-3 top-2.5"></i>
+          </div>
+
+          <div class="space-y-2">
+            <span class="text-xs text-slate-400 font-bold uppercase">Atalhos rápidos:</span>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="cursor-pointer px-2.5 py-1 bg-brand-navy text-white text-xs font-semibold rounded-md">Todos</span>
+              <span class="cursor-pointer px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-md">Bloco R</span>
+              <span class="cursor-pointer px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-md">Bloco G</span>
+              <span class="cursor-pointer px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-md">Biblioteca</span>
+              <span class="cursor-pointer px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-md">Cantina</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Preview de Cards Reais do Feed -->
+      <div class="space-y-3">
+        <h3 class="font-bold text-brand-navy text-base">Exemplo de Card no Feed (Estrutura Real do Componente com Boxicons):</h3>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- Card 1: Item Perdido -->
+          <article class="bg-white border border-slate-200 rounded-custom p-5 shadow-sm space-y-4 hover:border-slate-300 transition-all">
+            <!-- Topo do Card: Autor -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-brand-navy text-white flex items-center justify-center font-bold text-sm">
+                  MS
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm">Matheus Silva</h4>
+                  <p class="text-xs text-slate-500">Ciência da Computação • Há 25 min</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold uppercase tracking-wide bg-status-lostBg text-status-lostText">
+                Perdido
+              </span>
+            </div>
+
+            <!-- Conteúdo: Título e Detalhes -->
+            <div class="space-y-1.5">
+              <h3 class="text-base font-bold text-brand-navy">Mochila Notebook Azul Marinho</h3>
+              <p class="text-sm text-slate-600 line-clamp-2">
+                Esqueci no banco ao lado da porta do Laboratório 03 do Bloco R após a aula das 10h. Tem um estojo e meus cadernos dentro.
+              </p>
+            </div>
+
+            <!-- Tag de Localização -->
+            <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-md">
+              <i class="bx bx-map-pin text-brand-blue text-sm"></i>
+              <span>Bloco R — Laboratório 03</span>
+            </div>
+
+            <!-- Rodapé do Card: Ações -->
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+              <button class="text-xs font-semibold text-slate-600 hover:text-brand-blue inline-flex items-center gap-1.5">
+                <i class="bx bx-message-dots text-base"></i>
+                <span>3 pistas deixadas</span>
+              </button>
+
+              <button class="px-3.5 py-1.5 bg-brand-yellow hover:bg-brand-yellowHover text-brand-navy font-bold text-xs rounded-lg transition-colors flex items-center gap-1">
+                <i class="bx bx-check text-sm"></i>
+                Encontrei! / Avisar
+              </button>
+            </div>
+          </article>
+
+          <!-- Card 2: Item Achado -->
+          <article class="bg-white border border-slate-200 rounded-custom p-5 shadow-sm space-y-4 hover:border-slate-300 transition-all">
+            <!-- Topo do Card: Autor -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-brand-blue text-white flex items-center justify-center font-bold text-sm">
+                  PO
+                </div>
+                <div>
+                  <h4 class="font-bold text-slate-900 text-sm">Portaria Bloco G</h4>
+                  <p class="text-xs text-slate-500">Funcionário • Há 1 hora</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-0.5 rounded text-xs font-bold uppercase tracking-wide bg-status-foundBg text-status-foundText">
+                Achado
+              </span>
+            </div>
+
+            <!-- Conteúdo: Título e Detalhes -->
+            <div class="space-y-1.5">
+              <h3 class="text-base font-bold text-brand-navy">Chaveiro de Carro GM com 3 Chaves</h3>
+              <p class="text-sm text-slate-600 line-clamp-2">
+                Encontrado no chão próximo à cantina do Bloco G. Deixado guardado na recepção/portaria para retirada do proprietário.
+              </p>
+            </div>
+
+            <!-- Tag de Localização -->
+            <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 bg-slate-100 px-3 py-1.5 rounded-md">
+              <i class="bx bx-map-pin text-brand-blue text-sm"></i>
+              <span>Portaria Central — Bloco G</span>
+            </div>
+
+            <!-- Rodapé do Card: Ações -->
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+              <button class="text-xs font-semibold text-slate-600 hover:text-brand-blue inline-flex items-center gap-1.5">
+                <i class="bx bx-share-alt text-base"></i>
+                <span>Compartilhar</span>
+              </button>
+
+              <button class="px-3.5 py-1.5 bg-brand-blue hover:bg-brand-blueHover text-white font-bold text-xs rounded-lg transition-colors flex items-center gap-1">
+                <i class="bx bx-user-check text-sm"></i>
+                É meu! / Retirar
+              </button>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Rodapé -->
+    <footer class="text-center text-xs text-slate-400 py-6 border-t border-slate-200">
+      Achei • Sistema Comunitário da Unochapecó • Desenvolvido com Next.js, Tailwind CSS & Boxicons v2
+    </footer>
+
+  </div>
+
+  <!-- Script simples para copiar HEX com feedback visual -->
+  <script>
+    function copyColor(hex) {
+      navigator.clipboard.writeText(hex).then(() => {
+        const feedback = document.getElementById('copyFeedback');
+        feedback.innerText = `Copiado: ${hex}`;
+        feedback.classList.remove('opacity-0');
+        setTimeout(() => {
+          feedback.classList.add('opacity-0');
+        }, 1800);
+      });
+    }
+  </script>
+
+</body>
+</html>
