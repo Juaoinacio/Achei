@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achei — Entrar na Conta (Login) | Unochapecó</title>
+
+  <!-- Fonte Oficial: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Biblioteca Oficial de Ícones: Boxicons v2 -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN com Configuração da Marca Oficial -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              blue: '#1C4398',        // Azul Royal Oficial
+              blueHover: '#153375',
+              lilac: '#AC80CE',       // Roxo Lilás Oficial
+              lilacHover: '#986BBD',
+              yellow: '#FFDC5D',      // Amarelo Solar Oficial
+              yellowHover: '#E8C545',
+              dark: '#232724',        // Grafite Escuro Oficial (textos e títulos)
+              gray: '#E1E1E1',        // Cinza Claro Oficial (bordas e divisórias)
+              surface: '#FFFFFF',
+              bg: '#F8F9FA',          // Fundo suave de tela
+            }
+          },
+          borderRadius: {
+            'custom': '12px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* REGRAS DO MODO SIMULADOR MOBILE */
+    body.mobile-simulator-active {
+      background-color: #0f172a !important;
+    }
+
+    body.mobile-simulator-active #viewWrapper {
+      max-width: 412px !important;
+      height: 840px !important;
+      margin: 1.5rem auto !important;
+      border: 12px solid #232724 !important;
+      border-radius: 46px !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      position: relative !important;
+      background-color: #F8F9FA !important;
+    }
+
+    body.mobile-simulator-active #phoneDynamicIsland {
+      display: flex !important;
+    }
+
+    /* Oculta o banner lateral decorativo no simulador mobile */
+    body.mobile-simulator-active .desktop-hero-side {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .form-side {
+      width: 100% !important;
+      padding: 1.5rem 1.25rem !important;
+    }
+  </style>
+</head>
+<body class="bg-brand-bg text-brand-dark font-sans min-h-screen selection:bg-brand-yellow selection:text-brand-dark transition-colors duration-300">
+
+  <!-- ======================================================== -->
+  <!-- BARRA DE CONTROLE DO PROTÓTIPO (DESKTOP X MOBILE + TELAS)-->
+  <!-- ======================================================== -->
+  <aside class="bg-brand-dark text-white text-xs py-2 px-4 sticky top-0 z-50 flex items-center justify-between border-b border-black/20 shadow-md">
+    <div class="flex items-center gap-3">
+      <span class="font-bold text-brand-yellow flex items-center gap-1.5">
+        <i class="bx bx-slider-alt text-base"></i>
+        Achei • Login
+      </span>
+      <span class="hidden sm:inline text-slate-500">|</span>
+      
+      <!-- Navegação rápida entre telas do protótipo -->
+      <nav class="hidden md:flex items-center gap-2 text-slate-300">
+        <a href="../home/index.html" class="hover:text-brand-yellow transition-colors">Home</a>
+        <span>•</span>
+        <span class="text-white font-bold underline decoration-brand-yellow decoration-2">Login</span>
+        <span>•</span>
+        <a href="../register/index.html" class="hover:text-brand-yellow transition-colors">Cadastro</a>
+        <span>•</span>
+        <a href="../password/index.html" class="hover:text-brand-yellow transition-colors">Recuperar Senha</a>
+        <span>•</span>
+        <a href="../perfio/index.html" class="hover:text-brand-yellow transition-colors">Perfil</a>
+        <span>•</span>
+        <a href="../rank/index.html" class="hover:text-brand-yellow transition-colors">Ranking</a>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="setViewMode('desktop')" id="btnDesktop" class="px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs">
+        <i class="bx bx-laptop text-sm"></i>
+        <span>Desktop</span>
+      </button>
+      <button onclick="setViewMode('mobile')" id="btnMobile" class="px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all">
+        <i class="bx bx-mobile-alt text-sm"></i>
+        <span>Mobile (Simulador 390px)</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- CONTAINER PRINCIPAL                                      -->
+  <!-- ======================================================== -->
+  <div id="viewWrapper" class="w-full min-h-[calc(100vh-41px)] transition-all duration-300 flex flex-col justify-center items-center p-0 lg:p-6">
+
+    <!-- STATUS BAR / NOTCH DO CELULAR (visível no simulador mobile) -->
+    <div id="phoneDynamicIsland" class="hidden items-center justify-between px-6 pt-3 pb-2 bg-brand-blue text-white text-[11px] font-semibold select-none sticky top-0 z-50 w-full">
+      <span>9:41</span>
+      <div class="w-24 h-4 bg-black/40 rounded-full flex items-center justify-end px-2">
+        <span class="w-2 h-2 rounded-full bg-slate-900 border border-white/20"></span>
+      </div>
+      <div class="flex items-center gap-1.5 text-xs text-white">
+        <i class="bx bx-wifi text-sm"></i>
+        <i class="bx bxs-battery text-base"></i>
+      </div>
+    </div>
+
+    <!-- CARD PRINCIPAL DE LOGIN (SPLIT SCREEN EM DESKTOP) -->
+    <div class="w-full max-w-5xl bg-white border border-brand-gray rounded-none lg:rounded-2xl shadow-sm overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
+
+      <!-- LADO ESQUERDO: DESTAQUE INSTITUCIONAL & MARCA (DESKTOP) -->
+      <div class="desktop-hero-side hidden lg:flex lg:col-span-5 bg-gradient-to-br from-brand-blue via-brand-blue to-brand-blueHover text-white p-10 flex-col justify-between relative overflow-hidden">
+        
+        <!-- Círculo decorativo com Roxo Lilás Oficial (#AC80CE) -->
+        <div class="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-brand-lilac/25 blur-2xl pointer-events-none"></div>
+        <div class="absolute -bottom-20 -left-12 w-64 h-64 rounded-full bg-brand-yellow/15 blur-3xl pointer-events-none"></div>
+
+        <!-- Topo da lateral institucional -->
+        <div class="space-y-4 relative z-10">
+          <a href="../home/index.html" class="flex items-center gap-3 group">
+            <span class="w-10 h-10 bg-brand-yellow text-brand-dark rounded-xl flex items-center justify-center font-extrabold text-2xl shadow-sm transition-transform group-hover:scale-105">
+              <i class="bx bx-search"></i>
+            </span>
+            <div class="flex flex-col">
+              <span class="text-2xl font-extrabold tracking-tight leading-none text-white">Achei</span>
+              <span class="text-xs font-bold text-brand-yellow uppercase tracking-wider">Unochapecó</span>
+            </div>
+          </a>
+
+          <div class="pt-4">
+            <h2 class="text-2xl font-extrabold leading-snug">
+              A rede solidária de achados e perdidos da sua universidade.
+            </h2>
+            <p class="text-sm text-slate-200 mt-2 leading-relaxed">
+              Esqueceu sua garrafa, mochila ou calculadora em sala de aula? Nossa comunidade acadêmica te ajuda a recuperar.
+            </p>
+          </div>
+        </div>
+
+        <!-- Estatísticas da comunidade acadêmica -->
+        <div class="relative z-10 bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between text-xs border-b border-white/15 pb-2">
+            <span class="text-slate-200">Impacto no Campus</span>
+            <span class="font-bold text-brand-yellow">Campus Chapecó</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-center">
+            <div class="p-2 rounded-lg bg-white/10">
+              <p class="text-xl font-extrabold text-brand-yellow">340+</p>
+              <p class="text-[11px] text-slate-200 font-medium">Itens Devolvidos</p>
+            </div>
+            <div class="p-2 rounded-lg bg-white/10">
+              <p class="text-xl font-extrabold text-white">18 min</p>
+              <p class="text-[11px] text-slate-200 font-medium">Tempo Médio 1ª Pista</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rodapé da lateral -->
+        <div class="text-xs text-slate-300 relative z-10 flex items-center justify-between">
+          <span>Apoio Institucional • DCE</span>
+          <span class="font-mono text-[11px] text-brand-yellow">uno.edu.br</span>
+        </div>
+
+      </div>
+
+      <!-- LADO DIREITO: FORMULÁRIO DE LOGIN -->
+      <div class="form-side col-span-1 lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between bg-white">
+        
+        <!-- Topo Mobile (Logo exibido apenas quando a lateral estiver oculta) -->
+        <div class="lg:hidden flex items-center justify-between border-b border-brand-gray pb-4 mb-6">
+          <a href="../home/index.html" class="flex items-center gap-2.5">
+            <span class="w-8 h-8 bg-brand-yellow text-brand-dark rounded-lg flex items-center justify-center font-extrabold text-lg">
+              <i class="bx bx-search"></i>
+            </span>
+            <div class="flex flex-col">
+              <span class="text-lg font-extrabold tracking-tight leading-none text-brand-blue">Achei</span>
+              <span class="text-[9px] font-bold text-brand-lilac uppercase tracking-wider">Unochapecó</span>
+            </div>
+          </a>
+
+          <a href="../home/index.html" class="text-xs font-semibold text-slate-500 hover:text-brand-blue flex items-center gap-1">
+            <span>Visitar Feed</span>
+            <i class="bx bx-chevron-right"></i>
+          </a>
+        </div>
+
+        <!-- Cabeçalho do Formulário -->
+        <div class="space-y-2">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-tight">
+            Acessar Conta
+          </h1>
+          <p class="text-sm text-slate-600">
+            Entre com suas credenciais acadêmicas para publicar itens e registrar pistas.
+          </p>
+        </div>
+
+        <!-- Formulário Interativo -->
+        <form onsubmit="event.preventDefault(); handleLogin();" class="space-y-4 my-6">
+
+          <!-- Campo 1: E-mail Acadêmico ou RA -->
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+              E-mail Institucional ou RA
+            </label>
+            <div class="relative">
+              <span class="absolute left-3.5 top-3 text-slate-400 text-lg">
+                <i class="bx bx-envelope"></i>
+              </span>
+              <input 
+                id="loginEmail" 
+                type="text" 
+                required 
+                placeholder="seu.nome@unochapeco.edu.br ou RA" 
+                value="lucas.mendes@unochapeco.edu.br" 
+                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-brand-gray rounded-lg text-sm text-brand-dark placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all"
+              />
+            </div>
+          </div>
+
+          <!-- Campo 2: Senha -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                Senha
+              </label>
+              <a href="../password/index.html" class="text-xs font-semibold text-brand-blue hover:underline">
+                Esqueceu a senha?
+              </a>
+            </div>
+            <div class="relative">
+              <span class="absolute left-3.5 top-3 text-slate-400 text-lg">
+                <i class="bx bx-lock-alt"></i>
+              </span>
+              <input 
+                id="loginPassword" 
+                type="password" 
+                required 
+                placeholder="••••••••••••" 
+                value="senha12345" 
+                class="w-full pl-10 pr-11 py-2.5 bg-slate-50 border border-brand-gray rounded-lg text-sm text-brand-dark placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all"
+              />
+              <button 
+                type="button" 
+                onclick="togglePasswordVisibility('loginPassword', 'eyeIconLogin')" 
+                class="absolute right-3.5 top-2.5 text-slate-400 hover:text-slate-600 transition-colors p-0.5"
+                title="Mostrar/Ocultar Senha"
+              >
+                <i id="eyeIconLogin" class="bx bx-show text-xl"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Lembrar de mim -->
+          <div class="flex items-center justify-between text-xs pt-1">
+            <label class="flex items-center gap-2 cursor-pointer select-none text-slate-600 font-medium">
+              <input type="checkbox" checked class="w-4 h-4 rounded border-brand-gray text-brand-blue focus:ring-brand-blue accent-brand-blue" />
+              <span>Lembrar de mim neste navegador</span>
+            </label>
+          </div>
+
+          <!-- Botão Principal de Login: Amarelo Solar Oficial (#FFDC5D) com Texto Grafite (#232724) -->
+          <button 
+            type="submit" 
+            class="w-full py-3 px-4 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-sm rounded-lg shadow-sm transition-all duration-200 flex items-center justify-center gap-2 mt-4 active:scale-[0.99]"
+          >
+            <span>Entrar na Minha Conta</span>
+            <i class="bx bx-right-arrow-alt text-lg"></i>
+          </button>
+
+          <!-- Divisória Elegante -->
+          <div class="relative flex items-center justify-center my-4">
+            <div class="border-t border-brand-gray w-full"></div>
+            <span class="bg-white px-3 text-xs text-slate-400 font-medium uppercase tracking-wider">ou</span>
+            <div class="border-t border-brand-gray w-full"></div>
+          </div>
+
+          <!-- Botão de Acesso Rápido Integrado com a Unochapecó (Minha Uno) -->
+          <button 
+            type="button" 
+            class="w-full py-2.5 px-4 bg-slate-50 hover:bg-slate-100 border border-brand-gray text-brand-dark font-semibold text-xs rounded-lg transition-colors flex items-center justify-center gap-2"
+          >
+            <i class="bx bx-buildings text-brand-blue text-base"></i>
+            <span>Entrar com Login Único da Unochapecó (Minha Uno)</span>
+          </button>
+
+        </form>
+
+        <!-- Rodapé do Formulário: Link para Cadastro -->
+        <div class="pt-4 border-t border-brand-gray text-center text-xs text-slate-600">
+          <span>Ainda não possui conta no Achei?</span>
+          <a href="../register/index.html" class="font-bold text-brand-blue hover:underline ml-1">
+            Criar conta universitária
+          </a>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SCRIPT DE INTERAÇÃO -->
+  <script>
+    // Alternador de Visualização Desktop / Simulador Mobile
+    function setViewMode(mode) {
+      const btnDesktop = document.getElementById('btnDesktop');
+      const btnMobile = document.getElementById('btnMobile');
+
+      if (mode === 'mobile') {
+        document.body.classList.add('mobile-simulator-active');
+        btnMobile.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnDesktop.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      } else {
+        document.body.classList.remove('mobile-simulator-active');
+        btnDesktop.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnMobile.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      }
+    }
+
+    // Alternar visibilidade da senha
+    function togglePasswordVisibility(inputId, iconId) {
+      const input = document.getElementById(inputId);
+      const icon = document.getElementById(iconId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'bx bx-hide text-xl';
+      } else {
+        input.type = 'password';
+        icon.className = 'bx bx-show text-xl';
+      }
+    }
+
+    function handleLogin() {
+      alert('Login simulado com sucesso! Redirecionando para o feed principal da Unochapecó...');
+      window.location.href = '../home/index.html';
+    }
+  </script>
+
+</body>
+</html>
