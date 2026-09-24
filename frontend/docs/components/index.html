@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achei — Biblioteca de Componentes Reutilizáveis</title>
+
+  <!-- Fonte Oficial: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Biblioteca Oficial de Ícones: Boxicons v2 -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <!-- Tailwind CSS via CDN com Configuração da Marca Oficial -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              blue: '#1C4398',        // Azul Royal Oficial
+              blueHover: '#153375',
+              lilac: '#AC80CE',       // Roxo Lilás Oficial
+              lilacHover: '#986BBD',
+              yellow: '#FFDC5D',      // Amarelo Solar Oficial
+              yellowHover: '#E8C545',
+              dark: '#232724',        // Grafite Escuro Oficial
+              gray: '#E1E1E1',        // Cinza Claro Oficial
+              surface: '#FFFFFF',
+              bg: '#F8F9FA',          // Fundo suave de tela
+            }
+          },
+          borderRadius: {
+            'custom': '12px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilização suave para scrollbars */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #F8F9FA;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #E1E1E1;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #AC80CE;
+    }
+
+    /* Modo simulador mobile */
+    .mobile-simulator-frame {
+      max-width: 390px !important;
+      margin: 1.5rem auto !important;
+      border: 10px solid #232724 !important;
+      border-radius: 46px !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+      overflow: hidden !important;
+      background-color: #F8F9FA !important;
+      min-height: 844px !important;
+      position: relative !important;
+    }
+
+    /* Pílula superior (Dynamic Island) do simulador */
+    .mobile-notch {
+      display: none;
+    }
+    .mobile-mode .mobile-notch {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 28px;
+      background: #232724;
+      border-bottom-left-radius: 18px;
+      border-bottom-right-radius: 18px;
+      width: 120px;
+      margin: 0 auto;
+      z-index: 60;
+    }
+  </style>
+</head>
+<body class="bg-brand-bg text-brand-dark font-sans min-h-screen selection:bg-brand-yellow selection:text-brand-dark pb-24 transition-colors duration-300">
+
+  <!-- ======================================================== -->
+  <!-- BARRA DE CONTROLE DO PROTÓTIPO                           -->
+  <!-- ======================================================== -->
+  <aside class="bg-brand-dark text-white text-xs py-2 px-4 sticky top-0 z-50 flex items-center justify-between border-b border-black/20 shadow-md">
+    <div class="flex items-center gap-3">
+      <span class="font-bold text-brand-yellow flex items-center gap-1.5">
+        <i class="bx bx-cube text-base"></i>
+        Achei • Biblioteca de Componentes
+      </span>
+      <span class="hidden sm:inline text-slate-500">|</span>
+      
+      <!-- Navegação rápida entre telas do protótipo -->
+      <nav class="hidden md:flex items-center gap-2 text-slate-300">
+        <a href="../screens/home/index.html" class="hover:text-brand-yellow transition-colors">Home</a>
+        <span>•</span>
+        <a href="../screens/login/index.html" class="hover:text-brand-yellow transition-colors">Login</a>
+        <span>•</span>
+        <a href="../screens/register/index.html" class="hover:text-brand-yellow transition-colors">Cadastro</a>
+        <span>•</span>
+        <a href="../screens/perfio/index.html" class="hover:text-brand-yellow transition-colors">Perfil</a>
+        <span>•</span>
+        <a href="../screens/rank/index.html" class="hover:text-brand-yellow transition-colors">Ranking</a>
+        <span>•</span>
+        <span class="text-white font-bold underline decoration-brand-yellow decoration-2">Componentes</span>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="setViewMode('desktop')" id="btnDesktop" class="px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs">
+        <i class="bx bx-laptop text-sm"></i>
+        <span>Desktop</span>
+      </button>
+      <button onclick="setViewMode('mobile')" id="btnMobile" class="px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all">
+        <i class="bx bx-mobile-alt text-sm"></i>
+        <span>Mobile (Simulador 390px)</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Simulação de Dynamic Island no modo mobile -->
+  <div class="mobile-notch">
+    <div class="w-16 h-3 bg-black/60 rounded-full"></div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- CONTAINER PRINCIPAL DO SHOWCASE                          -->
+  <!-- ======================================================== -->
+  <div id="mainContainer" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+
+    <!-- CABEÇALHO DO GUIA DE COMPONENTES -->
+    <header class="mb-10 pb-6 border-b border-brand-gray">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span class="px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-brand-blue text-white inline-flex items-center gap-1 mb-2">
+            <i class="bx bx-palette"></i> Design System Oficial
+          </span>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-brand-dark tracking-tight">
+            Componentes Reutilizáveis da Interface
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
+            Catálogo completo de componentes atômicos, moléculas e estruturas de layout da plataforma Achei Unochapecó. 
+            Todos os itens seguem rigorosamente a paleta de 5 cores institucionais (<strong>Zero Verde</strong>).
+          </p>
+        </div>
+
+        <!-- Atalhos rápidos de navegação interna -->
+        <div class="flex flex-wrap gap-2 text-xs font-semibold">
+          <a href="#botoes" class="px-2.5 py-1.5 rounded-lg bg-white border border-brand-gray hover:border-brand-blue text-slate-700 transition-colors">Botões</a>
+          <a href="#badges" class="px-2.5 py-1.5 rounded-lg bg-white border border-brand-gray hover:border-brand-blue text-slate-700 transition-colors">Badges</a>
+          <a href="#inputs" class="px-2.5 py-1.5 rounded-lg bg-white border border-brand-gray hover:border-brand-blue text-slate-700 transition-colors">Inputs</a>
+          <a href="#cards" class="px-2.5 py-1.5 rounded-lg bg-white border border-brand-gray hover:border-brand-blue text-slate-700 transition-colors">Cards de Itens</a>
+          <a href="#layout" class="px-2.5 py-1.5 rounded-lg bg-white border border-brand-gray hover:border-brand-blue text-slate-700 transition-colors">Navbar & Footer</a>
+          <a href="#social" class="px-2.5 py-1.5 rounded-lg bg-white border border-brand-gray hover:border-brand-blue text-slate-700 transition-colors">Pistas & Selos</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="space-y-12">
+
+      <!-- ======================================================== -->
+      <!-- 1. TIPOS DE BOTÕES (BUTTONS)                             -->
+      <!-- ======================================================== -->
+      <section id="botoes" class="bg-white border border-brand-gray rounded-custom p-6 shadow-xs">
+        <div class="flex items-center gap-2 mb-2 pb-2 border-b border-brand-gray">
+          <span class="w-7 h-7 rounded-lg bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-sm">1</span>
+          <h2 class="text-lg font-bold text-brand-dark">Botões Reutilizáveis (Button Variants & Sizes)</h2>
+        </div>
+        <p class="text-xs text-slate-500 mb-6">
+          Hierarquia clara para ações na interface. O <strong>Amarelo Solar</strong> é reservado exclusivamente para ações de chamada principal (CTA).
+        </p>
+
+        <!-- Variantes Principais -->
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Variantes de Estilo</h3>
+            <div class="flex flex-wrap items-center gap-3">
+              
+              <!-- 1. Botão Primário CTA (Amarelo Solar) -->
+              <button class="px-4 py-2.5 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs rounded-lg transition-all shadow-xs flex items-center gap-1.5 active:scale-95">
+                <i class="bx bx-plus text-base"></i>
+                <span>+ Publicar Item (CTA Primário)</span>
+              </button>
+
+              <!-- 2. Botão Secundário Institucional (Azul Royal) -->
+              <button class="px-4 py-2.5 bg-brand-blue hover:bg-brand-blueHover text-white font-bold text-xs rounded-lg transition-all shadow-xs flex items-center gap-1.5 active:scale-95">
+                <i class="bx bx-log-in text-base"></i>
+                <span>Entrar com Minha Uno (Secundário)</span>
+              </button>
+
+              <!-- 3. Botão Social / Comunidade (Roxo Lilás) -->
+              <button class="px-4 py-2.5 bg-brand-lilac hover:bg-brand-lilacHover text-white font-bold text-xs rounded-lg transition-all shadow-xs flex items-center gap-1.5 active:scale-95">
+                <i class="bx bx-message-dots text-base"></i>
+                <span>Adicionar Pista (Social)</span>
+              </button>
+
+              <!-- 4. Botão Outline / Secundário Neutro -->
+              <button class="px-4 py-2.5 bg-white hover:bg-slate-50 text-brand-dark border border-brand-gray font-bold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1.5">
+                <i class="bx bx-filter-alt text-base text-slate-500"></i>
+                <span>Filtrar Resultados (Outline)</span>
+              </button>
+
+              <!-- 5. Botão Ghost / Ação Sutil -->
+              <button class="px-3 py-2 bg-transparent hover:bg-slate-100 text-slate-600 font-semibold text-xs rounded-lg transition-colors flex items-center gap-1">
+                <i class="bx bx-x text-base"></i>
+                <span>Limpar Filtros (Ghost)</span>
+              </button>
+
+              <!-- 6. Botão Desabilitado -->
+              <button disabled class="px-4 py-2.5 bg-slate-100 text-slate-400 font-bold text-xs rounded-lg border border-brand-gray cursor-not-allowed flex items-center gap-1.5">
+                <i class="bx bx-lock text-base"></i>
+                <span>Ação Bloqueada</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tamanhos -->
+          <div class="pt-4 border-t border-brand-gray">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Tamanhos Disponíveis</h3>
+            <div class="flex flex-wrap items-center gap-3">
+              <!-- Small -->
+              <button class="px-2.5 py-1.5 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-[11px] rounded-md transition-all shadow-xs flex items-center gap-1">
+                <i class="bx bx-check text-xs"></i>
+                <span>Pequeno (Sm - 11px)</span>
+              </button>
+
+              <!-- Medium (Padrão) -->
+              <button class="px-4 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs rounded-lg transition-all shadow-xs flex items-center gap-1.5">
+                <i class="bx bx-check text-sm"></i>
+                <span>Padrão (Md - 12px)</span>
+              </button>
+
+              <!-- Large -->
+              <button class="px-6 py-3 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-sm rounded-lg transition-all shadow-xs flex items-center gap-2">
+                <i class="bx bx-check text-base"></i>
+                <span>Grande (Lg - 14px)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 2. BADGES & ETIQUETAS TIPOGRÁFICAS (ZERO VERDE)          -->
+      <!-- ======================================================== -->
+      <section id="badges" class="bg-white border border-brand-gray rounded-custom p-6 shadow-xs">
+        <div class="flex items-center gap-2 mb-2 pb-2 border-b border-brand-gray">
+          <span class="w-7 h-7 rounded-lg bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-sm">2</span>
+          <h2 class="text-lg font-bold text-brand-dark">Badges de Status & Categorias (100% Tipográficas)</h2>
+        </div>
+        <p class="text-xs text-slate-500 mb-6">
+          Conforme a regra inviolável: <strong>todas as badges de status são 100% tipográficas, em caixa alta e sem ícones internos</strong>.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          
+          <!-- Badges de Status -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Status do Pertence</h3>
+            <div class="flex flex-wrap items-center gap-2">
+              <!-- PERDIDO -->
+              <span class="px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-red-50 text-red-700 border border-red-200">
+                PERDIDO
+              </span>
+
+              <!-- ACHADO -->
+              <span class="px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-brand-yellow text-brand-dark shadow-2xs">
+                ACHADO
+              </span>
+
+              <!-- DEVOLVIDO (Sem Verde! Usa Azul Royal) -->
+              <span class="px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-brand-blue text-white shadow-2xs">
+                DEVOLVIDO
+              </span>
+            </div>
+          </div>
+
+          <!-- Badges de Custódia Oficial -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Selos de Custódia & Verificação</h3>
+            <div class="flex flex-wrap items-center gap-2">
+              <!-- Custódia Oficial de Portaria -->
+              <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-50 text-brand-blue border border-blue-200 flex items-center gap-1">
+                <i class="bx bx-shield-quarter text-sm"></i>
+                <span>Sob Custódia da Portaria</span>
+              </span>
+
+              <!-- Aluno Verificado Uno -->
+              <span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-brand-yellow text-brand-dark">
+                VERIFICADO UNO
+              </span>
+            </div>
+          </div>
+
+          <!-- Chips de Categorias com Boxicons -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Tags de Categorias</h3>
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-xs font-semibold flex items-center gap-1 border border-brand-gray">
+                <i class="bx bx-laptop text-brand-blue"></i>
+                <span>Eletrônicos</span>
+              </span>
+
+              <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-xs font-semibold flex items-center gap-1 border border-brand-gray">
+                <i class="bx bx-id-card text-brand-lilac"></i>
+                <span>Documentos</span>
+              </span>
+
+              <span class="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-xs font-semibold flex items-center gap-1 border border-brand-gray">
+                <i class="bx bx-key text-brand-yellow"></i>
+                <span>Chaves</span>
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 3. CAMPOS DE ENTRADA & FORMULÁRIOS (INPUTS)              -->
+      <!-- ======================================================== -->
+      <section id="inputs" class="bg-white border border-brand-gray rounded-custom p-6 shadow-xs">
+        <div class="flex items-center gap-2 mb-2 pb-2 border-b border-brand-gray">
+          <span class="w-7 h-7 rounded-lg bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-sm">3</span>
+          <h2 class="text-lg font-bold text-brand-dark">Campos de Entrada & Formulários (Form Controls)</h2>
+        </div>
+        <p class="text-xs text-slate-500 mb-6">
+          Campos padronizados com anel de foco em Azul Royal (`#1C4398`) e ícones informativos.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-6">
+          
+          <!-- Input com Ícone -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">E-mail Institucional</label>
+            <div class="relative">
+              <i class="bx bx-envelope absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base"></i>
+              <input 
+                type="email" 
+                placeholder="seu.nome@unochapeco.edu.br" 
+                value="lucas.mendes@unochapeco.edu.br"
+                class="w-full pl-9 pr-3 py-2 bg-slate-50 border border-brand-gray rounded-lg text-xs font-medium text-brand-dark focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all"
+              />
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Obrigatório domínio institucional da Uno</p>
+          </div>
+
+          <!-- Barra de Busca do Feed -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Barra de Pesquisa do Feed</label>
+            <div class="relative">
+              <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-base"></i>
+              <input 
+                type="text" 
+                placeholder="Buscar garrafa, chaveiro, fone..." 
+                class="w-full pl-9 pr-8 py-2 bg-slate-50 border border-brand-gray rounded-lg text-xs font-medium text-brand-dark focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue transition-all"
+              />
+              <span class="absolute right-2.5 top-1/2 -translate-y-1/2 px-1.5 py-0.5 rounded text-[10px] font-mono bg-slate-200 text-slate-600">/</span>
+            </div>
+            <p class="text-[11px] text-slate-400 mt-1">Busca instantânea por título e local</p>
+          </div>
+
+          <!-- Input com Erro de Validação -->
+          <div>
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Exemplo com Validação Zod</label>
+            <div class="relative">
+              <i class="bx bx-error-circle absolute left-3 top-1/2 -translate-y-1/2 text-red-500 text-base"></i>
+              <input 
+                type="text" 
+                value="joao@gmail.com"
+                class="w-full pl-9 pr-3 py-2 bg-red-50/40 border border-red-300 rounded-lg text-xs font-medium text-red-700 focus:bg-white focus:outline-none focus:ring-2 focus:ring-red-400 transition-all"
+              />
+            </div>
+            <p class="text-[11px] text-red-600 font-semibold mt-1 flex items-center gap-1">
+              <i class="bx bx-x-circle"></i>
+              <span>Use seu e-mail institucional (@unochapeco.edu.br)</span>
+            </p>
+          </div>
+
+        </div>
+
+        <!-- ======================================================== -->
+        <!-- DEMONSTRAÇÃO: COMBOBOX ESTILO SHADCN/UI (RADIX + CMDK)   -->
+        <!-- ======================================================== -->
+        <div class="pt-6 border-t border-brand-gray">
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-brand-lilac/20 text-brand-lilac border border-brand-lilac/30">
+                  PADRÃO SHADCN/UI
+                </span>
+                <h3 class="text-sm font-bold text-brand-dark">Combobox Pesquisável & Customizado (Searchable Combobox)</h3>
+              </div>
+              <p class="text-xs text-slate-500 mt-0.5">
+                Substituto perfeito para o `&lt;select&gt;` nativo: busca instantânea, navegação por teclado e sem recarregar a tela.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <!-- COMBOBOX 1: SELEÇÃO ÚNICA (EX: BLOCO DO PERTENCE) -->
+            <div class="relative">
+              <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+                <span>Bloco do Pertence (Seleção Única)</span>
+                <span class="text-[10px] font-normal text-slate-400">Clique para pesquisar</span>
+              </label>
+
+              <!-- Botão Trigger do Combobox -->
+              <button 
+                type="button"
+                id="comboTriggerBlock" 
+                onclick="toggleCombobox('comboPopoverBlock')"
+                class="w-full px-3 py-2 bg-slate-50 hover:bg-white border border-brand-gray rounded-lg text-xs font-medium text-brand-dark flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-brand-blue focus:border-brand-blue shadow-2xs transition-all text-left"
+              >
+                <div class="flex items-center gap-2 truncate">
+                  <i class="bx bx-buildings text-brand-blue text-base shrink-0"></i>
+                  <span class="combobox-label truncate">Bloco R (Informática / Labs)</span>
+                </div>
+                <i class="bx bx-chevron-down text-slate-400 text-lg shrink-0 transition-transform" id="comboChevronBlock"></i>
+              </button>
+
+              <!-- Popover Flutuante (estilo shadcn/ui Command Popover) -->
+              <div 
+                id="comboPopoverBlock" 
+                class="hidden absolute z-30 left-0 right-0 mt-1.5 bg-white border border-brand-gray rounded-xl shadow-xl p-1.5 animate-in fade-in-50 zoom-in-95 duration-100"
+              >
+                <!-- Campo de Busca Interno com Ícone -->
+                <div class="relative mb-1.5 border-b border-brand-gray pb-1.5 px-1 pt-1">
+                  <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                  <input 
+                    type="text" 
+                    id="comboSearchBlock"
+                    placeholder="Pesquisar bloco ou setor..."
+                    onkeyup="filterCombobox('comboSearchBlock', 'comboListBlock', 'comboEmptyBlock')"
+                    class="w-full pl-8 pr-2 py-1.5 text-xs text-brand-dark placeholder-slate-400 bg-transparent focus:outline-none"
+                    autocomplete="off"
+                  />
+                </div>
+
+                <!-- Lista de Opções -->
+                <div id="comboListBlock" class="max-h-52 overflow-y-auto custom-scrollbar space-y-0.5">
+                  
+                  <div 
+                    onclick="selectComboboxItem(this, 'comboTriggerBlock', 'comboPopoverBlock')" 
+                    data-value="bloco r informatica computacao" 
+                    data-label="Bloco R (Informática / Labs)" 
+                    class="combobox-item px-2.5 py-2 rounded-lg text-xs hover:bg-slate-100 cursor-pointer flex items-center justify-between text-brand-dark transition-colors"
+                  >
+                    <div class="flex items-center gap-2">
+                      <i class="bx bx-laptop text-brand-blue"></i>
+                      <div>
+                        <p class="font-bold">Bloco R</p>
+                        <p class="text-[10px] text-slate-400">Informática, Ciência da Computação e Labs</p>
+                      </div>
+                    </div>
+                    <i class="bx bx-check text-brand-blue text-base combobox-check"></i>
+                  </div>
+
+                  <div 
+                    onclick="selectComboboxItem(this, 'comboTriggerBlock', 'comboPopoverBlock')" 
+                    data-value="bloco g saude medicina enfermagem" 
+                    data-label="Bloco G (Saúde / Medicina)" 
+                    class="combobox-item px-2.5 py-2 rounded-lg text-xs hover:bg-slate-100 cursor-pointer flex items-center justify-between text-brand-dark transition-colors"
+                  >
+                    <div class="flex items-center gap-2">
+                      <i class="bx bx-plus-medical text-brand-lilac"></i>
+                      <div>
+                        <p class="font-bold">Bloco G</p>
+                        <p class="text-[10px] text-slate-400">Ciências da Saúde, Medicina e Enfermagem</p>
+                      </div>
+                    </div>
+                    <i class="bx bx-check text-brand-blue text-base combobox-check opacity-0"></i>
+                  </div>
+
+                  <div 
+                    onclick="selectComboboxItem(this, 'comboTriggerBlock', 'comboPopoverBlock')" 
+                    data-value="biblioteca central acervo estudos" 
+                    data-label="Biblioteca Central (Acervo)" 
+                    class="combobox-item px-2.5 py-2 rounded-lg text-xs hover:bg-slate-100 cursor-pointer flex items-center justify-between text-brand-dark transition-colors"
+                  >
+                    <div class="flex items-center gap-2">
+                      <i class="bx bx-book-open text-brand-yellow"></i>
+                      <div>
+                        <p class="font-bold">Biblioteca Central</p>
+                        <p class="text-[10px] text-slate-400">Acervo acadêmico e salas de estudo</p>
+                      </div>
+                    </div>
+                    <i class="bx bx-check text-brand-blue text-base combobox-check opacity-0"></i>
+                  </div>
+
+                  <div 
+                    onclick="selectComboboxItem(this, 'comboTriggerBlock', 'comboPopoverBlock')" 
+                    data-value="cantina central alimentacao lanches" 
+                    data-label="Cantina Central" 
+                    class="combobox-item px-2.5 py-2 rounded-lg text-xs hover:bg-slate-100 cursor-pointer flex items-center justify-between text-brand-dark transition-colors"
+                  >
+                    <div class="flex items-center gap-2">
+                      <i class="bx bx-coffee text-slate-600"></i>
+                      <div>
+                        <p class="font-bold">Cantina Central</p>
+                        <p class="text-[10px] text-slate-400">Área de convivência e alimentação</p>
+                      </div>
+                    </div>
+                    <i class="bx bx-check text-brand-blue text-base combobox-check opacity-0"></i>
+                  </div>
+
+                  <div 
+                    onclick="selectComboboxItem(this, 'comboTriggerBlock', 'comboPopoverBlock')" 
+                    data-value="bloco b administracao direito negocios" 
+                    data-label="Bloco B (Administração & Direito)" 
+                    class="combobox-item px-2.5 py-2 rounded-lg text-xs hover:bg-slate-100 cursor-pointer flex items-center justify-between text-brand-dark transition-colors"
+                  >
+                    <div class="flex items-center gap-2">
+                      <i class="bx bx-briefcase text-brand-blue"></i>
+                      <div>
+                        <p class="font-bold">Bloco B</p>
+                        <p class="text-[10px] text-slate-400">Administração, Direito e Negócios</p>
+                      </div>
+                    </div>
+                    <i class="bx bx-check text-brand-blue text-base combobox-check opacity-0"></i>
+                  </div>
+
+                  <div 
+                    onclick="selectComboboxItem(this, 'comboTriggerBlock', 'comboPopoverBlock')" 
+                    data-value="portaria principal seguranca recepcao" 
+                    data-label="Portaria Principal (Segurança)" 
+                    class="combobox-item px-2.5 py-2 rounded-lg text-xs hover:bg-slate-100 cursor-pointer flex items-center justify-between text-brand-dark transition-colors"
+                  >
+                    <div class="flex items-center gap-2">
+                      <i class="bx bx-shield-quarter text-brand-blue"></i>
+                      <div>
+                        <p class="font-bold">Portaria Principal</p>
+                        <p class="text-[10px] text-slate-400">Recepção oficial e Achados & Perdidos</p>
+                      </div>
+                    </div>
+                    <i class="bx bx-check text-brand-blue text-base combobox-check opacity-0"></i>
+                  </div>
+
+                </div>
+
+                <!-- Estado Vazio da Busca -->
+                <div id="comboEmptyBlock" class="hidden py-4 text-center text-xs text-slate-400">
+                  <i class="bx bx-search-alt text-lg block mb-1"></i>
+                  Nenhum bloco encontrado.
+                </div>
+              </div>
+            </div>
+
+            <!-- COMBOBOX 2: MULTI-SELECT COM CHIPS (EX: BLOCOS FREQUENTADOS NO PERFIL) -->
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5 flex items-center justify-between">
+                <span>Blocos Frequentados (Multi-Select com Chips)</span>
+                <span class="text-[10px] font-normal text-brand-blue font-bold">Cenário B — RF04</span>
+              </label>
+
+              <!-- Caixa de Chips Ativos + Botão Adicionar -->
+              <div class="p-2 bg-slate-50 border border-brand-gray rounded-lg min-h-[42px] flex flex-wrap items-center gap-1.5">
+                
+                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-white border border-brand-gray text-xs font-semibold text-brand-dark shadow-2xs">
+                  <i class="bx bx-laptop text-brand-blue"></i>
+                  <span>Bloco R</span>
+                  <button type="button" onclick="this.parentElement.remove()" class="text-slate-400 hover:text-red-500 transition-colors ml-0.5">
+                    <i class="bx bx-x text-sm"></i>
+                  </button>
+                </span>
+
+                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-white border border-brand-gray text-xs font-semibold text-brand-dark shadow-2xs">
+                  <i class="bx bx-book-open text-brand-yellow"></i>
+                  <span>Biblioteca</span>
+                  <button type="button" onclick="this.parentElement.remove()" class="text-slate-400 hover:text-red-500 transition-colors ml-0.5">
+                    <i class="bx bx-x text-sm"></i>
+                  </button>
+                </span>
+
+                <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-white border border-brand-gray text-xs font-semibold text-brand-dark shadow-2xs">
+                  <i class="bx bx-plus-medical text-brand-lilac"></i>
+                  <span>Bloco G</span>
+                  <button type="button" onclick="this.parentElement.remove()" class="text-slate-400 hover:text-red-500 transition-colors ml-0.5">
+                    <i class="bx bx-x text-sm"></i>
+                  </button>
+                </span>
+
+                <button 
+                  type="button"
+                  class="px-2 py-1 rounded-md bg-white hover:bg-slate-100 border border-dashed border-slate-300 text-slate-600 text-xs font-semibold flex items-center gap-1 transition-colors"
+                >
+                  <i class="bx bx-plus text-xs"></i>
+                  <span>Adicionar Bloco...</span>
+                </button>
+
+              </div>
+              <p class="text-[11px] text-slate-400 mt-1">O acadêmico recebe notificações de itens achados em todos os blocos marcados</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 4. CARDS DE PERTENCES (ITEM CARDS)                       -->
+      <!-- ======================================================== -->
+      <section id="cards" class="bg-white border border-brand-gray rounded-custom p-6 shadow-xs">
+        <div class="flex items-center gap-2 mb-2 pb-2 border-b border-brand-gray">
+          <span class="w-7 h-7 rounded-lg bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-sm">4</span>
+          <h2 class="text-lg font-bold text-brand-dark">Card de Pertence (ItemCard Reutilizável)</h2>
+        </div>
+        <p class="text-xs text-slate-500 mb-6">
+          O componente central da plataforma. Abaixo estão instâncias demonstrando item <strong>ACHADO</strong>, item <strong>SOB CUSTÓDIA</strong> e item <strong>PERDIDO</strong>.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- EXEMPLO 1: ITEM ACHADO SOB CUSTÓDIA -->
+          <article class="bg-white border border-brand-gray rounded-custom overflow-hidden shadow-xs hover:border-slate-300 transition-all">
+            
+            <!-- Cabeçalho do Card -->
+            <div class="p-4 flex items-center justify-between border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <!-- Avatar Roxo Lilás Oficial -->
+                <div class="w-9 h-9 rounded-full bg-brand-lilac text-white flex items-center justify-center font-bold text-xs ring-2 ring-brand-yellow shadow-xs">
+                  LM
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-brand-dark">Lucas Mendes</h4>
+                  <p class="text-[11px] text-slate-400">há 25 minutos • Bloco R</p>
+                </div>
+              </div>
+
+              <!-- Badge Tipográfica ACHADO -->
+              <span class="px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-brand-yellow text-brand-dark">
+                ACHADO
+              </span>
+            </div>
+
+            <!-- Corpo do Card -->
+            <div class="p-4 space-y-3">
+              <h3 class="text-sm font-bold text-brand-dark">
+                Fone de Ouvido Bluetooth JBL Preto
+              </h3>
+              
+              <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                Encontrado na bancada 4 do Laboratório de Redes. O estojo possui um pequeno risco na parte traseira e foi levado para a portaria.
+              </p>
+
+              <!-- Tags de Metadados -->
+              <div class="flex flex-wrap items-center gap-2 pt-1">
+                <span class="px-2 py-0.5 rounded bg-blue-50 text-brand-blue text-[11px] font-bold border border-blue-200 flex items-center gap-1">
+                  <i class="bx bx-shield-quarter"></i>
+                  <span>Sob Custódia da Portaria Bloco R</span>
+                </span>
+                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-medium border border-brand-gray">
+                  Eletrônicos
+                </span>
+              </div>
+            </div>
+
+            <!-- Rodapé Social e Ações -->
+            <div class="px-4 py-3 bg-slate-50 border-t border-brand-gray flex items-center justify-between text-xs">
+              <div class="flex items-center gap-1 sm:gap-2">
+                
+                <!-- Botão Curtir / Apoiar -->
+                <button class="px-2.5 py-1.5 rounded-md hover:bg-slate-200 text-slate-600 hover:text-brand-blue font-semibold flex items-center gap-1 transition-colors">
+                  <i class="bx bx-like text-base"></i>
+                  <span>Apoiar (12)</span>
+                </button>
+
+                <!-- Botão Pistas -->
+                <button class="px-2.5 py-1.5 rounded-md hover:bg-slate-200 text-slate-600 hover:text-brand-lilac font-semibold flex items-center gap-1 transition-colors">
+                  <i class="bx bx-bulb text-base text-brand-yellow"></i>
+                  <span>3 Pistas</span>
+                </button>
+              </div>
+
+              <!-- Botão Salvar -->
+              <button class="p-1.5 rounded-md hover:bg-slate-200 text-slate-400 hover:text-brand-yellow transition-colors" title="Salvar Item">
+                <i class="bx bx-bookmark text-lg"></i>
+              </button>
+            </div>
+          </article>
+
+          <!-- EXEMPLO 2: ITEM PERDIDO COM RECOMPENSA MORAL -->
+          <article class="bg-white border border-brand-gray rounded-custom overflow-hidden shadow-xs hover:border-slate-300 transition-all">
+            
+            <!-- Cabeçalho do Card -->
+            <div class="p-4 flex items-center justify-between border-b border-slate-100">
+              <div class="flex items-center gap-2.5">
+                <div class="w-9 h-9 rounded-full bg-slate-700 text-white flex items-center justify-center font-bold text-xs ring-2 ring-white shadow-xs">
+                  CB
+                </div>
+                <div>
+                  <h4 class="text-xs font-bold text-brand-dark">Camila Becker</h4>
+                  <p class="text-[11px] text-slate-400">há 1 hora • Biblioteca Central</p>
+                </div>
+              </div>
+
+              <!-- Badge Tipográfica PERDIDO -->
+              <span class="px-2.5 py-1 rounded text-[10px] font-extrabold uppercase tracking-wider bg-red-50 text-red-700 border border-red-200">
+                PERDIDO
+              </span>
+            </div>
+
+            <!-- Corpo do Card -->
+            <div class="p-4 space-y-3">
+              <h3 class="text-sm font-bold text-brand-dark">
+                Caderno Espiral Capa Dura de Cálculo II
+              </h3>
+              
+              <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                Esqueci na mesa redonda perto dos computadores do segundo piso. Tem todas as minhas anotações da prova de amanhã!
+              </p>
+
+              <!-- Tags de Metadados -->
+              <div class="flex flex-wrap items-center gap-2 pt-1">
+                <span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 text-[11px] font-bold border border-amber-200 flex items-center gap-1">
+                  <i class="bx bx-gift text-brand-yellow"></i>
+                  <span>Oferece Café de Gratidão</span>
+                </span>
+                <span class="px-2 py-0.5 rounded bg-slate-100 text-slate-600 text-[11px] font-medium border border-brand-gray">
+                  Cadernos & Livros
+                </span>
+              </div>
+            </div>
+
+            <!-- Rodapé Social e Ações -->
+            <div class="px-4 py-3 bg-slate-50 border-t border-brand-gray flex items-center justify-between text-xs">
+              <div class="flex items-center gap-1 sm:gap-2">
+                <button class="px-2.5 py-1.5 rounded-md hover:bg-slate-200 text-slate-600 hover:text-brand-blue font-semibold flex items-center gap-1 transition-colors">
+                  <i class="bx bx-like text-base"></i>
+                  <span>Apoiar (5)</span>
+                </button>
+
+                <button class="px-2.5 py-1.5 rounded-md bg-brand-yellow/20 text-brand-dark font-bold flex items-center gap-1 transition-colors">
+                  <i class="bx bx-plus-circle text-base"></i>
+                  <span>Dar uma Pista</span>
+                </button>
+              </div>
+
+              <button class="p-1.5 rounded-md text-brand-yellow hover:bg-slate-200 transition-colors" title="Salvo">
+                <i class="bx bxs-bookmark text-lg"></i>
+              </button>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 5. COMPONENTES ESTRUTURAIS: NAVBAR, FOOTER & DOCK        -->
+      <!-- ======================================================== -->
+      <section id="layout" class="bg-white border border-brand-gray rounded-custom p-6 shadow-xs">
+        <div class="flex items-center gap-2 mb-2 pb-2 border-b border-brand-gray">
+          <span class="w-7 h-7 rounded-lg bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-sm">5</span>
+          <h2 class="text-lg font-bold text-brand-dark">Componentes de Layout Estrutural (Navbar, Footer & Dock)</h2>
+        </div>
+        <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg text-xs text-brand-blue mb-6 flex items-start gap-2">
+          <i class="bx bx-info-circle text-base shrink-0 mt-0.5"></i>
+          <div>
+            <strong>Sim! O Footer e a Navbar são componentes reutilizáveis:</strong>
+            Eles são componentes de alto nível (chamados de <em>Organismos</em> no Design System) que se repetem em todas as páginas da aplicação para dar identidade consistente.
+          </div>
+        </div>
+
+        <div class="space-y-8">
+          
+          <!-- DEMONSTRAÇÃO 1: NAVBAR INSTITUCIONAL (HEADER) -->
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">A. Navbar Superior (Global Header)</h3>
+            <p class="text-xs text-slate-500 mb-3">Fixa no topo da tela com logo institucional, busca rápida, CTA primário e perfil.</p>
+            
+            <header class="bg-brand-blue border border-brand-blueHover rounded-custom text-white p-3 shadow-md">
+              <div class="flex items-center justify-between gap-4">
+                
+                <!-- Logo -->
+                <div class="flex items-center gap-2">
+                  <span class="w-8 h-8 rounded-lg bg-brand-yellow text-brand-dark flex items-center justify-center font-extrabold text-base shadow-xs">
+                    <i class="bx bx-compass"></i>
+                  </span>
+                  <div>
+                    <span class="font-extrabold text-base tracking-tight text-white">Achei</span>
+                    <span class="text-[10px] text-brand-yellow font-bold uppercase tracking-widest block -mt-1">Unochapecó</span>
+                  </div>
+                </div>
+
+                <!-- Busca Centralizada -->
+                <div class="hidden sm:block flex-1 max-w-sm">
+                  <div class="relative">
+                    <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-white/60 text-sm"></i>
+                    <input 
+                      type="text" 
+                      placeholder="Pesquisar pertence..." 
+                      class="w-full pl-8 pr-3 py-1.5 bg-white/10 hover:bg-white/15 focus:bg-white text-white focus:text-brand-dark placeholder-white/60 focus:placeholder-slate-400 rounded-lg text-xs transition-all focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <!-- Ações do Header -->
+                <div class="flex items-center gap-2.5">
+                  <button class="px-3 py-1.5 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs rounded-lg transition-all shadow-xs flex items-center gap-1">
+                    <i class="bx bx-plus text-sm"></i>
+                    <span class="hidden md:inline">Publicar Item</span>
+                  </button>
+
+                  <button class="relative w-8 h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors">
+                    <i class="bx bx-bell text-base"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-brand-blue"></span>
+                  </button>
+
+                  <div class="w-8 h-8 rounded-full bg-brand-lilac text-white flex items-center justify-center font-bold text-xs ring-2 ring-brand-yellow shadow-xs">
+                    LM
+                  </div>
+                </div>
+
+              </div>
+            </header>
+          </div>
+
+          <!-- DEMONSTRAÇÃO 2: DOCK INFERIOR MOBILE -->
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">B. Dock de Navegação Inferior Mobile (MobileBottomNav)</h3>
+            <p class="text-xs text-slate-500 mb-3">Exibida em smartphones (< 1024px) para fácil acesso com o polegar.</p>
+            
+            <nav class="max-w-md mx-auto bg-white border border-brand-gray rounded-2xl shadow-lg px-4 py-2 flex items-center justify-around">
+              <a href="#" class="flex flex-col items-center gap-0.5 text-brand-blue text-[11px] font-bold">
+                <i class="bx bxs-home-circle text-2xl"></i>
+                <span>Feed</span>
+              </a>
+
+              <a href="#" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-brand-blue text-[11px] font-medium transition-colors">
+                <i class="bx bx-trophy text-2xl"></i>
+                <span>Ranking</span>
+              </a>
+
+              <!-- Botão Flutuante Central -->
+              <button class="w-11 h-11 -mt-4 rounded-full bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark flex items-center justify-center shadow-md ring-4 ring-white active:scale-95 transition-all">
+                <i class="bx bx-plus text-2xl font-bold"></i>
+              </button>
+
+              <a href="#" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-brand-blue text-[11px] font-medium transition-colors">
+                <i class="bx bx-bookmark text-2xl"></i>
+                <span>Salvos</span>
+              </a>
+
+              <a href="#" class="flex flex-col items-center gap-0.5 text-slate-400 hover:text-brand-blue text-[11px] font-medium transition-colors">
+                <i class="bx bx-user text-2xl"></i>
+                <span>Perfil</span>
+              </a>
+            </nav>
+          </div>
+
+          <!-- DEMONSTRAÇÃO 3: FOOTER INSTITUCIONAL -->
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">C. Rodapé Institucional (Footer)</h3>
+            <p class="text-xs text-slate-500 mb-3">Encerramento da página com links rápidos, canais de apoio e conformidade.</p>
+            
+            <footer class="bg-slate-50 border border-brand-gray rounded-custom p-6 text-xs text-slate-500">
+              <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded bg-brand-blue text-white flex items-center justify-center font-bold text-xs">A</span>
+                  <span class="font-bold text-brand-dark">Achei Unochapecó • Plataforma Colaborativa</span>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-4 text-xs font-medium">
+                  <a href="#" class="hover:text-brand-blue transition-colors">Termos de Uso</a>
+                  <span>•</span>
+                  <a href="#" class="hover:text-brand-blue transition-colors">Achados e Perdidos Oficial</a>
+                  <span>•</span>
+                  <a href="#" class="hover:text-brand-blue transition-colors">Central de Segurança</a>
+                </div>
+
+                <p class="text-[11px] text-slate-400">© 2026 Unochapecó. Todos os direitos reservados.</p>
+              </div>
+            </footer>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ======================================================== -->
+      <!-- 6. PISTAS, PÓDIO & GAMIFICAÇÃO                           -->
+      <!-- ======================================================== -->
+      <section id="social" class="bg-white border border-brand-gray rounded-custom p-6 shadow-xs">
+        <div class="flex items-center gap-2 mb-2 pb-2 border-b border-brand-gray">
+          <span class="w-7 h-7 rounded-lg bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-sm">6</span>
+          <h2 class="text-lg font-bold text-brand-dark">Componentes de Pistas, Pódio & Gamificação</h2>
+        </div>
+        <p class="text-xs text-slate-500 mb-6">
+          Elementos visuais de incentivo comunitário, provas sociais e ranking de devoluções.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- PISTA ÚTIL COM DESTAQUE AMARELO -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Componente de Pista Útil (HintCard)</h3>
+            
+            <div class="p-4 rounded-xl bg-amber-50/50 border-2 border-brand-yellow shadow-2xs relative">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full bg-brand-lilac text-white font-bold text-xs flex items-center justify-center">
+                    JS
+                  </div>
+                  <div>
+                    <h5 class="text-xs font-bold text-brand-dark">Juliana Silva</h5>
+                    <p class="text-[10px] text-slate-400">Direito • há 40 min</p>
+                  </div>
+                </div>
+
+                <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-brand-yellow text-brand-dark flex items-center gap-1 shadow-2xs">
+                  <i class="bx bx-check-double text-xs"></i>
+                  <span>PISTA ÚTIL (+2)</span>
+                </span>
+              </div>
+
+              <p class="text-xs text-slate-700 leading-relaxed">
+                "Vi o professor Carlos levando a garrafa azul para a secretaria do Bloco G por volta das 10h!"
+              </p>
+            </div>
+          </div>
+
+          <!-- MINI PÓDIO DE LÍDERES -->
+          <div class="space-y-3">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-400">Pódio do Ranking (Top 3)</h3>
+            
+            <div class="flex items-end justify-center gap-3 pt-4">
+              
+              <!-- 2º Lugar: Azul Royal -->
+              <div class="flex flex-col items-center">
+                <div class="w-10 h-10 rounded-full bg-slate-200 text-brand-dark flex items-center justify-center font-bold text-xs ring-2 ring-brand-blue mb-1">
+                  MS
+                </div>
+                <p class="text-[11px] font-bold text-brand-dark">Mateus S.</p>
+                <p class="text-[10px] text-slate-500">22 devoluções</p>
+                <div class="w-16 h-14 bg-brand-blue text-white rounded-t-lg flex items-center justify-center font-extrabold text-sm mt-1 shadow-xs">
+                  2º
+                </div>
+              </div>
+
+              <!-- 1º Lugar: Amarelo Solar -->
+              <div class="flex flex-col items-center">
+                <div class="relative">
+                  <i class="bx bxs-crown text-brand-yellow text-lg absolute -top-4 left-1/2 -translate-x-1/2"></i>
+                  <div class="w-12 h-12 rounded-full bg-brand-lilac text-white flex items-center justify-center font-extrabold text-sm ring-4 ring-brand-yellow mb-1 shadow-sm">
+                    LM
+                  </div>
+                </div>
+                <p class="text-xs font-extrabold text-brand-dark">Lucas M.</p>
+                <p class="text-[10px] text-brand-blue font-bold">34 devoluções</p>
+                <div class="w-20 h-20 bg-brand-yellow text-brand-dark rounded-t-lg flex items-center justify-center font-extrabold text-lg mt-1 shadow-sm">
+                  1º
+                </div>
+              </div>
+
+              <!-- 3º Lugar: Roxo Lilás -->
+              <div class="flex flex-col items-center">
+                <div class="w-10 h-10 rounded-full bg-slate-200 text-brand-dark flex items-center justify-center font-bold text-xs ring-2 ring-brand-lilac mb-1">
+                  BR
+                </div>
+                <p class="text-[11px] font-bold text-brand-dark">Beatriz R.</p>
+                <p class="text-[10px] text-slate-500">18 devoluções</p>
+                <div class="w-16 h-10 bg-brand-lilac text-white rounded-t-lg flex items-center justify-center font-extrabold text-sm mt-1 shadow-xs">
+                  3º
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+  </div>
+
+  <!-- SCRIPT DE CONTROLE DO MODO SIMULADOR MOBILE -->
+  <script>
+    function setViewMode(mode) {
+      const container = document.getElementById('mainContainer');
+      const btnDesktop = document.getElementById('btnDesktop');
+      const btnMobile = document.getElementById('btnMobile');
+
+      if (mode === 'mobile') {
+        document.body.classList.add('mobile-mode');
+        container.classList.add('mobile-simulator-frame');
+        
+        btnMobile.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnDesktop.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      } else {
+        document.body.classList.remove('mobile-mode');
+        container.classList.remove('mobile-simulator-frame');
+        
+        btnDesktop.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnMobile.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      }
+    }
+
+    // ========================================================
+    // CONTROLE DO COMBOBOX ESTILO SHADCN/UI
+    // ========================================================
+    function toggleCombobox(popoverId) {
+      const popover = document.getElementById(popoverId);
+      const isHidden = popover.classList.contains('hidden');
+      
+      // Fecha outros popovers abertos
+      document.querySelectorAll('[id^="comboPopover"]').forEach(p => p.classList.add('hidden'));
+
+      if (isHidden) {
+        popover.classList.remove('hidden');
+        const searchInput = popover.querySelector('input');
+        if (searchInput) {
+          searchInput.value = '';
+          searchInput.focus();
+          // Reset filtros
+          filterCombobox(searchInput.id, 'comboListBlock', 'comboEmptyBlock');
+        }
+      }
+    }
+
+    function filterCombobox(inputId, listId, emptyId) {
+      const query = document.getElementById(inputId).value.toLowerCase().trim();
+      const items = document.getElementById(listId).querySelectorAll('.combobox-item');
+      let matches = 0;
+
+      items.forEach(item => {
+        const text = (item.getAttribute('data-value') || '').toLowerCase();
+        if (!query || text.includes(query)) {
+          item.classList.remove('hidden');
+          matches++;
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      const emptyEl = document.getElementById(emptyId);
+      if (emptyEl) {
+        if (matches === 0) {
+          emptyEl.classList.remove('hidden');
+        } else {
+          emptyEl.classList.add('hidden');
+        }
+      }
+    }
+
+    function selectComboboxItem(itemEl, triggerId, popoverId) {
+      const label = itemEl.getAttribute('data-label');
+      const trigger = document.getElementById(triggerId);
+      
+      // Atualiza texto do botão trigger
+      const labelEl = trigger.querySelector('.combobox-label');
+      if (labelEl) labelEl.textContent = label;
+
+      // Atualiza checkmark visual (apenas o selecionado fica visível)
+      const list = itemEl.closest('#comboListBlock');
+      if (list) {
+        list.querySelectorAll('.combobox-check').forEach(chk => chk.classList.add('opacity-0'));
+        const activeCheck = itemEl.querySelector('.combobox-check');
+        if (activeCheck) activeCheck.classList.remove('opacity-0');
+      }
+
+      // Fecha o popover
+      document.getElementById(popoverId).classList.add('hidden');
+    }
+
+    // Fecha o combobox ao clicar fora
+    document.addEventListener('click', function(e) {
+      const isInside = e.target.closest('#comboTriggerBlock') || e.target.closest('#comboPopoverBlock');
+      if (!isInside) {
+        const popover = document.getElementById('comboPopoverBlock');
+        if (popover) popover.classList.add('hidden');
+      }
+    });
+  </script>
+
+</body>
+</html>
