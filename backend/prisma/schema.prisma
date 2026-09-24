@@ -1,0 +1,291 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ------------------------------------------------------
+// ENUMS
+// ------------------------------------------------------
+
+enum UserRole {
+  STUDENT
+  STAFF_PORTARIA
+  ADMIN
+}
+
+enum ItemType {
+  LOST
+  FOUND
+}
+
+enum ItemStatus {
+  ACTIVE
+  IN_REVIEW
+  RETURNED
+  CANCELLED
+}
+
+enum ClaimStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CONFIRMED
+}
+
+enum NotificationType {
+  HINT_RECEIVED
+  ITEM_FOUND
+  CLAIM_REQUEST
+  BADGE_EARNED
+  BLOCK_ALERT
+}
+
+// ------------------------------------------------------
+// MODELS
+// ------------------------------------------------------
+
+model User {
+  id              String   @id @default(uuid())
+  name            String
+  email           String   @unique
+  passwordHash    String
+  role            UserRole @default(STUDENT)
+  academicCourse  String?
+  academicPeriod  Int?
+  avatarUrl       String?
+  banerUrl        String?
+  isVerified      Boolean  @default(false)
+  reputationScore Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Many-to-many relationship with CampusBlock (blocks frequented by user)
+  frequentedBlocks CampusBlock[]
+
+  // Author of items
+  items         Item[] @relation("ItemAuthor")
+  // Staff or user who confirmed item return
+  resolvedItems Item[] @relation("ItemResolver")
+
+  // Social & interactions
+  hints         Hint[]
+  claims        Claim[]
+  likes         ItemLike[]
+  savedItems    SavedItem[]
+  badges        UserBadge[]
+  notifications Notification[]
+
+  @@map("users")
+}
+
+model CampusBlock {
+  id          String   @id @default(uuid())
+  name        String   @unique // e.g., "Bloco R", "Bloco G", "Biblioteca Central"
+  description String?
+  campus      String   @default("Campus Chapecó - Sede")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  frequentingUsers User[]
+  items            Item[]
+
+  @@map("campus_blocks")
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String // e.g., "Eletrônicos", "Documentos", "Chaves"
+  slug      String   @unique // e.g., "electronics", "documents", "keys"
+  iconName  String // e.g., "bx-devices", "bx-id-card", "bx-key"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  items Item[]
+
+  @@map("categories")
+}
+
+model Item {
+  id                  String     @id @default(uuid())
+  title               String
+  description         String     @db.Text
+  type                ItemType
+  status              ItemStatus @default(ACTIVE)
+  categoryId          String
+  blockId             String
+  specificLocation    String?
+  photoUrl            String?
+  hasReward           Boolean    @default(false)
+  isUnderStaffCustody Boolean    @default(false)
+  custodyLocation     String?
+  authorId            String
+  resolvedAt          DateTime?
+  resolvedById        String?
+  createdAt           DateTime   @default(now())
+  updatedAt           DateTime   @updatedAt
+
+  // Relations
+  category   Category    @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  block      CampusBlock @relation(fields: [blockId], references: [id], onDelete: Restrict)
+  author     User        @relation("ItemAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  resolvedBy User?       @relation("ItemResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
+
+  hints   Hint[]
+  claims  Claim[]
+  likes   ItemLike[]
+  savedBy SavedItem[]
+
+  @@index([type, status])
+  @@index([blockId])
+  @@index([categoryId])
+  @@index([authorId])
+  @@map("items")
+}
+
+model Hint {
+  id        String   @id @default(uuid())
+  content   String   @db.Text
+  isHelpful Boolean  @default(false)
+  itemId    String
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  item   Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([itemId])
+  @@index([authorId])
+  @@map("hints")
+}
+
+model Claim {
+  id            String      @id @default(uuid())
+  itemId        String
+  claimantId    String
+  status        ClaimStatus @default(PENDING)
+  secretDetails String?     @db.Text
+  securityCode  String? // Backup / quick lookup code
+  confirmedAt   DateTime?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  // Relations
+  item       Item        @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  claimant   User        @relation(fields: [claimantId], references: [id], onDelete: Cascade)
+  handoffPin HandoffPin?
+
+  @@index([itemId])
+  @@index([claimantId])
+  @@index([status])
+  @@map("claims")
+}
+
+model HandoffPin {
+  id          String   @id @default(uuid())
+  claimId     String   @unique
+  code        String // 6-digit confirmation PIN (e.g. "849201")
+  expiresAt   DateTime
+  attempts    Int      @default(0)
+  maxAttempts Int      @default(3)
+  isUsed      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  claim Claim @relation(fields: [claimId], references: [id], onDelete: Cascade)
+
+  @@index([code])
+  @@map("handoff_pins")
+}
+
+model ItemLike {
+  id        String   @id @default(uuid())
+  itemId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  // Relations
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId])
+  @@index([itemId])
+  @@index([userId])
+  @@map("item_likes")
+}
+
+model SavedItem {
+  id        String   @id @default(uuid())
+  itemId    String
+  userId    String
+  createdAt DateTime @default(now())
+
+  // Relations
+  item Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemId])
+  @@index([itemId])
+  @@index([userId])
+  @@map("saved_items")
+}
+
+model Badge {
+  id              String   @id @default(uuid())
+  name            String   @unique // e.g. "GOLD_GUARDIAN", "HINT_DETECTIVE"
+  title           String // e.g. "Guardião de Ouro"
+  description     String
+  icon            String // e.g. "bx-shield-quarter" or token
+  thresholdPoints Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  userBadges UserBadge[]
+
+  @@map("badges")
+}
+
+model UserBadge {
+  id        String   @id @default(uuid())
+  userId    String
+  badgeId   String
+  awardedAt DateTime @default(now())
+
+  // Relations
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, badgeId])
+  @@index([userId])
+  @@index([badgeId])
+  @@map("user_badges")
+}
+
+model Notification {
+  id          String           @id @default(uuid())
+  userId      String
+  type        NotificationType
+  title       String
+  message     String           @db.Text
+  referenceId String?
+  isRead      Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead])
+  @@index([createdAt])
+  @@map("notifications")
+}
