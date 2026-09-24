@@ -446,3 +446,22 @@ Dispatches real-time or inbox alerts to users regarding clues, claims, and campu
 | `ItemStatus` | `ACTIVE`, `IN_REVIEW`, `RETURNED`, `CANCELLED` | Lifecycle state of a publication. |
 | `ClaimStatus` | `PENDING`, `APPROVED`, `REJECTED`, `CONFIRMED` | Verification progression for returning an item. |
 | `NotificationType` | `HINT_RECEIVED`, `ITEM_FOUND`, `CLAIM_REQUEST`, `BADGE_EARNED`, `BLOCK_ALERT` | Categorization of user alert dispatches. |
+
+---
+
+## 4. File & Media Storage Architecture (Cloudinary)
+
+All media assets and user-uploaded images are processed, hosted, and delivered via **Cloudinary CDN**:
+
+* **Target Fields & Managed Folders:**
+  * `User.avatarUrl`: Stored under `achei-unochapeco/avatars/`. Transformed with auto-crop for faces (`c_thumb,g_face,w_200,h_200,f_auto,q_auto`).
+  * `User.banerUrl`: Stored under `achei-unochapeco/banners/`. Transformed for responsive profile headers (`c_fill,w_1200,h_400,f_auto,q_auto`).
+  * `Item.photoUrl`: Stored under `achei-unochapeco/items/`. Transformed with auto format and compression (`f_auto,q_auto,w_900`).
+* **Backend Environment Variables (`backend/.env`):**
+  * `CLOUDINARY_CLOUD_NAME` — Cloudinary account cloud name.
+  * `CLOUDINARY_API_KEY` — API public identification key.
+  * `CLOUDINARY_API_SECRET` — Secure signing secret.
+* **Security & Delivery Rules:**
+  * Only signed upload requests from authenticated users are permitted.
+  * All served URLs utilize secure HTTPS protocol.
+  * WebP and AVIF formats are automatically negotiated based on user's browser capabilities (`f_auto`).

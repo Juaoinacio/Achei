@@ -24,7 +24,7 @@ Documento de especificação técnica e funcional para a plataforma colaborativa
   * Categoria (Eletrônicos, Documentos, Chaves, Cadernos/Livros, Vestuário, Outros);
   * Bloco do campus (ex: Bloco R, Bloco G, Bloco B, Biblioteca Central, Cantina Central, Portaria, etc.);
   * Sala/laboratório ou ponto de referência (opcional);
-  * Foto do pertence (armazenamento e exibição de imagem).
+  * Foto do pertence (armazenamento, otimização e entrega via Cloudinary CDN).
 * **RF08:** Para itens com status `ACHADO`, o sistema deve permitir sinalizar se o item está em mãos do próprio aluno ou se foi entregue para a custódia de uma portaria/setor oficial.
 * **RF09:** O sistema deve listar o feed cronológico de publicações ativas com filtros por:
   * Tipo (`Todos`, `Perdidos`, `Achados`);
@@ -81,3 +81,4 @@ Documento de especificação técnica e funcional para a plataforma colaborativa
 * **RNF05 — Otimização Mobile-First:** A API REST deve fornecer respostas paginadas (por cursor ou limit/offset) e compressão de imagens para garantir consumo eficiente de dados móveis em dispositivos móveis.
 * **RNF06 — Conformidade com LGPD e Privacidade:** Nenhum dado pessoal sensível (como CPF, RG, número de telefone pessoal ou endereço residencial) deve ser exposto publicamente no feed de publicações.
 * **RNF07 — Disponibilidade e Desacoplamento:** O sistema deve manter arquitetura independente entre Next.js (frontend) e Express/Prisma (backend), viabilizando manutenção, testes unitários e escalabilidade contínua.
+* **RNF08 — Armazenamento em Nuvem com Cloudinary:** O upload, processamento e hospedagem de todos os arquivos de mídia (fotos dos pertences achados/perdidos, avatares de perfil e banners de capa `banerUrl`) devem ser gerenciados pelo serviço **Cloudinary**, garantindo compressão automática, conversão para formatos modernos (WebP/AVIF), CDN global de alta performance e URLs seguras com HTTPS.
