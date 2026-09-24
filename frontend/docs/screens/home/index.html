@@ -34,14 +34,6 @@
               gray: '#E1E1E1',        // Cinza Claro Oficial (bordas e divisórias)
               surface: '#FFFFFF',
               bg: '#F8F9FA',          // Fundo suave de tela
-            },
-            status: {
-              foundText: '#047857',
-              foundBg: '#ECFDF5',
-              lostText: '#B91C1C',
-              lostBg: '#FEF2F2',
-              returnedText: '#854D0E',
-              returnedBg: '#FEF3C7',
             }
           },
           borderRadius: {
@@ -75,6 +67,29 @@
     .no-scrollbar {
       -ms-overflow-style: none;
       scrollbar-width: none;
+    }
+
+    /* Transições e Animações de Modais estilo shadcn/ui */
+    .modal-overlay {
+      transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal-overlay.hidden {
+      display: none !important;
+    }
+    .modal-overlay:not(.hidden) {
+      display: flex !important;
+      animation: modalFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .modal-overlay:not(.hidden) .modal-content {
+      animation: modalScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes modalScaleIn {
+      from { opacity: 0; transform: scale(0.96) translateY(6px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     /* ======================================================== */
@@ -161,6 +176,8 @@
       <span class="hidden sm:inline text-slate-500">|</span>
       <nav class="hidden md:flex items-center gap-2 text-slate-300">
         <span class="text-white font-bold underline decoration-brand-yellow decoration-2">Home</span>
+        <span>•</span>
+        <a href="../../components/index.html" class="hover:text-brand-yellow transition-colors font-semibold text-brand-yellow/90 flex items-center gap-0.5"><i class="bx bx-cube"></i> Componentes</a>
         <span>•</span>
         <a href="../login/index.html" class="hover:text-brand-yellow transition-colors">Login</a>
         <span>•</span>
@@ -286,23 +303,23 @@
     <!-- CARROSSEL DE BLOCOS MOBILE (Permite filtrar com polegar)  -->
     <!-- ======================================================== -->
     <div class="mobile-blocks-bar lg:hidden bg-white border-b border-brand-gray px-4 py-2 overflow-x-auto no-scrollbar flex items-center gap-2 shadow-xs">
-      <button class="shrink-0 px-3 py-1 rounded-full bg-brand-blue text-white text-xs font-bold shadow-xs">
+      <button onclick="filterByBlock('all')" class="mobile-block-chip shrink-0 px-3 py-1 rounded-full bg-brand-blue text-white text-xs font-bold shadow-xs transition-colors" data-block="all">
         Todos (24)
       </button>
-      <button class="shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors">
-        Bloco R (Informática)
+      <button onclick="filterByBlock('bloco-r')" class="mobile-block-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-block="bloco-r">
+        Bloco R (8)
       </button>
-      <button class="shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors">
-        Bloco G (Saúde)
+      <button onclick="filterByBlock('bloco-g')" class="mobile-block-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-block="bloco-g">
+        Bloco G (5)
       </button>
-      <button class="shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors">
-        Biblioteca Central
+      <button onclick="filterByBlock('biblioteca')" class="mobile-block-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-block="biblioteca">
+        Biblioteca (6)
       </button>
-      <button class="shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors">
-        Cantinas
+      <button onclick="filterByBlock('cantinas')" class="mobile-block-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-block="cantinas">
+        Cantinas (3)
       </button>
-      <button class="shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors">
-        Portarias
+      <button onclick="filterByBlock('bloco-b')" class="mobile-block-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-block="bloco-b">
+        Bloco B (1)
       </button>
     </div>
 
@@ -342,65 +359,139 @@
             </a>
           </div>
 
-          <!-- Filtro por Blocos Oficiais da Unochapecó -->
+          <!-- Filtro por Blocos Oficiais da Unochapecó (Combobox estilo shadcn/ui) -->
           <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
             <div class="flex items-center justify-between border-b border-brand-gray pb-2">
               <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                 <i class="bx bx-map text-brand-blue text-sm"></i>
-                Blocos do Campus
+                Filtrar por Bloco
               </h3>
-              <span class="text-[11px] text-brand-blue font-semibold hover:underline cursor-pointer">Ver todos</span>
+              <button onclick="filterByBlock('all')" class="text-[11px] text-brand-blue font-semibold hover:underline cursor-pointer">Limpar</button>
             </div>
 
-            <nav class="space-y-1 text-sm font-medium">
-              <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-brand-yellow/30 text-brand-dark font-bold text-left transition-colors">
-                <span class="flex items-center gap-2">
-                  <span class="w-2 h-2 rounded-full bg-brand-blue"></span>
-                  Todos os Blocos
+            <!-- Combobox Container -->
+            <div class="relative">
+              <button 
+                type="button"
+                id="comboTriggerBlock"
+                onclick="toggleCombobox('comboPopoverBlock')"
+                class="w-full flex items-center justify-between px-3 py-2.5 bg-slate-50 hover:bg-slate-100 border border-brand-gray rounded-xl text-xs font-medium text-brand-dark transition-all focus:outline-none focus:ring-2 focus:ring-brand-blue"
+              >
+                <span class="flex items-center gap-2 truncate">
+                  <i class="bx bx-buildings text-brand-blue text-sm"></i>
+                  <span id="comboSelectedLabel" class="combobox-label font-semibold">Todos os Blocos (24)</span>
                 </span>
-                <span class="text-xs text-slate-500 font-mono">24</span>
+                <i class="bx bx-chevron-down text-slate-400 text-base"></i>
               </button>
 
-              <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-blue text-left transition-colors">
-                <span class="flex items-center gap-2">
-                  <i class="bx bx-laptop text-slate-400"></i>
-                  Bloco R (Informática / Labs)
-                </span>
-                <span class="text-xs text-slate-400 font-mono">8</span>
-              </button>
+              <!-- Popover com Campo de Busca e Lista -->
+              <div 
+                id="comboPopoverBlock" 
+                class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white border border-brand-gray rounded-xl shadow-xl z-30 p-2 space-y-1.5"
+              >
+                <!-- Input de Busca Interno estilo cmdk -->
+                <div class="relative">
+                  <i class="bx bx-search absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                  <input 
+                    type="text" 
+                    id="comboInputBlock"
+                    oninput="filterCombobox('comboInputBlock', 'comboListBlock', 'comboEmptyBlock')"
+                    placeholder="Pesquisar bloco ou local..." 
+                    class="w-full pl-7 pr-3 py-1.5 bg-slate-50 border border-brand-gray rounded-lg text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue focus:outline-none transition-colors"
+                  />
+                </div>
 
-              <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-blue text-left transition-colors">
-                <span class="flex items-center gap-2">
-                  <i class="bx bx-plus-medical text-slate-400"></i>
-                  Bloco G (Saúde / Clínicas)
-                </span>
-                <span class="text-xs text-slate-400 font-mono">5</span>
-              </button>
+                <!-- Lista de Opções -->
+                <div id="comboListBlock" class="max-h-48 overflow-y-auto custom-scrollbar space-y-0.5 text-xs">
+                  <div 
+                    onclick="selectBlockOption('all', 'Todos os Blocos (24)', this)"
+                    data-value="todos os blocos geral campus sede"
+                    class="combobox-item flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer font-bold text-brand-dark transition-colors"
+                  >
+                    <span class="flex items-center gap-2">
+                      <i class="bx bx-check combobox-check text-brand-blue text-sm"></i>
+                      <span>Todos os Blocos</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-mono">24</span>
+                  </div>
 
-              <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-blue text-left transition-colors">
-                <span class="flex items-center gap-2">
-                  <i class="bx bx-book-bookmark text-slate-400"></i>
-                  Biblioteca Central
-                </span>
-                <span class="text-xs text-slate-400 font-mono">6</span>
-              </button>
+                  <div 
+                    onclick="selectBlockOption('bloco-r', 'Bloco R (Informática / Labs)', this)"
+                    data-value="bloco r informatica computacao redes software ti labs"
+                    class="combobox-item flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer text-slate-700 transition-colors"
+                  >
+                    <span class="flex items-center gap-2">
+                      <i class="bx bx-check combobox-check text-brand-blue text-sm opacity-0"></i>
+                      <span>Bloco R (Informática)</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-mono">8</span>
+                  </div>
 
-              <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-blue text-left transition-colors">
-                <span class="flex items-center gap-2">
-                  <i class="bx bx-coffee text-slate-400"></i>
-                  Cantinas & Convivência
-                </span>
-                <span class="text-xs text-slate-400 font-mono">3</span>
-              </button>
+                  <div 
+                    onclick="selectBlockOption('bloco-g', 'Bloco G (Saúde / Clínicas)', this)"
+                    data-value="bloco g saude enfermagem medicina clinicas farmacia"
+                    class="combobox-item flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer text-slate-700 transition-colors"
+                  >
+                    <span class="flex items-center gap-2">
+                      <i class="bx bx-check combobox-check text-brand-blue text-sm opacity-0"></i>
+                      <span>Bloco G (Saúde)</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-mono">5</span>
+                  </div>
 
-              <button class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-blue text-left transition-colors">
-                <span class="flex items-center gap-2">
-                  <i class="bx bx-door-open text-slate-400"></i>
-                  Portarias & Recepção
-                </span>
-                <span class="text-xs text-slate-400 font-mono">2</span>
-              </button>
-            </nav>
+                  <div 
+                    onclick="selectBlockOption('biblioteca', 'Biblioteca Central', this)"
+                    data-value="biblioteca central acervo estudos piso livros"
+                    class="combobox-item flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer text-slate-700 transition-colors"
+                  >
+                    <span class="flex items-center gap-2">
+                      <i class="bx bx-check combobox-check text-brand-blue text-sm opacity-0"></i>
+                      <span>Biblioteca Central</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-mono">6</span>
+                  </div>
+
+                  <div 
+                    onclick="selectBlockOption('cantinas', 'Cantinas & Convivência', this)"
+                    data-value="cantinas convivencia alimentacao cafe lanchonete"
+                    class="combobox-item flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer text-slate-700 transition-colors"
+                  >
+                    <span class="flex items-center gap-2">
+                      <i class="bx bx-check combobox-check text-brand-blue text-sm opacity-0"></i>
+                      <span>Cantinas & Convivência</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-mono">3</span>
+                  </div>
+
+                  <div 
+                    onclick="selectBlockOption('bloco-b', 'Bloco B (Administração)', this)"
+                    data-value="bloco b administracao gestao contabil salas"
+                    class="combobox-item flex items-center justify-between px-2.5 py-1.5 rounded-lg hover:bg-slate-100 cursor-pointer text-slate-700 transition-colors"
+                  >
+                    <span class="flex items-center gap-2">
+                      <i class="bx bx-check combobox-check text-brand-blue text-sm opacity-0"></i>
+                      <span>Bloco B</span>
+                    </span>
+                    <span class="text-[10px] text-slate-400 font-mono">1</span>
+                  </div>
+                </div>
+
+                <div id="comboEmptyBlock" class="hidden p-3 text-center text-xs text-slate-400">
+                  Nenhum bloco encontrado
+                </div>
+              </div>
+            </div>
+
+            <!-- Chips de Filtro Rápido -->
+            <div class="space-y-1 pt-1">
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Atalhos Frequentes:</span>
+              <div class="flex flex-wrap gap-1.5">
+                <button onclick="filterByBlock('bloco-r')" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold transition-colors">Bloco R</button>
+                <button onclick="filterByBlock('bloco-g')" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold transition-colors">Bloco G</button>
+                <button onclick="filterByBlock('biblioteca')" class="px-2 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-semibold transition-colors">Biblioteca</button>
+              </div>
+            </div>
+
           </div>
 
         </aside>
@@ -418,6 +509,7 @@
               </div>
               <input 
                 type="text" 
+                onclick="openModal('modalPublish')"
                 placeholder="Perdeu ou encontrou algo no campus? Publique aqui..." 
                 class="flex-1 px-4 py-2.5 bg-slate-50 hover:bg-slate-100 border border-brand-gray rounded-lg text-xs sm:text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:bg-white cursor-pointer transition-all"
               />
@@ -425,18 +517,18 @@
 
             <div class="flex items-center justify-between pt-2 border-t border-brand-gray">
               <div class="flex items-center gap-1 sm:gap-2">
-                <button class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                <button onclick="openModal('modalPublish')" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 text-xs font-semibold flex items-center gap-1.5 transition-colors">
                   <i class="bx bx-camera text-base text-brand-blue"></i>
                   <span class="hidden sm:inline">Adicionar Foto</span>
                 </button>
-                <button class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 text-xs font-semibold flex items-center gap-1.5 transition-colors">
+                <button onclick="openModal('modalPublish')" class="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 text-xs font-semibold flex items-center gap-1.5 transition-colors">
                   <i class="bx bx-map-pin text-base text-brand-lilac"></i>
                   <span class="hidden sm:inline">Selecionar Bloco</span>
                 </button>
               </div>
 
               <!-- Botão Publicar: Amarelo Solar (#FFDC5D) com Texto Grafite (#232724) -->
-              <button class="px-4 py-1.5 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-bold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1">
+              <button onclick="openModal('modalPublish')" class="px-4 py-1.5 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-bold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1">
                 <i class="bx bx-send text-sm"></i>
                 <span>Publicar</span>
               </button>
@@ -446,14 +538,14 @@
           <!-- Abas de Filtro Segmentadas (Pílulas) -->
           <div class="flex items-center justify-between bg-white border border-brand-gray rounded-custom p-1.5 shadow-xs">
             <div class="flex items-center gap-1 w-full sm:w-auto">
-              <button class="flex-1 sm:flex-initial px-4 py-2 rounded-lg bg-brand-blue text-white text-xs font-bold transition-all shadow-xs">
-                Todos (24)
+              <button onclick="filterFeed('all')" id="tabAll" class="feed-tab flex-1 sm:flex-initial px-4 py-2 rounded-lg bg-brand-blue text-white text-xs font-bold transition-all shadow-xs">
+                Todos (<span id="countAll">24</span>)
               </button>
-              <button class="flex-1 sm:flex-initial px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all">
-                Perdidos (14)
+              <button onclick="filterFeed('lost')" id="tabLost" class="feed-tab flex-1 sm:flex-initial px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all">
+                Perdidos (<span id="countLost">14</span>)
               </button>
-              <button class="flex-1 sm:flex-initial px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all">
-                Achados (10)
+              <button onclick="filterFeed('found')" id="tabFound" class="feed-tab flex-1 sm:flex-initial px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all">
+                Achados (<span id="countFound">10</span>)
               </button>
             </div>
 
@@ -469,7 +561,7 @@
           <!-- LISTA DE POSTS DO FEED SOCIAL -->
 
           <!-- CARD 1: ITEM PERDIDO (MOCHILA AZUL NO BLOCO R) -->
-          <article class="bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-4 hover:border-slate-300 transition-all">
+          <article class="feed-card bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-4 hover:border-slate-300 transition-all" data-status="lost" data-block="bloco-r">
             <!-- Cabeçalho do Post: Autor e Badge Tipográfica -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
@@ -482,10 +574,16 @@
                 </div>
               </div>
 
-              <!-- Badge de Status: 100% Tipográfica sem ícone -->
-              <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-status-lostBg text-status-lostText">
-                PERDIDO
-              </span>
+              <div class="flex items-center gap-2">
+                <!-- Badge de Status: 100% Tipográfica sem verde -->
+                <span class="px-2.5 py-1 rounded text-xs font-extrabold uppercase tracking-wider bg-brand-blue text-white">
+                  PERDIDO
+                </span>
+                <!-- Menu de Ações / Cancelar -->
+                <button onclick="openModal('modalConfirmDelete')" class="text-slate-400 hover:text-brand-dark p-1 rounded hover:bg-slate-100 transition-colors" title="Gerenciar publicação">
+                  <i class="bx bx-dots-horizontal-rounded text-lg"></i>
+                </button>
+              </div>
             </div>
 
             <!-- Conteúdo Textual -->
@@ -523,7 +621,7 @@
                   <i class="bx bx-heart text-base text-rose-500"></i>
                   <span>14</span>
                 </button>
-                <button class="text-xs font-semibold text-slate-600 hover:text-brand-blue flex items-center gap-1 transition-colors">
+                <button onclick="openModal('modalHint')" class="text-xs font-semibold text-slate-600 hover:text-brand-blue flex items-center gap-1 transition-colors">
                   <i class="bx bx-message-dots text-base text-brand-lilac"></i>
                   <span>3 pistas</span>
                 </button>
@@ -533,16 +631,16 @@
                 </button>
               </div>
 
-              <!-- Botão Principal de Ajuda: Amarelo Solar (#FFDC5D) com Texto Grafite Escuro (#232724) -->
-              <button class="px-3.5 sm:px-4 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-bold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1.5">
-                <i class="bx bx-check-circle text-base"></i>
-                <span>Encontrei! / Avisar</span>
+              <!-- Botão Principal de Ajuda: Abre modal de Pista com ganho de Karma -->
+              <button onclick="openModal('modalHint')" class="px-3.5 sm:px-4 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1.5">
+                <i class="bx bx-bulb text-base"></i>
+                <span>Adicionar Pista (+2 Karma)</span>
               </button>
             </div>
           </article>
 
           <!-- CARD 2: ITEM ACHADO (CHAVEIRO DE CARRO NO BLOCO G) -->
-          <article class="bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-4 hover:border-slate-300 transition-all">
+          <article class="feed-card bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-4 hover:border-slate-300 transition-all" data-status="found" data-block="bloco-g">
             <!-- Cabeçalho do Post: Autor e Badge Tipográfica -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
@@ -555,8 +653,8 @@
                 </div>
               </div>
 
-              <!-- Badge de Status: 100% Tipográfica sem ícone -->
-              <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-status-foundBg text-status-foundText">
+              <!-- Badge de Status: 100% Tipográfica sem ícone (Amarelo Solar Oficial) -->
+              <span class="px-2.5 py-1 rounded text-xs font-extrabold uppercase tracking-wider bg-brand-yellow text-brand-dark">
                 ACHADO
               </span>
             </div>
@@ -567,7 +665,7 @@
                 Chaveiro com 3 Chaves e Alarme de Carro GM
               </h3>
               <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Encontrado no banco próximo à cantina do Bloco G. O item foi recolhido e está guardado com segurança na recepção da portaria do Bloco G. O proprietário pode retirar mediante confirmação.
+                Encontrado no banco próximo à cantina do Bloco G. O item foi recolhido e está guardado com segurança na recepção da portaria do Bloco G. O proprietário pode retirar mediante comprovação sigilosa.
               </p>
             </div>
 
@@ -580,12 +678,15 @@
               />
             </div>
 
-            <!-- Chip de Localização -->
-            <div class="flex items-center gap-2">
-              <div class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700 bg-slate-100 px-3 py-1.5 rounded-lg border border-brand-gray">
-                <i class="bx bx-map-pin text-brand-blue text-sm"></i>
-                <span>Portaria Central — Bloco G</span>
-              </div>
+            <!-- Metadados e Localização -->
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="px-2.5 py-1 rounded bg-blue-50 text-brand-blue text-xs font-bold border border-blue-200 flex items-center gap-1">
+                <i class="bx bx-shield-quarter"></i>
+                <span>Sob Custódia da Portaria Bloco G</span>
+              </span>
+              <span class="px-2 py-1 rounded bg-slate-100 text-slate-600 text-xs font-medium border border-brand-gray">
+                Chaves & Alarmes
+              </span>
             </div>
 
             <!-- Barra de Ações Sociais -->
@@ -595,22 +696,28 @@
                   <i class="bx bx-heart text-base text-slate-400"></i>
                   <span>8</span>
                 </button>
-                <button class="text-xs font-semibold text-slate-600 hover:text-brand-blue flex items-center gap-1 transition-colors">
+                <button onclick="openModal('modalHint')" class="text-xs font-semibold text-slate-600 hover:text-brand-blue flex items-center gap-1 transition-colors">
                   <i class="bx bx-message-dots text-base text-brand-lilac"></i>
                   <span>1 pista</span>
                 </button>
               </div>
 
-              <!-- Botão de Ação: Azul Royal (#1C4398) com Texto Branco -->
-              <button class="px-3.5 sm:px-4 py-2 bg-brand-blue hover:bg-brand-blueHover text-white font-bold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1.5">
-                <i class="bx bx-user-check text-base"></i>
-                <span>É meu! / Retirar</span>
-              </button>
+              <!-- Ações: Reivindicar & Validar PIN -->
+              <div class="flex items-center gap-2">
+                <button onclick="openModal('modalPin')" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-brand-blue border border-blue-200 font-bold text-xs rounded-lg transition-colors flex items-center gap-1" title="Confirmar devolução presencial">
+                  <i class="bx bx-key text-base"></i>
+                  <span class="hidden sm:inline">PIN (+10)</span>
+                </button>
+                <button onclick="openModal('modalClaim')" class="px-3.5 sm:px-4 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1.5">
+                  <i class="bx bx-lock-open-alt text-base"></i>
+                  <span>É meu! / Reivindicar</span>
+                </button>
+              </div>
             </div>
           </article>
 
           <!-- CARD 3: CASO DEVOLVIDO (PROVA SOCIAL) -->
-          <article class="bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-3 bg-gradient-to-r from-white via-white to-amber-50/30">
+          <article class="feed-card bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-3 bg-gradient-to-r from-white via-white to-blue-50/20" data-status="returned" data-block="bloco-b">
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-sm shadow-xs">
@@ -622,19 +729,24 @@
                 </div>
               </div>
 
-              <!-- Badge de Status: 100% Tipográfica sem ícone -->
-              <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-status-returnedBg text-status-returnedText">
-                DEVOLVIDO
-              </span>
+              <!-- Badge de Status: DEVOLVIDO em cinza neutro e selo de Karma -->
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 rounded bg-brand-yellow text-brand-dark text-[10px] font-extrabold flex items-center gap-1 shadow-2xs">
+                  <i class="bx bx-star text-xs"></i> +10 KARMA
+                </span>
+                <span class="px-2.5 py-1 rounded text-xs font-extrabold uppercase tracking-wider bg-slate-200 text-brand-dark">
+                  DEVOLVIDO
+                </span>
+              </div>
             </div>
 
-            <p class="text-xs sm:text-sm text-slate-600">
-              Agradecimento especial à comunidade do <strong>Bloco B</strong> que encontrou e avisou pelo Achei em menos de 40 minutos!
+            <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">
+              Agradecimento especial à comunidade do <strong>Bloco B</strong> que encontrou e validou a entrega pelo código PIN em menos de 40 minutos!
             </p>
           </article>
 
           <!-- CARD 4: ITEM PERDIDO (GARRAFA TÉRMICA NA BIBLIOTECA) -->
-          <article class="bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-4 hover:border-slate-300 transition-all">
+          <article class="feed-card bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-4 hover:border-slate-300 transition-all" data-status="lost" data-block="biblioteca">
             <!-- Cabeçalho do Post: Autor e Badge Tipográfica -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
@@ -647,8 +759,8 @@
                 </div>
               </div>
 
-              <!-- Badge de Status: 100% Tipográfica sem ícone -->
-              <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-status-lostBg text-status-lostText">
+              <!-- Badge de Status: PERDIDO em Azul Royal -->
+              <span class="px-2.5 py-1 rounded text-xs font-extrabold uppercase tracking-wider bg-brand-blue text-white">
                 PERDIDO
               </span>
             </div>
@@ -687,22 +799,22 @@
                   <i class="bx bx-heart text-base text-rose-500"></i>
                   <span>5</span>
                 </button>
-                <button class="text-xs font-semibold text-slate-600 hover:text-brand-blue flex items-center gap-1 transition-colors">
+                <button onclick="openModal('modalHint')" class="text-xs font-semibold text-slate-600 hover:text-brand-blue flex items-center gap-1 transition-colors">
                   <i class="bx bx-message-dots text-base text-brand-lilac"></i>
                   <span>2 pistas</span>
                 </button>
               </div>
 
-              <!-- Botão Principal: Amarelo Solar (#FFDC5D) com Texto Grafite Escuro (#232724) -->
-              <button class="px-3.5 sm:px-4 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-bold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1.5">
-                <i class="bx bx-check-circle text-base"></i>
-                <span>Encontrei! / Avisar</span>
+              <!-- Botão Principal: Adicionar Pista -->
+              <button onclick="openModal('modalHint')" class="px-3.5 sm:px-4 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1.5">
+                <i class="bx bx-bulb text-base"></i>
+                <span>Enviar Pista (+2 Karma)</span>
               </button>
             </div>
           </article>
 
           <!-- CARD 5: ITEM ACHADO (CALCULADORA CIENTÍFICA NO BLOCO R) -->
-          <article class="bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-4 hover:border-slate-300 transition-all">
+          <article class="feed-card bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs space-y-4 hover:border-slate-300 transition-all" data-status="found" data-block="bloco-r">
             <!-- Cabeçalho do Post: Autor e Badge Tipográfica -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
@@ -715,8 +827,8 @@
                 </div>
               </div>
 
-              <!-- Badge de Status: 100% Tipográfica sem ícone -->
-              <span class="px-2.5 py-1 rounded text-xs font-bold uppercase tracking-wider bg-status-foundBg text-status-foundText">
+              <!-- Badge de Status: ACHADO (Amarelo Solar Oficial) -->
+              <span class="px-2.5 py-1 rounded text-xs font-extrabold uppercase tracking-wider bg-brand-yellow text-brand-dark">
                 ACHADO
               </span>
             </div>
@@ -755,17 +867,23 @@
                   <i class="bx bx-heart text-base text-slate-400"></i>
                   <span>6</span>
                 </button>
-                <button class="text-xs font-semibold text-slate-600 hover:text-brand-blue flex items-center gap-1 transition-colors">
+                <button onclick="openModal('modalHint')" class="text-xs font-semibold text-slate-600 hover:text-brand-blue flex items-center gap-1 transition-colors">
                   <i class="bx bx-message-dots text-base text-brand-lilac"></i>
                   <span>0 pistas</span>
                 </button>
               </div>
 
-              <!-- Botão de Ação: Azul Royal (#1C4398) com Texto Branco -->
-              <button class="px-3.5 sm:px-4 py-2 bg-brand-blue hover:bg-brand-blueHover text-white font-bold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1.5">
-                <i class="bx bx-user-check text-base"></i>
-                <span>É meu! / Retirar</span>
-              </button>
+              <!-- Ações: Reivindicar & Validar PIN -->
+              <div class="flex items-center gap-2">
+                <button onclick="openModal('modalPin')" class="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-brand-blue border border-blue-200 font-bold text-xs rounded-lg transition-colors flex items-center gap-1" title="Confirmar entrega">
+                  <i class="bx bx-key text-base"></i>
+                  <span class="hidden sm:inline">PIN (+10)</span>
+                </button>
+                <button onclick="openModal('modalClaim')" class="px-3.5 sm:px-4 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1.5">
+                  <i class="bx bx-lock-open-alt text-base"></i>
+                  <span>É meu! / Retirar</span>
+                </button>
+              </div>
             </div>
           </article>
 
@@ -872,12 +990,12 @@
       </a>
 
       <!-- Tab Central: Botão Novo Post Elevado (Amarelo Solar #FFDC5D) -->
-      <button class="-mt-6 w-12 h-12 rounded-full bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark flex items-center justify-center font-extrabold text-2xl shadow-md border-4 border-white transition-transform active:scale-95" title="Publicar Novo Item">
+      <button onclick="openModal('modalPublish')" class="-mt-6 w-12 h-12 rounded-full bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark flex items-center justify-center font-extrabold text-2xl shadow-md border-4 border-white transition-transform active:scale-95 cursor-pointer" title="Publicar Novo Item">
         <i class="bx bx-plus"></i>
       </button>
 
       <!-- Tab 4: Pistas / Alertas -->
-      <a href="#" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-brand-blue text-[11px] font-medium transition-colors">
+      <a href="#" onclick="openModal('modalHint'); return false;" class="flex flex-col items-center gap-0.5 text-slate-500 hover:text-brand-blue text-[11px] font-medium transition-colors">
         <div class="relative">
           <i class="bx bx-bell text-2xl"></i>
           <span class="absolute top-0 right-0 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-white"></span>
@@ -896,9 +1014,438 @@
   </div>
 
   <!-- ======================================================== -->
-  <!-- SCRIPT DO SELETOR INTERATIVO DESKTOP / SIMULADOR MOBILE  -->
+  <!-- MODAL 1: REIVINDICAÇÃO DE PERTENCE (ClaimModal)           -->
+  <!-- ======================================================== -->
+  <div id="modalClaim" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/70 backdrop-blur-xs overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="modalClaimTitle">
+    <div class="fixed inset-0" onclick="closeModal('modalClaim')"></div>
+    <div class="modal-content relative bg-white border border-brand-gray rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden my-8 z-10">
+      
+      <!-- Modal Header -->
+      <div class="p-6 border-b border-brand-gray flex items-start justify-between bg-slate-50/60">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-brand-yellow text-brand-dark">ITEM ACHADO</span>
+            <span class="text-xs text-slate-400 font-medium">Portaria • Campus Chapecó</span>
+          </div>
+          <h3 id="modalClaimTitle" class="text-lg font-bold text-brand-dark">Reivindicar Pertence</h3>
+          <p class="text-xs text-slate-500">Envie detalhes que comprovem sua posse para retirar o item com o guardião.</p>
+        </div>
+        <button onclick="closeModal('modalClaim')" class="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-brand-dark flex items-center justify-center transition-colors" aria-label="Fechar">
+          <i class="bx bx-x text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-4 max-h-[calc(85vh-180px)] overflow-y-auto custom-scrollbar">
+        <!-- Alerta de Segurança e Privacidade -->
+        <div class="p-3 rounded-lg bg-amber-50/70 border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5">
+          <i class="bx bx-shield-quarter text-base text-amber-700 mt-0.5 shrink-0"></i>
+          <p class="leading-relaxed text-[11px]">
+            <strong>Comprovação Sigilosa:</strong> Informe marcas exclusivas (arranhões, adesivos, número de série ou papel de parede). Suas respostas são enviadas diretamente ao guardião para validação segura.
+          </p>
+        </div>
+
+        <!-- Campo 1: Detalhes Secretos -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-brand-dark">
+            Detalhes Secretos / Características Únicas <span class="text-brand-blue">*</span>
+          </label>
+          <textarea 
+            rows="3" 
+            placeholder="Ex: O chaveiro tem uma fita azul presa e a chave do carro tem uma ranhura perto do logo..." 
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Campo 2: Foto de Comprovação / Nota Fiscal (Opcional) -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-brand-dark">
+            Comprovante Adicional <span class="text-slate-400 font-normal">(Opcional: foto antiga, nota fiscal ou documento)</span>
+          </label>
+          <div class="border-2 border-dashed border-brand-gray hover:border-brand-blue rounded-xl p-4 text-center cursor-pointer transition-colors bg-slate-50/50 hover:bg-blue-50/20">
+            <i class="bx bx-cloud-upload text-2xl text-slate-400"></i>
+            <p class="text-xs font-semibold text-brand-dark mt-1">Arraste uma foto ou <span class="text-brand-blue underline">clique para enviar</span></p>
+            <p class="text-[10px] text-slate-400 mt-0.5">PNG, JPG até 5MB</p>
+          </div>
+        </div>
+
+        <!-- Campo 3: Ponto de Encontro / Turno -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-brand-dark">
+            Melhor Horário / Ponto de Encontro na Unochapecó
+          </label>
+          <select class="w-full px-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all">
+            <option>Portaria Central Bloco G (Intervalo Noturno - 20:30)</option>
+            <option>Portaria Bloco R (Intervalo Matutino - 09:40)</option>
+            <option>Secretaria Acadêmica Bloco A (Tarde)</option>
+            <option>Biblioteca Central (A combinar)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 sm:p-6 border-t border-brand-gray bg-slate-50/60 flex flex-col-reverse sm:flex-row items-center justify-end gap-2.5">
+        <button 
+          type="button" 
+          onclick="closeModal('modalClaim')"
+          class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-brand-gray hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          onclick="alert('Reivindicação enviada com sucesso ao guardião!'); closeModal('modalClaim');"
+          class="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <i class="bx bx-check-shield text-base"></i>
+          <span>Enviar Comprovação de Posse</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL 2: VALIDAÇÃO DE ENTREGA COM PIN (HandoffPinModal)   -->
+  <!-- ======================================================== -->
+  <div id="modalPin" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/70 backdrop-blur-xs overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="modalPinTitle">
+    <div class="fixed inset-0" onclick="closeModal('modalPin')"></div>
+    <div class="modal-content relative bg-white border border-brand-gray rounded-2xl w-full max-w-md shadow-2xl overflow-hidden my-8 z-10">
+      
+      <!-- Modal Header -->
+      <div class="p-6 border-b border-brand-gray flex items-start justify-between bg-slate-50/60">
+        <div class="space-y-1">
+          <div class="w-10 h-10 rounded-full bg-blue-100 text-brand-blue flex items-center justify-center text-xl mb-2">
+            <i class="bx bx-key"></i>
+          </div>
+          <h3 id="modalPinTitle" class="text-lg font-bold text-brand-dark">Confirmar Entrega Presencial</h3>
+          <p class="text-xs text-slate-500">Digite o PIN de 6 dígitos informado pelo proprietário no campus.</p>
+        </div>
+        <button onclick="closeModal('modalPin')" class="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-brand-dark flex items-center justify-center transition-colors" aria-label="Fechar">
+          <i class="bx bx-x text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-5">
+        <!-- Destaque de Gamificação e Recompensa -->
+        <div class="p-3.5 rounded-xl bg-gradient-to-r from-blue-50 to-amber-50/50 border border-blue-100 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-lg bg-brand-yellow text-brand-dark font-extrabold flex items-center justify-center text-sm shadow-xs shrink-0">
+            +10
+          </div>
+          <div class="text-xs">
+            <p class="font-bold text-brand-dark">Recompensa Comunitária</p>
+            <p class="text-slate-600 text-[11px] leading-relaxed">A validação conclui o resgate, atualiza o status para <strong>DEVOLVIDO</strong> e credita 10 pontos ao seu ranking.</p>
+          </div>
+        </div>
+
+        <!-- 6-digit OTP Inputs -->
+        <div class="space-y-2">
+          <label class="block text-center text-xs font-bold text-brand-dark uppercase tracking-wider">
+            Código PIN de Confirmação
+          </label>
+          <div class="flex items-center justify-center gap-2 sm:gap-2.5">
+            <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-extrabold text-brand-dark bg-slate-50 border-2 border-brand-gray rounded-xl focus:border-brand-blue focus:bg-white focus:outline-none transition-all shadow-xs" data-index="0" />
+            <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-extrabold text-brand-dark bg-slate-50 border-2 border-brand-gray rounded-xl focus:border-brand-blue focus:bg-white focus:outline-none transition-all shadow-xs" data-index="1" />
+            <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-extrabold text-brand-dark bg-slate-50 border-2 border-brand-gray rounded-xl focus:border-brand-blue focus:bg-white focus:outline-none transition-all shadow-xs" data-index="2" />
+            <span class="text-slate-300 font-bold">-</span>
+            <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-extrabold text-brand-dark bg-slate-50 border-2 border-brand-gray rounded-xl focus:border-brand-blue focus:bg-white focus:outline-none transition-all shadow-xs" data-index="3" />
+            <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-extrabold text-brand-dark bg-slate-50 border-2 border-brand-gray rounded-xl focus:border-brand-blue focus:bg-white focus:outline-none transition-all shadow-xs" data-index="4" />
+            <input type="text" maxlength="1" inputmode="numeric" class="otp-input w-10 h-12 sm:w-12 sm:h-14 text-center text-xl font-extrabold text-brand-dark bg-slate-50 border-2 border-brand-gray rounded-xl focus:border-brand-blue focus:bg-white focus:outline-none transition-all shadow-xs" data-index="5" />
+          </div>
+          <p class="text-center text-[11px] text-slate-400 pt-1">O código foi enviado para o email institucional do proprietário</p>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 sm:p-6 border-t border-brand-gray bg-slate-50/60 flex flex-col-reverse sm:flex-row items-center justify-end gap-2.5">
+        <button 
+          type="button" 
+          onclick="closeModal('modalPin')"
+          class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-brand-gray hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors"
+        >
+          Voltar
+        </button>
+        <button 
+          type="button" 
+          onclick="alert('PIN validado com sucesso! +10 pontos de Karma creditados.'); closeModal('modalPin');"
+          class="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <i class="bx bx-check-circle text-base"></i>
+          <span>Validar Devolução</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL 3: NOVA PISTA COLABORATIVA (NewHintModal)           -->
+  <!-- ======================================================== -->
+  <div id="modalHint" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/70 backdrop-blur-xs overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="modalHintTitle">
+    <div class="fixed inset-0" onclick="closeModal('modalHint')"></div>
+    <div class="modal-content relative bg-white border border-brand-gray rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden my-8 z-10">
+      
+      <!-- Modal Header -->
+      <div class="p-6 border-b border-brand-gray flex items-start justify-between bg-slate-50/60">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-brand-blue text-white flex items-center gap-1">
+              <i class="bx bx-bulb text-xs"></i> PISTA COLABORATIVA
+            </span>
+            <span class="text-xs text-slate-400 font-medium">Ganhe +2 Karma</span>
+          </div>
+          <h3 id="modalHintTitle" class="text-lg font-bold text-brand-dark">Adicionar Pista sobre o Pertence</h3>
+          <p class="text-xs text-slate-500">Ajude o colega compartilhando informações sobre onde o pertence foi avistado.</p>
+        </div>
+        <button onclick="closeModal('modalHint')" class="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-brand-dark flex items-center justify-center transition-colors" aria-label="Fechar">
+          <i class="bx bx-x text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-4 max-h-[calc(85vh-180px)] overflow-y-auto custom-scrollbar">
+        <!-- Campo Bloco / Local -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-brand-dark">
+            Onde você viu o pertence? <span class="text-brand-blue">*</span>
+          </label>
+          <div class="relative">
+            <i class="bx bx-map-pin absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input 
+              type="text" 
+              placeholder="Ex: Bloco R, Bancada do Laboratório 03 ou próximo à cantina..." 
+              class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all"
+            />
+          </div>
+        </div>
+
+        <!-- Campo Data/Hora -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-brand-dark">
+            Quando você viu?
+          </label>
+          <div class="relative">
+            <i class="bx bx-time-five absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input 
+              type="text" 
+              placeholder="Ex: Hoje por volta das 10h15 no intervalo..." 
+              class="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all"
+            />
+          </div>
+        </div>
+
+        <!-- Campo Descrição detalhada -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-brand-dark">
+            Detalhes da sua Pista <span class="text-brand-blue">*</span>
+          </label>
+          <textarea 
+            rows="3" 
+            placeholder="Ex: Vi alguém entregando a mochila para o monitor da sala 03 após o término da aula..." 
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Checkbox Notificação -->
+        <label class="flex items-start gap-2.5 cursor-pointer pt-1">
+          <input type="checkbox" checked class="mt-0.5 rounded border-slate-300 text-brand-blue focus:ring-brand-blue" />
+          <span class="text-xs text-slate-600 leading-tight">
+            Notificar o proprietário do item imediatamente por notificação interna
+          </span>
+        </label>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 sm:p-6 border-t border-brand-gray bg-slate-50/60 flex flex-col-reverse sm:flex-row items-center justify-end gap-2.5">
+        <button 
+          type="button" 
+          onclick="closeModal('modalHint')"
+          class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-brand-gray hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          onclick="alert('Pista enviada com sucesso! Você receberá +2 de Karma se o autor marcar como útil.'); closeModal('modalHint');"
+          class="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <i class="bx bx-send text-base"></i>
+          <span>Publicar Pista</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL 4: DIÁLOGO DE CONFIRMAÇÃO CRÍTICA (AlertDialog)     -->
+  <!-- ======================================================== -->
+  <div id="modalConfirmDelete" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/70 backdrop-blur-xs" role="alertdialog" aria-modal="true" aria-labelledby="modalAlertTitle" aria-describedby="modalAlertDesc">
+    <div class="fixed inset-0" onclick="closeModal('modalConfirmDelete')"></div>
+    <div class="modal-content relative bg-white border border-brand-gray rounded-2xl w-full max-w-md shadow-2xl overflow-hidden my-8 z-10">
+      <div class="p-6">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-brand-dark flex items-center justify-center text-2xl shrink-0">
+            <i class="bx bx-error-alt text-amber-700"></i>
+          </div>
+          <div>
+            <h3 id="modalAlertTitle" class="text-base font-bold text-brand-dark">Você tem certeza absoluta?</h3>
+            <span class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Ação Irreversível</span>
+          </div>
+        </div>
+
+        <p id="modalAlertDesc" class="text-xs text-slate-600 leading-relaxed mb-6">
+          Esta ação encerrará a publicação do pertence. O item sairá do feed público da comunidade e todas as pistas ativas serão arquivadas com segurança.
+        </p>
+
+        <div class="flex flex-col-reverse sm:flex-row items-center justify-end gap-2.5">
+          <button 
+            type="button" 
+            onclick="closeModal('modalConfirmDelete')"
+            class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-brand-gray hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors"
+          >
+            Manter Publicação
+          </button>
+          <button 
+            type="button" 
+            onclick="alert('Publicação encerrada com sucesso.'); closeModal('modalConfirmDelete');"
+            class="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-brand-dark hover:bg-black text-white font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            <i class="bx bx-trash text-base"></i>
+            <span>Sim, Encerrar</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MODAL 5: PUBLICAR NOVO PERTENCE (PublishModal)            -->
+  <!-- ======================================================== -->
+  <div id="modalPublish" class="modal-overlay hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/70 backdrop-blur-xs overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="modalPublishTitle">
+    <div class="fixed inset-0" onclick="closeModal('modalPublish')"></div>
+    <div class="modal-content relative bg-white border border-brand-gray rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden my-8 z-10">
+      
+      <!-- Modal Header -->
+      <div class="p-6 border-b border-brand-gray flex items-start justify-between bg-slate-50/60">
+        <div class="space-y-1">
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-brand-yellow text-brand-dark">NOVA PUBLICAÇÃO</span>
+            <span class="text-xs text-slate-400 font-medium">Campus Chapecó</span>
+          </div>
+          <h3 id="modalPublishTitle" class="text-lg font-bold text-brand-dark">Publicar Pertence no Feed</h3>
+          <p class="text-xs text-slate-500">Ajude a comunidade acadêmica compartilhando detalhes do item.</p>
+        </div>
+        <button onclick="closeModal('modalPublish')" class="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-brand-dark flex items-center justify-center transition-colors" aria-label="Fechar">
+          <i class="bx bx-x text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="p-6 space-y-4 max-h-[calc(85vh-180px)] overflow-y-auto custom-scrollbar">
+        <!-- Tipo: Perdido ou Achado -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-brand-dark">O que aconteceu?</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" class="py-2.5 px-3 rounded-xl border-2 border-brand-blue bg-blue-50 text-brand-blue font-bold text-xs flex items-center justify-center gap-2">
+              <i class="bx bx-search-alt"></i>
+              <span>Eu Perdi (Perdido)</span>
+            </button>
+            <button type="button" class="py-2.5 px-3 rounded-xl border border-brand-gray hover:border-slate-300 bg-white text-slate-700 font-semibold text-xs flex items-center justify-center gap-2">
+              <i class="bx bx-check-circle"></i>
+              <span>Eu Achei (Achado)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Título do Item -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-brand-dark">
+            Título do Pertence <span class="text-brand-blue">*</span>
+          </label>
+          <input 
+            type="text" 
+            placeholder="Ex: Fone JBL Tune 510 Preto, Carteira de Couro..." 
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all"
+          />
+        </div>
+
+        <!-- Categoria e Bloco -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-brand-dark">Categoria</label>
+            <select class="w-full px-3 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark focus:bg-white focus:border-brand-blue outline-none transition-all">
+              <option>Eletrônicos</option>
+              <option>Documentos / Crachá</option>
+              <option>Chaves</option>
+              <option>Cadernos & Livros</option>
+              <option>Roupas / Agasalhos</option>
+              <option>Outros</option>
+            </select>
+          </div>
+
+          <div class="space-y-1.5">
+            <label class="block text-xs font-bold text-brand-dark">Bloco do Campus</label>
+            <select class="w-full px-3 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark focus:bg-white focus:border-brand-blue outline-none transition-all">
+              <option>Bloco R (Informática / Labs)</option>
+              <option>Bloco G (Saúde / Clínicas)</option>
+              <option>Biblioteca Central</option>
+              <option>Cantinas & Convivência</option>
+              <option>Bloco B (Administração)</option>
+              <option>Portaria Central</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Descrição -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-brand-dark">
+            Descrição e Ponto Exato <span class="text-brand-blue">*</span>
+          </label>
+          <textarea 
+            rows="3" 
+            placeholder="Ex: Esqueci na bancada 4 do Laboratório de Redes logo após o intervalo das 20h30..." 
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all resize-none"
+          ></textarea>
+        </div>
+
+        <!-- Upload de Foto -->
+        <div class="space-y-1.5">
+          <label class="block text-xs font-bold text-brand-dark">Foto do Item</label>
+          <div class="border-2 border-dashed border-brand-gray hover:border-brand-blue rounded-xl p-3.5 text-center cursor-pointer transition-colors bg-slate-50/50 hover:bg-blue-50/20">
+            <i class="bx bx-camera text-2xl text-slate-400"></i>
+            <p class="text-xs font-semibold text-brand-dark mt-0.5">Clique ou arraste uma foto do item</p>
+            <p class="text-[10px] text-slate-400">Ajuda muito a comunidade a reconhecer</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-4 sm:p-6 border-t border-brand-gray bg-slate-50/60 flex flex-col-reverse sm:flex-row items-center justify-end gap-2.5">
+        <button 
+          type="button" 
+          onclick="closeModal('modalPublish')"
+          class="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-brand-gray hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          onclick="alert('Item publicado com sucesso no feed!'); closeModal('modalPublish');"
+          class="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
+        >
+          <i class="bx bx-send text-base"></i>
+          <span>Publicar no Feed</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SCRIPT DE CONTROLE INTERATIVO (SHADCN/UI & FILTROS)       -->
   <!-- ======================================================== -->
   <script>
+    let currentFilterStatus = 'all';
+    let currentFilterBlock = 'all';
+
     function setViewMode(mode) {
       const btnDesktop = document.getElementById('btnDesktop');
       const btnMobile = document.getElementById('btnMobile');
@@ -913,6 +1460,233 @@
         btnMobile.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
       }
     }
+
+    // ========================================================
+    // CONTROLE DOS MODAIS ESTILO SHADCN/UI
+    // ========================================================
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+
+        if (modalId === 'modalPin') {
+          const otpInputs = modal.querySelectorAll('.otp-input');
+          otpInputs.forEach(i => i.value = '');
+          if (otpInputs[0]) setTimeout(() => otpInputs[0].focus(), 100);
+        } else {
+          const firstInput = modal.querySelector('textarea, input:not([type="hidden"]), select');
+          if (firstInput) setTimeout(() => firstInput.focus(), 100);
+        }
+      }
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.add('hidden');
+        const anyModalOpen = document.querySelector('.modal-overlay:not(.hidden)');
+        if (!anyModalOpen) {
+          document.body.style.overflow = '';
+        }
+      }
+    }
+
+    // Auto-tab nos 6 dígitos de PIN
+    function setupOtpInputs() {
+      const inputs = document.querySelectorAll('.otp-input');
+      inputs.forEach((input, idx) => {
+        input.addEventListener('input', (e) => {
+          const val = e.target.value.replace(/[^0-9]/g, '');
+          e.target.value = val;
+          if (val.length > 0 && idx < inputs.length - 1) {
+            inputs[idx + 1].focus();
+          }
+        });
+
+        input.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && !e.target.value && idx > 0) {
+            inputs[idx - 1].focus();
+          }
+        });
+      });
+    }
+
+    // ========================================================
+    // CONTROLE DO COMBOBOX ESTILO SHADCN/UI
+    // ========================================================
+    function toggleCombobox(popoverId) {
+      const popover = document.getElementById(popoverId);
+      if (!popover) return;
+      const isHidden = popover.classList.contains('hidden');
+
+      if (isHidden) {
+        popover.classList.remove('hidden');
+        const input = popover.querySelector('input');
+        if (input) {
+          input.value = '';
+          input.focus();
+          filterCombobox('comboInputBlock', 'comboListBlock', 'comboEmptyBlock');
+        }
+      } else {
+        popover.classList.add('hidden');
+      }
+    }
+
+    function filterCombobox(inputId, listId, emptyId) {
+      const query = (document.getElementById(inputId).value || '').toLowerCase().trim();
+      const items = document.getElementById(listId).querySelectorAll('.combobox-item');
+      let matches = 0;
+
+      items.forEach(item => {
+        const val = (item.getAttribute('data-value') || '').toLowerCase();
+        if (!query || val.includes(query)) {
+          item.classList.remove('hidden');
+          matches++;
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+
+      const emptyEl = document.getElementById(emptyId);
+      if (emptyEl) {
+        emptyEl.classList.toggle('hidden', matches > 0);
+      }
+    }
+
+    function selectBlockOption(blockKey, label, el) {
+      currentFilterBlock = blockKey;
+      const labelEl = document.getElementById('comboSelectedLabel');
+      if (labelEl) labelEl.textContent = label;
+
+      // Atualiza checkmarks
+      const list = el.closest('#comboListBlock');
+      if (list) {
+        list.querySelectorAll('.combobox-check').forEach(chk => chk.classList.add('opacity-0'));
+        const activeCheck = el.querySelector('.combobox-check');
+        if (activeCheck) activeCheck.classList.remove('opacity-0');
+      }
+
+      // Fecha popover
+      const popover = document.getElementById('comboPopoverBlock');
+      if (popover) popover.classList.add('hidden');
+
+      // Atualiza chips mobile
+      document.querySelectorAll('.mobile-block-chip').forEach(btn => {
+        const b = btn.getAttribute('data-block');
+        if (b === blockKey) {
+          btn.className = 'mobile-block-chip shrink-0 px-3 py-1 rounded-full bg-brand-blue text-white text-xs font-bold shadow-xs transition-colors';
+        } else {
+          btn.className = 'mobile-block-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors';
+        }
+      });
+
+      applyFilters();
+    }
+
+    function filterByBlock(blockKey) {
+      currentFilterBlock = blockKey;
+      const labelMap = {
+        'all': 'Todos os Blocos (24)',
+        'bloco-r': 'Bloco R (Informática / Labs)',
+        'bloco-g': 'Bloco G (Saúde / Clínicas)',
+        'biblioteca': 'Biblioteca Central',
+        'cantinas': 'Cantinas & Convivência',
+        'bloco-b': 'Bloco B (Administração)'
+      };
+      const labelEl = document.getElementById('comboSelectedLabel');
+      if (labelEl && labelMap[blockKey]) labelEl.textContent = labelMap[blockKey];
+
+      // Atualiza checks no combobox
+      const items = document.querySelectorAll('#comboListBlock .combobox-item');
+      items.forEach(item => {
+        const isTarget = item.getAttribute('onclick').includes(`'${blockKey}'`);
+        const chk = item.querySelector('.combobox-check');
+        if (chk) chk.classList.toggle('opacity-0', !isTarget);
+      });
+
+      // Atualiza chips mobile
+      document.querySelectorAll('.mobile-block-chip').forEach(btn => {
+        const b = btn.getAttribute('data-block');
+        if (b === blockKey) {
+          btn.className = 'mobile-block-chip shrink-0 px-3 py-1 rounded-full bg-brand-blue text-white text-xs font-bold shadow-xs transition-colors';
+        } else {
+          btn.className = 'mobile-block-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors';
+        }
+      });
+
+      applyFilters();
+    }
+
+    // ========================================================
+    // FILTROS DO FEED (STATUS E BLOCO EM CONJUNTO)
+    // ========================================================
+    function filterFeed(statusKey) {
+      currentFilterStatus = statusKey;
+
+      const tabs = [
+        { id: 'tabAll', active: statusKey === 'all' },
+        { id: 'tabLost', active: statusKey === 'lost' },
+        { id: 'tabFound', active: statusKey === 'found' },
+      ];
+
+      tabs.forEach(t => {
+        const el = document.getElementById(t.id);
+        if (el) {
+          if (t.active) {
+            el.className = 'feed-tab flex-1 sm:flex-initial px-4 py-2 rounded-lg bg-brand-blue text-white text-xs font-bold transition-all shadow-xs';
+          } else {
+            el.className = 'feed-tab flex-1 sm:flex-initial px-4 py-2 rounded-lg text-slate-600 hover:bg-slate-100 text-xs font-bold transition-all';
+          }
+        }
+      });
+
+      applyFilters();
+    }
+
+    function applyFilters() {
+      const cards = document.querySelectorAll('.feed-card');
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const status = card.getAttribute('data-status');
+        const block = card.getAttribute('data-block');
+
+        const matchStatus = (currentFilterStatus === 'all') || (status === currentFilterStatus);
+        const matchBlock = (currentFilterBlock === 'all') || (block === currentFilterBlock);
+
+        if (matchStatus && matchBlock) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // Global keyboard listener (Esc fecha modais e combobox)
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.modal-overlay:not(.hidden)').forEach(modal => {
+          closeModal(modal.id);
+        });
+        const popover = document.getElementById('comboPopoverBlock');
+        if (popover) popover.classList.add('hidden');
+      }
+    });
+
+    // Fecha o combobox ao clicar fora
+    document.addEventListener('click', function(e) {
+      const isInside = e.target.closest('#comboTriggerBlock') || e.target.closest('#comboPopoverBlock');
+      if (!isInside) {
+        const popover = document.getElementById('comboPopoverBlock');
+        if (popover) popover.classList.add('hidden');
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setupOtpInputs();
+    });
   </script>
 
 </body>
