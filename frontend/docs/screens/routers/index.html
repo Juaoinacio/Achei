@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Achei Unochapecó — Documentação de Rotas da API</title>
+
+  <!-- Fonte Oficial: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Biblioteca Oficial de Ícones: Boxicons v2 -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN com a Paleta Oficial da Marca (Zero Verde) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              blue: '#1C4398',        // Azul Royal Oficial
+              blueHover: '#153375',
+              blueLight: '#EEF3FF',
+              lilac: '#AC80CE',       // Roxo Lilás Oficial
+              lilacHover: '#986BBD',
+              lilacLight: '#F7F2FA',
+              yellow: '#FFDC5D',      // Amarelo Solar Oficial
+              yellowHover: '#E8C545',
+              yellowLight: '#FFFBEA',
+              dark: '#232724',        // Grafite Escuro Oficial
+              gray: '#E1E1E1',        // Cinza Claro Oficial
+              surface: '#FFFFFF',
+              bg: '#F8F9FA',          // Fundo suave de tela
+            }
+          },
+          borderRadius: {
+            'custom': '12px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #E1E1E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #AC80CE;
+    }
+
+    .json-key { color: #1C4398; font-weight: 600; }
+    .json-string { color: #8B5CF6; }
+    .json-number { color: #D97706; }
+    .json-boolean { color: #2563EB; font-weight: bold; }
+    .json-null { color: #9CA3AF; font-style: italic; }
+
+    /* Badge Method Styles */
+    .badge-get { background-color: #EEF3FF; color: #1C4398; border: 1px solid #C7D7FE; }
+    .badge-post { background-color: #F7F2FA; color: #7E22CE; border: 1px solid #E9D5FF; }
+    .badge-put { background-color: #FFFBEA; color: #B45309; border: 1px solid #FDE68A; }
+    .badge-patch { background-color: #FFFBEA; color: #D97706; border: 1px solid #FDE68A; }
+    .badge-delete { background-color: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
+  </style>
+</head>
+<body class="bg-brand-bg text-brand-dark font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- ========================================== -->
+  <!-- TOPO / HEADER DA TELA DE ROTAS             -->
+  <!-- ========================================== -->
+  <header class="sticky top-0 z-40 bg-white border-b border-brand-gray shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- Marca & Navegação Voltar -->
+      <div class="flex items-center gap-3">
+        <a href="../home/index.html" class="p-2 text-gray-500 hover:text-brand-blue hover:bg-brand-blueLight rounded-lg transition-colors" title="Voltar ao Feed">
+          <i class="bx bx-arrow-back text-2xl"></i>
+        </a>
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-brand-blue text-brand-yellow flex items-center justify-center font-extrabold text-lg shadow-sm">
+            <i class="bx bx-radar"></i>
+          </div>
+          <div>
+            <h1 class="font-extrabold text-base sm:text-lg leading-tight text-brand-blue flex items-center gap-2">
+              Achei Unochapecó
+              <span class="text-xs px-2 py-0.5 rounded-full bg-brand-blueLight text-brand-blue font-semibold border border-blue-200">
+                API Docs & Tester
+              </span>
+            </h1>
+            <p class="text-xs text-gray-500 hidden sm:block">Especificação e prototipagem interativa dos endpoints</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status da Conexão Backend -->
+      <div class="flex items-center gap-3">
+        <div class="hidden md:flex items-center gap-2 bg-gray-50 border border-brand-gray px-3 py-1.5 rounded-lg text-xs font-mono">
+          <span class="text-gray-400">Base:</span>
+          <input id="baseUrlInput" type="text" value="http://localhost:3333" class="bg-transparent text-brand-dark focus:outline-none w-44 font-semibold" />
+          <button onclick="pingBackend()" class="text-brand-blue hover:underline text-xs flex items-center gap-1 font-sans font-medium" title="Testar Conexão">
+            <i class="bx bx-refresh"></i> Testar
+          </button>
+        </div>
+
+        <div id="connectionStatusBadge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200">
+          <span class="w-2 h-2 rounded-full bg-gray-400 animate-pulse"></span>
+          <span>Verificando...</span>
+        </div>
+
+        <a href="../../components/index.html" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-lilacLight text-brand-lilac hover:bg-brand-lilac hover:text-white transition-all">
+          <i class="bx bx-layer"></i>
+          Componentes UI
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================== -->
+  <!-- BARRA DE AUTENTICAÇÃO RÁPIDA / TOKEN JWT   -->
+  <!-- ========================================== -->
+  <section class="bg-white border-b border-brand-gray py-3 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+      
+      <div class="flex-1 w-full md:w-auto">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold uppercase tracking-wider text-brand-blue flex items-center gap-1">
+            <i class="bx bx-key text-sm"></i>
+            Bearer Token:
+          </span>
+          <input 
+            id="globalJwtToken" 
+            type="text" 
+            placeholder="Cole seu JWT Token aqui ou use o login rápido ao lado..." 
+            class="flex-1 bg-gray-50 border border-brand-gray rounded-lg px-3 py-1.5 text-xs font-mono text-gray-800 focus:outline-none focus:border-brand-blue"
+          />
+          <button onclick="clearToken()" class="px-2 py-1.5 text-xs text-gray-400 hover:text-red-500 rounded border border-transparent hover:border-gray-200" title="Limpar Token">
+            <i class="bx bx-trash text-sm"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Botões de Login Rápido com os Usuários do Seed -->
+      <div class="flex items-center gap-1.5 flex-wrap">
+        <span class="text-xs text-gray-500 font-medium">Login Rápido (Seed):</span>
+        <button onclick="quickLogin('lucas.silva@unochapeco.edu.br', '123456', 'Lucas Silva (Aluno)')" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-blue-50 text-brand-blue border border-blue-200 hover:bg-brand-blue hover:text-white transition-colors">
+          🎓 Lucas (Aluno)
+        </button>
+        <button onclick="quickLogin('mariana.becker@unochapeco.edu.br', '123456', 'Mariana Becker (Aluna)')" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-700 hover:text-white transition-colors">
+          🎓 Mariana (Aluna)
+        </button>
+        <button onclick="quickLogin('portaria.blocor@unochapeco.edu.br', '123456', 'Portaria Bloco R')" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-600 hover:text-white transition-colors">
+          🛡️ Portaria (Staff)
+        </button>
+        <button onclick="quickLogin('admin@unochapeco.edu.br', '123456', 'Admin')" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-gray-100 text-gray-800 border border-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
+          👑 Admin
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================== -->
+  <!-- CONTEÚDO PRINCIPAL: FILTROS & LISTA        -->
+  <!-- ========================================== -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
+
+    <!-- Card Destaque: Fluxo do PIN de 6 Dígitos -->
+    <div class="bg-gradient-to-r from-blue-900 to-indigo-950 text-white rounded-2xl p-6 shadow-md border border-blue-800">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-brand-yellow text-brand-dark flex items-center justify-center text-2xl font-bold">
+            <i class="bx bx-shield-quarter"></i>
+          </div>
+          <div>
+            <span class="text-xs uppercase font-extrabold tracking-wider text-brand-yellow">Destaque de Segurança</span>
+            <h2 class="text-xl font-extrabold text-white">Fluxo de Entrega Física por PIN de 6 Dígitos (HandoffPin)</h2>
+          </div>
+        </div>
+        <span class="px-3 py-1 bg-white/10 rounded-full text-xs font-mono font-semibold text-blue-200 border border-white/20">
+          Model: HandoffPin 1:1 Claim
+        </span>
+      </div>
+
+      <!-- Passos do Fluxo -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+        <div class="bg-white/10 p-3.5 rounded-xl border border-white/15">
+          <div class="flex items-center gap-2 mb-1.5 font-bold text-brand-yellow">
+            <span class="w-5 h-5 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-xs">1</span>
+            Solicitação com Prova
+          </div>
+          <p class="text-gray-300 leading-relaxed font-mono">POST /api/items/:id/claims</p>
+          <p class="text-gray-400 mt-1">Dono envia detalhes confidenciais (marcas, papel de parede) para provar a posse.</p>
+        </div>
+
+        <div class="bg-white/10 p-3.5 rounded-xl border border-white/15">
+          <div class="flex items-center gap-2 mb-1.5 font-bold text-brand-yellow">
+            <span class="w-5 h-5 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-xs">2</span>
+            Aprovação & Geração
+          </div>
+          <p class="text-gray-300 leading-relaxed font-mono">PATCH /api/claims/:id/review</p>
+          <p class="text-gray-400 mt-1">Autor ou Portaria aprova. O sistema gera automaticamente o PIN de 6 dígitos numérico.</p>
+        </div>
+
+        <div class="bg-white/10 p-3.5 rounded-xl border border-white/15">
+          <div class="flex items-center gap-2 mb-1.5 font-bold text-brand-yellow">
+            <span class="w-5 h-5 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-xs">3</span>
+            Apresentação na Portaria
+          </div>
+          <p class="text-gray-300 leading-relaxed font-mono">Notificação ao Aluno</p>
+          <p class="text-gray-400 mt-1">O aluno recebe a notificação com o PIN (ex: <strong class="text-brand-yellow">849201</strong>) para comparecer ao local.</p>
+        </div>
+
+        <div class="bg-white/10 p-3.5 rounded-xl border border-white/15">
+          <div class="flex items-center gap-2 mb-1.5 font-bold text-brand-yellow">
+            <span class="w-5 h-5 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-xs">4</span>
+            Validação & Baixa
+          </div>
+          <p class="text-gray-300 leading-relaxed font-mono">POST /api/claims/:id/confirm</p>
+          <p class="text-gray-400 mt-1">Portaria digita o PIN. O item vira <span class="text-green-300 font-bold">RETURNED</span> e reputação é concedida!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de Filtros e Busca de Rotas -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-xl border border-brand-gray shadow-sm">
+      
+      <!-- Campo de Busca -->
+      <div class="relative w-full sm:w-80">
+        <i class="bx bx-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+        <input 
+          id="routeSearchInput" 
+          type="text" 
+          placeholder="Buscar rota por caminho ou nome..." 
+          oninput="filterRoutes()"
+          class="w-full bg-gray-50 border border-brand-gray rounded-lg pl-10 pr-4 py-2 text-sm text-brand-dark focus:outline-none focus:border-brand-blue"
+        />
+      </div>
+
+      <!-- Filtro por Categoria de Rotas -->
+      <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+        <button onclick="setCategoryFilter('ALL')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-blue text-white" data-category="ALL">
+          Todas (<span id="totalRoutesCount">16</span>)
+        </button>
+        <button onclick="setCategoryFilter('auth')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="auth">
+          Auth
+        </button>
+        <button onclick="setCategoryFilter('items')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="items">
+          Itens & Feed
+        </button>
+        <button onclick="setCategoryFilter('claims')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="claims">
+          Retirada (PIN)
+        </button>
+        <button onclick="setCategoryFilter('hints')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="hints">
+          Pistas
+        </button>
+        <button onclick="setCategoryFilter('users')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="users">
+          Usuários
+        </button>
+        <button onclick="setCategoryFilter('references')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="references">
+          Blocos & Cat.
+        </button>
+        <button onclick="setCategoryFilter('gamification')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="gamification">
+          Rankings
+        </button>
+      </div>
+    </div>
+
+    <!-- Lista de Endpoints -->
+    <div id="routesContainer" class="flex flex-col gap-4">
+      <!-- Inserido dinamicamente via JavaScript para permitir testes ao vivo -->
+    </div>
+
+  </main>
+
+  <!-- ========================================== -->
+  <!-- MODAL / DRAWER DE TESTE DA REQUISIÇÃO AO VIVO -->
+  <!-- ========================================== -->
+  <div id="testModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-brand-gray overflow-hidden">
+      
+      <!-- Cabeçalho do Teste -->
+      <div class="px-6 py-4 border-b border-brand-gray flex items-center justify-between bg-gray-50">
+        <div class="flex items-center gap-2.5">
+          <span id="modalMethodBadge" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold">GET</span>
+          <span id="modalRoutePath" class="font-mono text-sm font-bold text-brand-dark">/api/...</span>
+        </div>
+        <button onclick="closeTestModal()" class="w-8 h-8 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-200 flex items-center justify-center transition-colors">
+          <i class="bx bx-x text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Corpo da Configuração do Teste -->
+      <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-4 custom-scrollbar">
+        
+        <!-- Descrição -->
+        <p id="modalDescription" class="text-xs text-gray-600"></p>
+
+        <!-- Parâmetros de Rota (Path Params) -->
+        <div id="modalPathParamsGroup" class="hidden flex flex-col gap-2">
+          <label class="text-xs font-bold text-gray-700 uppercase tracking-wider">Parâmetros de Caminho (Path Params):</label>
+          <div id="modalPathParamsContainer" class="flex flex-col gap-2"></div>
+        </div>
+
+        <!-- Parâmetros de Query (Query Params) -->
+        <div id="modalQueryParamsGroup" class="hidden flex flex-col gap-2">
+          <label class="text-xs font-bold text-gray-700 uppercase tracking-wider">Parâmetros de Consulta (Query Params):</label>
+          <div id="modalQueryParamsContainer" class="flex flex-col gap-2"></div>
+        </div>
+
+        <!-- Request Body (JSON) -->
+        <div id="modalBodyGroup" class="hidden flex flex-col gap-2">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-gray-700 uppercase tracking-wider">Corpo da Requisição (JSON Body):</label>
+            <span class="text-[11px] text-gray-400">Content-Type: application/json</span>
+          </div>
+          <textarea 
+            id="modalBodyInput" 
+            rows="6" 
+            class="w-full bg-gray-900 text-green-300 font-mono text-xs rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brand-blue"
+          ></textarea>
+        </div>
+
+        <!-- Botão Executar -->
+        <button 
+          id="btnExecuteRequest" 
+          onclick="executeLiveRequest()" 
+          class="w-full py-2.5 px-4 rounded-xl bg-brand-blue hover:bg-brand-blueHover text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all"
+        >
+          <i class="bx bx-send text-lg"></i>
+          <span>Enviar Requisição ao Backend</span>
+        </button>
+
+        <!-- Resposta do Servidor -->
+        <div id="responseSection" class="hidden flex flex-col gap-2 pt-2 border-t border-brand-gray">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
+              Resposta do Servidor:
+              <span id="responseStatusBadge" class="px-2 py-0.5 rounded text-[11px] font-mono font-bold">200 OK</span>
+              <span id="responseTime" class="text-gray-400 font-mono text-[11px]">12ms</span>
+            </label>
+            <button onclick="copyResponse()" class="text-xs text-brand-blue hover:underline flex items-center gap-1 font-medium">
+              <i class="bx bx-copy"></i> Copiar
+            </button>
+          </div>
+          <pre id="responseJsonViewer" class="bg-gray-950 text-gray-100 font-mono text-xs p-3.5 rounded-xl overflow-x-auto max-h-60 custom-scrollbar border border-gray-800"></pre>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- JAVASCRIPT DE DADOS E INTERATIVIDADE       -->
+  <!-- ========================================== -->
+  <script>
+    // Catálogo completo de todas as rotas do backend
+    const API_ROUTES = [
+      // 1. AUTENTICAÇÃO
+      {
+        id: 'auth_register',
+        category: 'auth',
+        method: 'POST',
+        path: '/api/auth/register',
+        title: 'Cadastrar Novo Estudante',
+        description: 'Registra novo usuário validando obrigatoriamente e-mail institucional @unochapeco.edu.br.',
+        authRequired: false,
+        bodyTemplate: {
+          name: "João da Silva",
+          email: "joao.silva@unochapeco.edu.br",
+          password: "senhaSegura123",
+          academicCourse: "Ciência da Computação",
+          academicPeriod: 3
+        }
+      },
+      {
+        id: 'auth_login',
+        category: 'auth',
+        method: 'POST',
+        path: '/api/auth/login',
+        title: 'Autenticação (Login)',
+        description: 'Valida credenciais, gera e retorna o token de autenticação JWT.',
+        authRequired: false,
+        bodyTemplate: {
+          email: "lucas.silva@unochapeco.edu.br",
+          password: "123456"
+        }
+      },
+
+      // 2. ITENS & FEED
+      {
+        id: 'items_feed',
+        category: 'items',
+        method: 'GET',
+        path: '/api/items',
+        title: 'Listar Feed de Pertences',
+        description: 'Retorna a lista paginada de itens com filtros de tipo, bloco, categoria, busca e custódia.',
+        authRequired: false,
+        queryParams: [
+          { name: 'type', placeholder: 'LOST ou FOUND', default: '' },
+          { name: 'q', placeholder: 'Palavra-chave (ex: garrafa, chave)', default: '' },
+          { name: 'page', placeholder: '1', default: '1' },
+          { name: 'limit', placeholder: '12', default: '12' }
+        ]
+      },
+      {
+        id: 'items_get_id',
+        category: 'items',
+        method: 'GET',
+        path: '/api/items/:id',
+        title: 'Obter Detalhes do Item',
+        description: 'Retorna detalhes completos, autor, pistas já submetidas, contadores e flags de curtida do usuário autenticado.',
+        authRequired: false,
+        pathParams: [{ name: 'id', placeholder: 'ID do Item (UUID)' }]
+      },
+      {
+        id: 'items_create',
+        category: 'items',
+        method: 'POST',
+        path: '/api/items',
+        title: 'Publicar Pertence Achado ou Perdido',
+        description: 'Cria nova publicação no feed e concede reputação à conta do usuário.',
+        authRequired: true,
+        bodyTemplate: {
+          title: "Fone de Ouvido Bluetooth JBL",
+          description: "Esqueci meu fone preto no Laboratório 04 do Bloco R próximo ao computador 12.",
+          type: "LOST",
+          categoryId: "ID_DA_CATEGORIA_AQUI",
+          blockId: "ID_DO_BLOCO_AQUI",
+          specificLocation: "Lab 04 - 2º andar",
+          hasReward: true
+        }
+      },
+      {
+        id: 'items_return',
+        category: 'items',
+        method: 'PATCH',
+        path: '/api/items/:id/return',
+        title: 'Marcar Item como Devolvido',
+        description: 'Conclui o ciclo de vida do pertence marcando o status como RETURNED e concedendo +15 pontos de karma.',
+        authRequired: true,
+        pathParams: [{ name: 'id', placeholder: 'ID do Item (UUID)' }]
+      },
+      {
+        id: 'items_like',
+        category: 'items',
+        method: 'POST',
+        path: '/api/items/:id/like',
+        title: 'Curtir / Descurtir Publicação',
+        description: 'Alterna a curtida (like) no post para impulsionar relevância no campus.',
+        authRequired: true,
+        pathParams: [{ name: 'id', placeholder: 'ID do Item (UUID)' }]
+      },
+      {
+        id: 'items_save',
+        category: 'items',
+        method: 'POST',
+        path: '/api/items/:id/save',
+        title: 'Salvar / Favoritar Pertence',
+        description: 'Adiciona ou remove o item da coleção pessoal de itens salvos para acompanhamento.',
+        authRequired: true,
+        pathParams: [{ name: 'id', placeholder: 'ID do Item (UUID)' }]
+      },
+
+      // 3. RETIRADA E PIN DE 6 DÍGITOS
+      {
+        id: 'claims_create',
+        category: 'claims',
+        method: 'POST',
+        path: '/api/items/:itemId/claims',
+        title: 'Solicitar Retirada com Prova',
+        description: 'Submete solicitação formal com detalhes confidenciais para comprovar propriedade do item.',
+        authRequired: true,
+        pathParams: [{ name: 'itemId', placeholder: 'ID do Item Achado (UUID)' }],
+        bodyTemplate: {
+          secretDetails: "O objeto possui um arranhão leve na tampa e uma fita adesiva amarela na lateral."
+        }
+      },
+      {
+        id: 'claims_list_item',
+        category: 'claims',
+        method: 'GET',
+        path: '/api/items/:itemId/claims',
+        title: 'Listar Solicitações Recebidas',
+        description: 'Permite ao autor ou à portaria visualizar todas as solicitações de posse submetidas no pertence.',
+        authRequired: true,
+        pathParams: [{ name: 'itemId', placeholder: 'ID do Item (UUID)' }]
+      },
+      {
+        id: 'claims_review',
+        category: 'claims',
+        method: 'PATCH',
+        path: '/api/claims/:id/review',
+        title: 'Aprovar Solicitação & Gerar PIN 6 Dígitos',
+        description: 'Aprova a posse comprovada. O sistema gera automaticamente o código PIN de 6 dígitos no modelo HandoffPin.',
+        authRequired: true,
+        pathParams: [{ name: 'id', placeholder: 'ID da Solicitação (UUID)' }],
+        bodyTemplate: {
+          status: "APPROVED"
+        }
+      },
+      {
+        id: 'claims_confirm',
+        category: 'claims',
+        method: 'POST',
+        path: '/api/claims/:id/confirm',
+        title: 'Validar Entrega Física por PIN (6 Dígitos)',
+        description: 'Portaria ou autor confere o PIN de 6 dígitos do solicitante. Conclui a devolução e distribui karma.',
+        authRequired: true,
+        pathParams: [{ name: 'id', placeholder: 'ID da Solicitação (UUID)' }],
+        bodyTemplate: {
+          code: "849201"
+        }
+      },
+
+      // 4. PISTAS COMUNITÁRIAS
+      {
+        id: 'hints_create',
+        category: 'hints',
+        method: 'POST',
+        path: '/api/items/:itemId/hints',
+        title: 'Submeter Pista Comunitária',
+        description: 'Adiciona pista ou comentário sobre a localização do item e alerta o autor da postagem.',
+        authRequired: true,
+        pathParams: [{ name: 'itemId', placeholder: 'ID do Item (UUID)' }],
+        bodyTemplate: {
+          content: "Vi um pertence idêntico guardado com o monitor no laboratório do 2º andar!"
+        }
+      },
+      {
+        id: 'hints_helpful',
+        category: 'hints',
+        method: 'PATCH',
+        path: '/api/hints/:id/helpful',
+        title: 'Marcar Pista como Útil ⭐',
+        description: 'Autor do post sinaliza que a pista foi útil, concedendo +3 pontos de reputação a quem ajudou.',
+        authRequired: true,
+        pathParams: [{ name: 'id', placeholder: 'ID da Pista (UUID)' }]
+      },
+
+      // 5. USUÁRIOS
+      {
+        id: 'users_me',
+        category: 'users',
+        method: 'GET',
+        path: '/api/users/me',
+        title: 'Perfil Autenticado (Meu Perfil)',
+        description: 'Retorna perfil, pontuação de reputação (karma), medalhas conquistadas e blocos favoritos.',
+        authRequired: true
+      },
+      {
+        id: 'users_my_saved',
+        category: 'users',
+        method: 'GET',
+        path: '/api/users/me/saved',
+        title: 'Meus Itens Salvos',
+        description: 'Lista todos os pertences favoritados pelo estudante logado.',
+        authRequired: true
+      },
+
+      // 6. BLOCOS & CATEGORIAS (REFERÊNCIAS)
+      {
+        id: 'ref_blocks',
+        category: 'references',
+        method: 'GET',
+        path: '/api/blocks',
+        title: 'Listar Prédios & Blocos do Campus',
+        description: 'Retorna blocos oficiais da Unochapecó com contadores em tempo real de itens ativos.',
+        authRequired: false
+      },
+      {
+        id: 'ref_categories',
+        category: 'references',
+        method: 'GET',
+        path: '/api/categories',
+        title: 'Listar Categorias de Pertences',
+        description: 'Retorna categorias mestras cadastradas com seus respectivos ícones Boxicons.',
+        authRequired: false
+      },
+
+      // 7. GAMIFICAÇÃO & RANKINGS
+      {
+        id: 'gamification_rankings',
+        category: 'gamification',
+        method: 'GET',
+        path: '/api/rankings',
+        title: 'Leaderboard & Ranking Geral',
+        description: 'Lista os estudantes e membros da universidade com maior karma e devoluções confirmadas.',
+        authRequired: false
+      },
+      {
+        id: 'gamification_badges',
+        category: 'gamification',
+        method: 'GET',
+        path: '/api/badges',
+        title: 'Listar Medalhas do Sistema',
+        description: 'Retorna todas as medalhas e critérios de desbloqueio por reputação.',
+        authRequired: false
+      }
+    ];
+
+    let currentCategoryFilter = 'ALL';
+    let currentSelectedRoute = null;
+
+    // Inicialização da tela
+    document.addEventListener('DOMContentLoaded', () => {
+      // Carregar token salvo se existir
+      const savedToken = localStorage.getItem('achei_api_token');
+      if (savedToken) {
+        document.getElementById('globalJwtToken').value = savedToken;
+      }
+
+      renderRoutes();
+      pingBackend();
+    });
+
+    // Testar conectividade com o Backend
+    async function pingBackend() {
+      const baseUrl = document.getElementById('baseUrlInput').value.trim();
+      const badge = document.getElementById('connectionStatusBadge');
+
+      badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><span>Testando...</span>`;
+      badge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200";
+
+      try {
+        const res = await fetch(`${baseUrl}/`, { method: 'GET' });
+        if (res.ok) {
+          const data = await res.json();
+          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-blue-600"></span><span>Online (${data.name || 'API'})</span>`;
+          badge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-brand-blue border border-blue-200";
+        } else {
+          throw new Error('Status: ' + res.status);
+        }
+      } catch (err) {
+        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span><span>Offline (Inicie com: npm run dev)</span>`;
+        badge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200";
+      }
+    }
+
+    // Renderizar Cards de Rotas
+    function renderRoutes() {
+      const container = document.getElementById('routesContainer');
+      const searchTerm = document.getElementById('routeSearchInput').value.toLowerCase().trim();
+
+      const filtered = API_ROUTES.filter(route => {
+        const matchesCategory = currentCategoryFilter === 'ALL' || route.category === currentCategoryFilter;
+        const matchesSearch = !searchTerm || 
+          route.path.toLowerCase().includes(searchTerm) || 
+          route.title.toLowerCase().includes(searchTerm) ||
+          route.method.toLowerCase().includes(searchTerm);
+        return matchesCategory && matchesSearch;
+      });
+
+      document.getElementById('totalRoutesCount').innerText = API_ROUTES.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-2xl p-12 text-center border border-brand-gray flex flex-col items-center justify-center">
+            <i class="bx bx-search text-4xl text-gray-300 mb-2"></i>
+            <p class="font-bold text-gray-700">Nenhum endpoint encontrado para este filtro.</p>
+            <p class="text-xs text-gray-400 mt-1">Tente pesquisar com outros termos ou selecione outra categoria.</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(route => {
+        const methodClass = getBadgeClass(route.method);
+        return `
+          <div class="bg-white rounded-xl border border-brand-gray hover:border-brand-blue/40 shadow-sm transition-all p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            
+            <div class="flex items-start gap-3.5 flex-1">
+              <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold ${methodClass}">
+                ${route.method}
+              </span>
+              <div>
+                <div class="flex items-center gap-2 flex-wrap">
+                  <span class="font-mono text-sm font-bold text-brand-dark">${route.path}</span>
+                  ${route.authRequired ? `
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                      <i class="bx bx-lock-alt"></i> Auth Bearer
+                    </span>
+                  ` : `
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-brand-blue border border-blue-200">
+                      Público
+                    </span>
+                  `}
+                </div>
+                <h3 class="font-bold text-sm text-gray-800 mt-1">${route.title}</h3>
+                <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">${route.description}</p>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+              <button 
+                onclick="openTestModal('${route.id}')" 
+                class="px-4 py-2 rounded-lg bg-brand-blueLight hover:bg-brand-blue text-brand-blue hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm"
+              >
+                <i class="bx bx-play-circle text-base"></i>
+                Testar Endpoint
+              </button>
+            </div>
+
+          </div>
+        `;
+      }).join('');
+    }
+
+    function getBadgeClass(method) {
+      switch (method) {
+        case 'GET': return 'badge-get';
+        case 'POST': return 'badge-post';
+        case 'PUT': return 'badge-put';
+        case 'PATCH': return 'badge-patch';
+        case 'DELETE': return 'badge-delete';
+        default: return 'bg-gray-100 text-gray-800';
+      }
+    }
+
+    function setCategoryFilter(category) {
+      currentCategoryFilter = category;
+      document.querySelectorAll('.category-filter-btn').forEach(btn => {
+        if (btn.dataset.category === category) {
+          btn.className = "category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-blue text-white";
+        } else {
+          btn.className = "category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all";
+        }
+      });
+      renderRoutes();
+    }
+
+    function filterRoutes() {
+      renderRoutes();
+    }
+
+    // Modal de Teste Interativo
+    function openTestModal(routeId) {
+      const route = API_ROUTES.find(r => r.id === routeId);
+      if (!route) return;
+
+      currentSelectedRoute = route;
+
+      const modal = document.getElementById('testModal');
+      const methodBadge = document.getElementById('modalMethodBadge');
+      const routePath = document.getElementById('modalRoutePath');
+      const description = document.getElementById('modalDescription');
+      const pathGroup = document.getElementById('modalPathParamsGroup');
+      const pathContainer = document.getElementById('modalPathParamsContainer');
+      const queryGroup = document.getElementById('modalQueryParamsGroup');
+      const queryContainer = document.getElementById('modalQueryParamsContainer');
+      const bodyGroup = document.getElementById('modalBodyGroup');
+      const bodyInput = document.getElementById('modalBodyInput');
+      const responseSection = document.getElementById('responseSection');
+
+      responseSection.classList.add('hidden');
+
+      methodBadge.innerText = route.method;
+      methodBadge.className = `px-2.5 py-1 rounded-md text-xs font-mono font-bold ${getBadgeClass(route.method)}`;
+      routePath.innerText = route.path;
+      description.innerText = route.description;
+
+      // Montar campos de Path Params
+      if (route.pathParams && route.pathParams.length > 0) {
+        pathGroup.classList.remove('hidden');
+        pathContainer.innerHTML = route.pathParams.map(param => `
+          <div class="flex items-center gap-2">
+            <span class="w-24 text-xs font-mono text-gray-500 font-semibold">${param.name}:</span>
+            <input 
+              type="text" 
+              id="pathParam_${param.name}" 
+              placeholder="${param.placeholder || ''}" 
+              class="flex-1 bg-gray-50 border border-brand-gray rounded-lg px-3 py-1.5 text-xs font-mono text-brand-dark focus:outline-none focus:border-brand-blue"
+            />
+          </div>
+        `).join('');
+      } else {
+        pathGroup.classList.add('hidden');
+        pathContainer.innerHTML = '';
+      }
+
+      // Montar campos de Query Params
+      if (route.queryParams && route.queryParams.length > 0) {
+        queryGroup.classList.remove('hidden');
+        queryContainer.innerHTML = route.queryParams.map(param => `
+          <div class="flex items-center gap-2">
+            <span class="w-24 text-xs font-mono text-gray-500 font-semibold">${param.name}:</span>
+            <input 
+              type="text" 
+              id="queryParam_${param.name}" 
+              value="${param.default || ''}" 
+              placeholder="${param.placeholder || ''}" 
+              class="flex-1 bg-gray-50 border border-brand-gray rounded-lg px-3 py-1.5 text-xs font-mono text-brand-dark focus:outline-none focus:border-brand-blue"
+            />
+          </div>
+        `).join('');
+      } else {
+        queryGroup.classList.add('hidden');
+        queryContainer.innerHTML = '';
+      }
+
+      // Montar Body JSON
+      if (route.bodyTemplate) {
+        bodyGroup.classList.remove('hidden');
+        bodyInput.value = JSON.stringify(route.bodyTemplate, null, 2);
+      } else {
+        bodyGroup.classList.add('hidden');
+        bodyInput.value = '';
+      }
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeTestModal() {
+      document.getElementById('testModal').classList.add('hidden');
+      currentSelectedRoute = null;
+    }
+
+    // Executar Requisição Real ao Backend
+    async function executeLiveRequest() {
+      if (!currentSelectedRoute) return;
+
+      const baseUrl = document.getElementById('baseUrlInput').value.trim();
+      const globalToken = document.getElementById('globalJwtToken').value.trim();
+
+      let targetUrl = `${baseUrl}${currentSelectedRoute.path}`;
+
+      // Substituir Path Params
+      if (currentSelectedRoute.pathParams) {
+        for (const param of currentSelectedRoute.pathParams) {
+          const val = document.getElementById(`pathParam_${param.name}`)?.value.trim();
+          if (!val) {
+            alert(`Por favor, preencha o parâmetro obrigatório de rota: :${param.name}`);
+            return;
+          }
+          targetUrl = targetUrl.replace(`:${param.name}`, encodeURIComponent(val));
+        }
+      }
+
+      // Anexar Query Params
+      if (currentSelectedRoute.queryParams) {
+        const queryParams = new URLSearchParams();
+        for (const param of currentSelectedRoute.queryParams) {
+          const val = document.getElementById(`queryParam_${param.name}`)?.value.trim();
+          if (val) {
+            queryParams.append(param.name, val);
+          }
+        }
+        const qs = queryParams.toString();
+        if (qs) {
+          targetUrl += `?${qs}`;
+        }
+      }
+
+      // Montar Headers
+      const headers = {
+        'Accept': 'application/json',
+      };
+
+      if (globalToken) {
+        headers['Authorization'] = `Bearer ${globalToken}`;
+      }
+
+      let requestBody = null;
+      if (currentSelectedRoute.bodyTemplate) {
+        const bodyRaw = document.getElementById('modalBodyInput').value.trim();
+        if (bodyRaw) {
+          try {
+            JSON.parse(bodyRaw); // Validar JSON
+            requestBody = bodyRaw;
+            headers['Content-Type'] = 'application/json';
+          } catch (e) {
+            alert('O corpo da requisição não contém um JSON válido!');
+            return;
+          }
+        }
+      }
+
+      const btn = document.getElementById('btnExecuteRequest');
+      btn.innerHTML = `<i class="bx bx-loader-alt animate-spin text-lg"></i> Enviando...`;
+      btn.disabled = true;
+
+      const startTime = performance.now();
+
+      try {
+        const response = await fetch(targetUrl, {
+          method: currentSelectedRoute.method,
+          headers,
+          body: requestBody,
+        });
+
+        const duration = Math.round(performance.now() - startTime);
+        const data = await response.json().catch(() => ({ message: 'Sem conteúdo JSON' }));
+
+        showResponse(response.status, duration, data);
+      } catch (err) {
+        const duration = Math.round(performance.now() - startTime);
+        showResponse(0, duration, { error: 'Falha na conexão com o backend. Verifique se o servidor está rodando em http://localhost:3333.' });
+      } finally {
+        btn.innerHTML = `<i class="bx bx-send text-lg"></i> Enviar Requisição ao Backend`;
+        btn.disabled = false;
+      }
+    }
+
+    function showResponse(status, duration, data) {
+      const responseSection = document.getElementById('responseSection');
+      const badge = document.getElementById('responseStatusBadge');
+      const time = document.getElementById('responseTime');
+      const viewer = document.getElementById('responseJsonViewer');
+
+      responseSection.classList.remove('hidden');
+
+      time.innerText = `${duration}ms`;
+
+      if (status >= 200 && status < 300) {
+        badge.innerText = `${status} SUCESSO`;
+        badge.className = "px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-green-950 text-green-400 border border-green-800";
+      } else if (status >= 400 && status < 500) {
+        badge.innerText = `${status} ERRO CLIENTE`;
+        badge.className = "px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-amber-950 text-amber-400 border border-amber-800";
+      } else {
+        badge.innerText = `${status || 'FALHA'}`;
+        badge.className = "px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-red-950 text-red-400 border border-red-800";
+      }
+
+      viewer.textContent = JSON.stringify(data, null, 2);
+    }
+
+    function copyResponse() {
+      const viewer = document.getElementById('responseJsonViewer');
+      navigator.clipboard.writeText(viewer.textContent).then(() => {
+        alert('Resposta copiada para a área de transferência!');
+      });
+    }
+
+    // Login Rápido com usuários do Seed
+    async function quickLogin(email, password, label) {
+      const baseUrl = document.getElementById('baseUrlInput').value.trim();
+
+      try {
+        const res = await fetch(`${baseUrl}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.token) {
+          document.getElementById('globalJwtToken').value = data.token;
+          localStorage.setItem('achei_api_token', data.token);
+          alert(`✅ Logado com sucesso como: ${label}!\nO token JWT foi preenchido automaticamente.`);
+        } else {
+          alert(`❌ Falha no login rápido: ${data.message || 'Erro desconhecido'}`);
+        }
+      } catch (err) {
+        alert('❌ Não foi possível conectar ao servidor. Certifique-se de que o backend está ativo com "npm run dev".');
+      }
+    }
+
+    function clearToken() {
+      document.getElementById('globalJwtToken').value = '';
+      localStorage.removeItem('achei_api_token');
+    }
+  </script>
+
+</body>
+</html>
