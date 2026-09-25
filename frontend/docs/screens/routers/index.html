@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Achei Unochapecó — Documentação de Rotas da API</title>
+  <title>Achei — Rotas & Documentação da API Unochapecó</title>
 
   <!-- Fonte Oficial: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -13,7 +13,7 @@
   <!-- Biblioteca Oficial de Ícones: Boxicons v2 -->
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
 
-  <!-- Tailwind CSS CDN com a Paleta Oficial da Marca (Zero Verde) -->
+  <!-- Tailwind CSS via CDN com Configuração da Marca Oficial (Zero Verde) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -34,8 +34,8 @@
               yellow: '#FFDC5D',      // Amarelo Solar Oficial
               yellowHover: '#E8C545',
               yellowLight: '#FFFBEA',
-              dark: '#232724',        // Grafite Escuro Oficial
-              gray: '#E1E1E1',        // Cinza Claro Oficial
+              dark: '#232724',        // Grafite Escuro Oficial (textos e títulos)
+              gray: '#E1E1E1',        // Cinza Claro Oficial (bordas e divisórias)
               surface: '#FFFFFF',
               bg: '#F8F9FA',          // Fundo suave de tela
             }
@@ -49,29 +49,99 @@
   </script>
 
   <style>
-    /* Scrollbar personalizada */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+    /* Estilização suave para scrollbars */
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
     }
-    ::-webkit-scrollbar-track {
+    .custom-scrollbar::-webkit-scrollbar-track {
       background: transparent;
     }
-    ::-webkit-scrollbar-thumb {
+    .custom-scrollbar::-webkit-scrollbar-thumb {
       background: #E1E1E1;
       border-radius: 9999px;
     }
-    ::-webkit-scrollbar-thumb:hover {
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
       background: #AC80CE;
     }
 
-    .json-key { color: #1C4398; font-weight: 600; }
-    .json-string { color: #8B5CF6; }
-    .json-number { color: #D97706; }
-    .json-boolean { color: #2563EB; font-weight: bold; }
-    .json-null { color: #9CA3AF; font-style: italic; }
+    /* Ocultar barra de rolagem horizontal */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
 
-    /* Badge Method Styles */
+    /* ======================================================== */
+    /* REGRAS DO SIMULADOR MOBILE QUANDO ATIVADO NO DESKTOP    */
+    /* ======================================================== */
+    body.mobile-simulator-active {
+      background-color: #0f172a !important;
+    }
+
+    body.mobile-simulator-active #viewWrapper {
+      max-width: 412px !important;
+      height: 840px !important;
+      margin: 1.5rem auto !important;
+      border: 12px solid #232724 !important;
+      border-radius: 46px !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.15) !important;
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      position: relative !important;
+      background-color: #F8F9FA !important;
+    }
+
+    body.mobile-simulator-active #phoneDynamicIsland {
+      display: flex !important;
+    }
+
+    body.mobile-simulator-active header {
+      top: 0 !important;
+    }
+
+    body.mobile-simulator-active .desktop-sidebar {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .desktop-search-input {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .desktop-campus-badge {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .desktop-btn-publish {
+      display: none !important;
+    }
+
+    body.mobile-simulator-active .content-column {
+      grid-column: span 12 / span 12 !important;
+      width: 100% !important;
+    }
+
+    body.mobile-simulator-active .mobile-search-bar {
+      display: block !important;
+    }
+
+    body.mobile-simulator-active .mobile-categories-bar {
+      display: flex !important;
+    }
+
+    body.mobile-simulator-active .mobile-bottom-nav {
+      display: flex !important;
+      position: sticky !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      z-index: 50 !important;
+    }
+
+    /* Badges de Métodos HTTP com as cores da identidade oficial */
     .badge-get { background-color: #EEF3FF; color: #1C4398; border: 1px solid #C7D7FE; }
     .badge-post { background-color: #F7F2FA; color: #7E22CE; border: 1px solid #E9D5FF; }
     .badge-put { background-color: #FFFBEA; color: #B45309; border: 1px solid #FDE68A; }
@@ -79,260 +149,501 @@
     .badge-delete { background-color: #FEF2F2; color: #B91C1C; border: 1px solid #FECACA; }
   </style>
 </head>
-<body class="bg-brand-bg text-brand-dark font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-brand-bg text-brand-dark font-sans min-h-screen selection:bg-brand-yellow selection:text-brand-dark pb-20 lg:pb-10 transition-colors duration-300">
 
-  <!-- ========================================== -->
-  <!-- TOPO / HEADER DA TELA DE ROTAS             -->
-  <!-- ========================================== -->
-  <header class="sticky top-0 z-40 bg-white border-b border-brand-gray shadow-sm">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-      
-      <!-- Marca & Navegação Voltar -->
-      <div class="flex items-center gap-3">
-        <a href="../home/index.html" class="p-2 text-gray-500 hover:text-brand-blue hover:bg-brand-blueLight rounded-lg transition-colors" title="Voltar ao Feed">
-          <i class="bx bx-arrow-back text-2xl"></i>
-        </a>
-        <div class="flex items-center gap-2.5">
-          <div class="w-9 h-9 rounded-xl bg-brand-blue text-brand-yellow flex items-center justify-center font-extrabold text-lg shadow-sm">
-            <i class="bx bx-radar"></i>
-          </div>
-          <div>
-            <h1 class="font-extrabold text-base sm:text-lg leading-tight text-brand-blue flex items-center gap-2">
-              Achei Unochapecó
-              <span class="text-xs px-2 py-0.5 rounded-full bg-brand-blueLight text-brand-blue font-semibold border border-blue-200">
-                API Docs & Tester
-              </span>
-            </h1>
-            <p class="text-xs text-gray-500 hidden sm:block">Especificação e prototipagem interativa dos endpoints</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Status da Conexão Backend -->
-      <div class="flex items-center gap-3">
-        <div class="hidden md:flex items-center gap-2 bg-gray-50 border border-brand-gray px-3 py-1.5 rounded-lg text-xs font-mono">
-          <span class="text-gray-400">Base:</span>
-          <input id="baseUrlInput" type="text" value="http://localhost:3333" class="bg-transparent text-brand-dark focus:outline-none w-44 font-semibold" />
-          <button onclick="pingBackend()" class="text-brand-blue hover:underline text-xs flex items-center gap-1 font-sans font-medium" title="Testar Conexão">
-            <i class="bx bx-refresh"></i> Testar
-          </button>
-        </div>
-
-        <div id="connectionStatusBadge" class="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 border border-gray-200">
-          <span class="w-2 h-2 rounded-full bg-gray-400 animate-pulse"></span>
-          <span>Verificando...</span>
-        </div>
-
-        <a href="../../components/index.html" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-brand-lilacLight text-brand-lilac hover:bg-brand-lilac hover:text-white transition-all">
-          <i class="bx bx-layer"></i>
-          Componentes UI
-        </a>
-      </div>
-    </div>
-  </header>
-
-  <!-- ========================================== -->
-  <!-- BARRA DE AUTENTICAÇÃO RÁPIDA / TOKEN JWT   -->
-  <!-- ========================================== -->
-  <section class="bg-white border-b border-brand-gray py-3 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-      
-      <div class="flex-1 w-full md:w-auto">
-        <div class="flex items-center gap-2">
-          <span class="text-xs font-bold uppercase tracking-wider text-brand-blue flex items-center gap-1">
-            <i class="bx bx-key text-sm"></i>
-            Bearer Token:
-          </span>
-          <input 
-            id="globalJwtToken" 
-            type="text" 
-            placeholder="Cole seu JWT Token aqui ou use o login rápido ao lado..." 
-            class="flex-1 bg-gray-50 border border-brand-gray rounded-lg px-3 py-1.5 text-xs font-mono text-gray-800 focus:outline-none focus:border-brand-blue"
-          />
-          <button onclick="clearToken()" class="px-2 py-1.5 text-xs text-gray-400 hover:text-red-500 rounded border border-transparent hover:border-gray-200" title="Limpar Token">
-            <i class="bx bx-trash text-sm"></i>
-          </button>
-        </div>
-      </div>
-
-      <!-- Botões de Login Rápido com os Usuários do Seed -->
-      <div class="flex items-center gap-1.5 flex-wrap">
-        <span class="text-xs text-gray-500 font-medium">Login Rápido (Seed):</span>
-        <button onclick="quickLogin('lucas.silva@unochapeco.edu.br', '123456', 'Lucas Silva (Aluno)')" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-blue-50 text-brand-blue border border-blue-200 hover:bg-brand-blue hover:text-white transition-colors">
-          🎓 Lucas (Aluno)
-        </button>
-        <button onclick="quickLogin('mariana.becker@unochapeco.edu.br', '123456', 'Mariana Becker (Aluna)')" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-700 hover:text-white transition-colors">
-          🎓 Mariana (Aluna)
-        </button>
-        <button onclick="quickLogin('portaria.blocor@unochapeco.edu.br', '123456', 'Portaria Bloco R')" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-600 hover:text-white transition-colors">
-          🛡️ Portaria (Staff)
-        </button>
-        <button onclick="quickLogin('admin@unochapeco.edu.br', '123456', 'Admin')" class="px-2.5 py-1 text-xs font-semibold rounded-md bg-gray-100 text-gray-800 border border-gray-300 hover:bg-gray-800 hover:text-white transition-colors">
-          👑 Admin
-        </button>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================== -->
-  <!-- CONTEÚDO PRINCIPAL: FILTROS & LISTA        -->
-  <!-- ========================================== -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col gap-6">
-
-    <!-- Card Destaque: Fluxo do PIN de 6 Dígitos -->
-    <div class="bg-gradient-to-r from-blue-900 to-indigo-950 text-white rounded-2xl p-6 shadow-md border border-blue-800">
-      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-4">
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-xl bg-brand-yellow text-brand-dark flex items-center justify-center text-2xl font-bold">
-            <i class="bx bx-shield-quarter"></i>
-          </div>
-          <div>
-            <span class="text-xs uppercase font-extrabold tracking-wider text-brand-yellow">Destaque de Segurança</span>
-            <h2 class="text-xl font-extrabold text-white">Fluxo de Entrega Física por PIN de 6 Dígitos (HandoffPin)</h2>
-          </div>
-        </div>
-        <span class="px-3 py-1 bg-white/10 rounded-full text-xs font-mono font-semibold text-blue-200 border border-white/20">
-          Model: HandoffPin 1:1 Claim
+  <!-- ======================================================== -->
+  <!-- BARRA DE CONTROLE DO PROTÓTIPO (DESKTOP X MOBILE)        -->
+  <!-- ======================================================== -->
+  <aside class="bg-brand-dark text-white text-xs py-2 px-4 sticky top-0 z-50 flex items-center justify-between border-b border-black/20 shadow-md">
+    <div class="flex items-center gap-3">
+      <span class="font-bold text-brand-yellow flex items-center gap-1.5">
+        <i class="bx bx-slider-alt text-base"></i>
+        Achei • Unochapecó
+      </span>
+      <span class="hidden sm:inline text-slate-500">|</span>
+      <nav class="hidden md:flex items-center gap-2 text-slate-300">
+        <a href="../home/index.html" class="hover:text-brand-yellow transition-colors">Home</a>
+        <span>•</span>
+        <a href="../../components/index.html" class="hover:text-brand-yellow transition-colors font-semibold text-brand-yellow/90 flex items-center gap-0.5"><i class="bx bx-cube"></i> Componentes</a>
+        <span>•</span>
+        <a href="../login/index.html" class="hover:text-brand-yellow transition-colors">Login</a>
+        <span>•</span>
+        <a href="../register/index.html" class="hover:text-brand-yellow transition-colors">Cadastro</a>
+        <span>•</span>
+        <a href="../password/index.html" class="hover:text-brand-yellow transition-colors">Recuperar Senha</a>
+        <span>•</span>
+        <a href="../perfio/index.html" class="hover:text-brand-yellow transition-colors">Perfil</a>
+        <span>•</span>
+        <a href="../rank/index.html" class="hover:text-brand-yellow transition-colors">Ranking</a>
+        <span>•</span>
+        <span class="text-white font-bold underline decoration-brand-yellow decoration-2 flex items-center gap-1">
+          <i class="bx bx-code-alt text-brand-yellow"></i> Rotas API
         </span>
+      </nav>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button onclick="setViewMode('desktop')" id="btnDesktop" class="px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs">
+        <i class="bx bx-laptop text-sm"></i>
+        <span>Desktop (3 Colunas)</span>
+      </button>
+      <button onclick="setViewMode('mobile')" id="btnMobile" class="px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all">
+        <i class="bx bx-mobile-alt text-sm"></i>
+        <span>Mobile (Simulador 390px)</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ======================================================== -->
+  <!-- CONTAINER PRINCIPAL (ADAPTA NO MODO SIMULADOR)           -->
+  <!-- ======================================================== -->
+  <div id="viewWrapper" class="w-full transition-all duration-300 mx-auto">
+
+    <!-- STATUS BAR / NOTCH DO CELULAR (visível no simulador mobile) -->
+    <div id="phoneDynamicIsland" class="hidden items-center justify-between px-6 pt-3 pb-2 bg-brand-blue text-white text-[11px] font-semibold select-none sticky top-0 z-50">
+      <span>9:41</span>
+      <div class="w-24 h-4 bg-black/40 rounded-full flex items-center justify-end px-2">
+        <span class="w-2 h-2 rounded-full bg-slate-900 border border-white/20"></span>
       </div>
-
-      <!-- Passos do Fluxo -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
-        <div class="bg-white/10 p-3.5 rounded-xl border border-white/15">
-          <div class="flex items-center gap-2 mb-1.5 font-bold text-brand-yellow">
-            <span class="w-5 h-5 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-xs">1</span>
-            Solicitação com Prova
-          </div>
-          <p class="text-gray-300 leading-relaxed font-mono">POST /api/items/:id/claims</p>
-          <p class="text-gray-400 mt-1">Dono envia detalhes confidenciais (marcas, papel de parede) para provar a posse.</p>
-        </div>
-
-        <div class="bg-white/10 p-3.5 rounded-xl border border-white/15">
-          <div class="flex items-center gap-2 mb-1.5 font-bold text-brand-yellow">
-            <span class="w-5 h-5 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-xs">2</span>
-            Aprovação & Geração
-          </div>
-          <p class="text-gray-300 leading-relaxed font-mono">PATCH /api/claims/:id/review</p>
-          <p class="text-gray-400 mt-1">Autor ou Portaria aprova. O sistema gera automaticamente o PIN de 6 dígitos numérico.</p>
-        </div>
-
-        <div class="bg-white/10 p-3.5 rounded-xl border border-white/15">
-          <div class="flex items-center gap-2 mb-1.5 font-bold text-brand-yellow">
-            <span class="w-5 h-5 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-xs">3</span>
-            Apresentação na Portaria
-          </div>
-          <p class="text-gray-300 leading-relaxed font-mono">Notificação ao Aluno</p>
-          <p class="text-gray-400 mt-1">O aluno recebe a notificação com o PIN (ex: <strong class="text-brand-yellow">849201</strong>) para comparecer ao local.</p>
-        </div>
-
-        <div class="bg-white/10 p-3.5 rounded-xl border border-white/15">
-          <div class="flex items-center gap-2 mb-1.5 font-bold text-brand-yellow">
-            <span class="w-5 h-5 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-xs">4</span>
-            Validação & Baixa
-          </div>
-          <p class="text-gray-300 leading-relaxed font-mono">POST /api/claims/:id/confirm</p>
-          <p class="text-gray-400 mt-1">Portaria digita o PIN. O item vira <span class="text-green-300 font-bold">RETURNED</span> e reputação é concedida!</p>
-        </div>
+      <div class="flex items-center gap-1.5 text-xs text-white">
+        <i class="bx bx-wifi text-sm"></i>
+        <i class="bx bxs-battery text-base"></i>
       </div>
     </div>
 
-    <!-- Barra de Filtros e Busca de Rotas -->
-    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-xl border border-brand-gray shadow-sm">
-      
-      <!-- Campo de Busca -->
-      <div class="relative w-full sm:w-80">
-        <i class="bx bx-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-lg"></i>
+    <!-- ======================================================== -->
+    <!-- 1. NAVBAR SUPERIOR OFICIAL (STICKY)                      -->
+    <!-- ======================================================== -->
+    <header class="bg-brand-blue text-white sticky top-9 z-40 shadow-sm border-b border-brand-blueHover">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+        
+        <!-- Logo Achei & Unochapecó -->
+        <div class="flex items-center gap-4">
+          <a href="../home/index.html" class="flex items-center gap-2.5 group">
+            <span class="w-9 h-9 bg-brand-yellow text-brand-dark rounded-lg flex items-center justify-center font-extrabold text-xl shadow-sm transition-transform group-hover:scale-105">
+              <i class="bx bx-search"></i>
+            </span>
+            <div class="flex flex-col">
+              <span class="text-xl font-extrabold tracking-tight leading-none text-white">Achei</span>
+              <span class="text-[10px] font-semibold text-brand-yellow uppercase tracking-wider">Unochapecó</span>
+            </div>
+          </a>
+
+          <!-- Seletor de Campus Institucional (Desktop) -->
+          <div class="desktop-campus-badge hidden md:flex items-center gap-1.5 px-2.5 py-1 bg-white/10 rounded-md text-xs font-medium text-slate-100 hover:bg-white/15 cursor-pointer transition-colors">
+            <i class="bx bx-buildings text-sm text-brand-yellow"></i>
+            <span>Campus Chapecó (Sede)</span>
+            <i class="bx bx-chevron-down text-xs opacity-70"></i>
+          </div>
+        </div>
+
+        <!-- Campo de Busca Central (Desktop) -->
+        <div class="desktop-search-input hidden md:flex flex-1 max-w-lg mx-4">
+          <div class="relative w-full">
+            <i class="bx bx-search text-slate-400 text-lg absolute left-3.5 top-2.5"></i>
+            <input 
+              id="topNavSearchInput"
+              type="text" 
+              oninput="syncSearchWithFeed(this.value)"
+              placeholder="Buscar rota por caminho (ex: /api/items, /api/auth) ou nome..." 
+              class="w-full pl-10 pr-12 py-2 bg-white/10 hover:bg-white/15 focus:bg-white text-white focus:text-brand-dark placeholder:text-slate-300 focus:placeholder:text-slate-400 rounded-lg text-sm border border-white/20 focus:border-white focus:outline-none transition-all"
+            />
+            <span class="absolute right-3 top-2 px-1.5 py-0.5 bg-white/20 text-white text-[10px] font-mono rounded">/</span>
+          </div>
+        </div>
+
+        <!-- Ações do Topo -->
+        <div class="flex items-center gap-2 sm:gap-3">
+          <!-- Status Backend Badge -->
+          <div id="headerStatusBadge" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-white text-xs font-semibold cursor-pointer hover:bg-white/15 transition-all" onclick="pingBackend()" title="Clique para retestar a conexão">
+            <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+            <span id="headerStatusText">Conectando...</span>
+          </div>
+
+          <!-- Perfil do Usuário com Roxo Lilás Oficial (#AC80CE) -->
+          <a href="../perfio/index.html" class="flex items-center gap-2 pl-2 border-l border-white/15 cursor-pointer hover:opacity-90 transition-opacity">
+            <div id="userAvatarBadge" class="w-8 h-8 rounded-full bg-brand-lilac text-white flex items-center justify-center font-bold text-xs ring-2 ring-white/30 shadow-xs">
+              LM
+            </div>
+            <span id="userDisplayName" class="hidden xl:inline text-xs font-semibold text-white">Lucas Mendes</span>
+          </a>
+        </div>
+
+      </div>
+    </header>
+
+    <!-- ======================================================== -->
+    <!-- BARRA DE BUSCA MOBILE (Simulador e Celular)               -->
+    <!-- ======================================================== -->
+    <div class="mobile-search-bar md:hidden bg-white border-b border-brand-gray px-4 py-2.5 shadow-xs">
+      <div class="relative">
+        <i class="bx bx-search text-slate-400 text-lg absolute left-3 top-2.5"></i>
         <input 
-          id="routeSearchInput" 
           type="text" 
-          placeholder="Buscar rota por caminho ou nome..." 
-          oninput="filterRoutes()"
-          class="w-full bg-gray-50 border border-brand-gray rounded-lg pl-10 pr-4 py-2 text-sm text-brand-dark focus:outline-none focus:border-brand-blue"
+          oninput="syncSearchWithFeed(this.value)"
+          placeholder="Buscar endpoint na API..." 
+          class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-brand-gray rounded-lg text-xs placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue focus:bg-white transition-all"
         />
       </div>
+    </div>
 
-      <!-- Filtro por Categoria de Rotas -->
-      <div class="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
-        <button onclick="setCategoryFilter('ALL')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-blue text-white" data-category="ALL">
-          Todas (<span id="totalRoutesCount">16</span>)
-        </button>
-        <button onclick="setCategoryFilter('auth')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="auth">
-          Auth
-        </button>
-        <button onclick="setCategoryFilter('items')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="items">
-          Itens & Feed
-        </button>
-        <button onclick="setCategoryFilter('claims')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="claims">
-          Retirada (PIN)
-        </button>
-        <button onclick="setCategoryFilter('hints')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="hints">
-          Pistas
-        </button>
-        <button onclick="setCategoryFilter('users')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="users">
-          Usuários
-        </button>
-        <button onclick="setCategoryFilter('references')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="references">
-          Blocos & Cat.
-        </button>
-        <button onclick="setCategoryFilter('gamification')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all" data-category="gamification">
-          Rankings
-        </button>
+    <!-- ======================================================== -->
+    <!-- CARROSSEL DE CATEGORIAS MOBILE (Permite filtrar na tela) -->
+    <!-- ======================================================== -->
+    <div class="mobile-categories-bar lg:hidden bg-white border-b border-brand-gray px-4 py-2 overflow-x-auto no-scrollbar flex items-center gap-2 shadow-xs">
+      <button onclick="setCategoryFilter('ALL')" class="mobile-cat-chip shrink-0 px-3 py-1 rounded-full bg-brand-blue text-white text-xs font-bold shadow-xs transition-colors" data-category="ALL">
+        Todas (<span class="total-count-badge">16</span>)
+      </button>
+      <button onclick="setCategoryFilter('auth')" class="mobile-cat-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-category="auth">
+        Auth
+      </button>
+      <button onclick="setCategoryFilter('items')" class="mobile-cat-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-category="items">
+        Itens & Feed
+      </button>
+      <button onclick="setCategoryFilter('claims')" class="mobile-cat-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-category="claims">
+        Retirada (PIN)
+      </button>
+      <button onclick="setCategoryFilter('hints')" class="mobile-cat-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-category="hints">
+        Pistas
+      </button>
+      <button onclick="setCategoryFilter('users')" class="mobile-cat-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-category="users">
+        Usuários
+      </button>
+      <button onclick="setCategoryFilter('gamification')" class="mobile-cat-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors" data-category="gamification">
+        Rankings
+      </button>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 2. CORPO PRINCIPAL COM O MESMO LAYOUT EM COLUNAS         -->
+    <!-- ======================================================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+
+        <!-- ==================================================== -->
+        <!-- COLUNA ESQUERDA: NAVEGAÇÃO & STATUS (SIDEBAR FIXA)   -->
+        <!-- ==================================================== -->
+        <aside class="desktop-sidebar hidden lg:block lg:col-span-3 sticky top-[115px] space-y-5 self-start max-h-[calc(100vh-8.5rem)] overflow-y-auto custom-scrollbar pr-1">
+          
+          <!-- Menu Principal de Navegação (Com a aba de Rotas Ativa) -->
+          <div class="bg-white border border-brand-gray rounded-custom p-3 shadow-xs space-y-1">
+            <a href="../home/index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-blue font-medium text-sm transition-colors">
+              <i class="bx bx-home-alt-2 text-lg"></i>
+              <span>Feed Principal</span>
+            </a>
+            <a href="../perfio/index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-blue font-medium text-sm transition-colors">
+              <i class="bx bx-user text-lg"></i>
+              <span>Meu Perfil</span>
+            </a>
+            <a href="../rank/index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-blue font-medium text-sm transition-colors">
+              <i class="bx bx-trophy text-lg text-brand-yellow"></i>
+              <span>Ranking Comunitário</span>
+            </a>
+            <a href="../../components/index.html" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-blue font-medium text-sm transition-colors">
+              <i class="bx bx-cube text-lg text-brand-lilac"></i>
+              <span>Catálogo de Componentes</span>
+            </a>
+            <!-- ROTA ATIVA -->
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-brand-blue text-white font-semibold text-sm shadow-xs">
+              <i class="bx bx-code-alt text-lg text-brand-yellow"></i>
+              <span>Rotas & Docs da API</span>
+            </a>
+          </div>
+
+          <!-- Painel do Servidor Backend Local -->
+          <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+            <div class="flex items-center justify-between border-b border-brand-gray pb-2">
+              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                <i class="bx bx-server text-brand-blue text-sm"></i>
+                Backend Local
+              </h3>
+              <button onclick="pingBackend()" class="text-[11px] text-brand-blue font-semibold hover:underline cursor-pointer flex items-center gap-0.5">
+                <i class="bx bx-refresh"></i> Testar
+              </button>
+            </div>
+
+            <div class="space-y-2 text-xs">
+              <div>
+                <label class="text-[11px] text-slate-400 font-medium">URL Base:</label>
+                <input 
+                  id="baseUrlInput" 
+                  type="text" 
+                  value="http://localhost:3333" 
+                  class="w-full mt-1 bg-slate-50 border border-brand-gray rounded-lg px-2.5 py-1.5 font-mono text-xs font-semibold text-brand-dark focus:bg-white focus:border-brand-blue focus:outline-none"
+                />
+              </div>
+
+              <div id="sidebarStatusBox" class="p-2.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center gap-2">
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse"></span>
+                <div class="flex-1">
+                  <p class="font-bold text-brand-blue text-[11px] leading-tight" id="sidebarStatusTitle">Verificando status...</p>
+                  <p class="text-[10px] text-slate-500" id="sidebarStatusSub">Porta 3333</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contas de Teste (Login com 1 Clique) -->
+          <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+            <div class="border-b border-brand-gray pb-2">
+              <h3 class="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                <i class="bx bx-user-check text-brand-lilac text-sm"></i>
+                Logar como (Seed):
+              </h3>
+            </div>
+
+            <div class="space-y-1.5 text-xs">
+              <button onclick="quickLogin('lucas.silva@unochapeco.edu.br', '123456', 'Lucas Silva', 'LM', 'Ciência da Computação')" class="w-full text-left p-2 rounded-lg hover:bg-slate-50 border border-transparent hover:border-brand-gray transition-colors flex items-center justify-between group">
+                <div>
+                  <p class="font-bold text-brand-dark group-hover:text-brand-blue">Lucas Silva</p>
+                  <p class="text-[10px] text-slate-400">Estudante • CC</p>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-brand-blue border border-blue-200">Logar</span>
+              </button>
+
+              <button onclick="quickLogin('mariana.becker@unochapeco.edu.br', '123456', 'Mariana Becker', 'MB', 'Arquitetura')" class="w-full text-left p-2 rounded-lg hover:bg-slate-50 border border-transparent hover:border-brand-gray transition-colors flex items-center justify-between group">
+                <div>
+                  <p class="font-bold text-brand-dark group-hover:text-brand-blue">Mariana Becker</p>
+                  <p class="text-[10px] text-slate-400">Estudante • Arq.</p>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200">Logar</span>
+              </button>
+
+              <button onclick="quickLogin('portaria.blocor@unochapeco.edu.br', '123456', 'Portaria Bloco R', 'PO', 'Segurança')" class="w-full text-left p-2 rounded-lg hover:bg-slate-50 border border-transparent hover:border-brand-gray transition-colors flex items-center justify-between group">
+                <div>
+                  <p class="font-bold text-brand-dark group-hover:text-brand-blue">Portaria Bloco R</p>
+                  <p class="text-[10px] text-slate-400">Staff • Valida PIN</p>
+                </div>
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200">Logar</span>
+              </button>
+            </div>
+          </div>
+
+        </aside>
+
+        <!-- ==================================================== -->
+        <!-- COLUNA CENTRAL: EXPLORADOR DE ROTAS & FEED DE APIS   -->
+        <!-- ==================================================== -->
+        <section class="content-column lg:col-span-9 space-y-6">
+
+          <!-- Banner Informativo: Especificação da API -->
+          <div class="bg-gradient-to-r from-brand-blue to-indigo-900 text-white rounded-custom p-6 shadow-sm relative overflow-hidden">
+            <div class="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div class="space-y-1">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-brand-yellow text-brand-dark">
+                  <i class="bx bx-check-circle"></i>
+                  Prisma ORM 7 + PostgreSQL + Express 5
+                </span>
+                <h2 class="text-xl sm:text-2xl font-extrabold tracking-tight text-white">
+                  Documentação & Prototipagem da API
+                </h2>
+                <p class="text-xs sm:text-sm text-blue-100 max-w-xl">
+                  Todas as 16 rotas implementadas no backend para alimentar o feed, cadastro de achados e perdidos e fluxo de devolução com PIN de 6 dígitos.
+                </p>
+              </div>
+
+              <!-- Badges de Métricas -->
+              <div class="flex items-center gap-2 bg-white/10 p-2.5 rounded-xl border border-white/20 backdrop-blur-xs">
+                <div class="text-center px-3 border-r border-white/20">
+                  <span class="block text-lg font-black text-brand-yellow">16</span>
+                  <span class="text-[10px] text-slate-200 uppercase font-semibold">Rotas</span>
+                </div>
+                <div class="text-center px-3 border-r border-white/20">
+                  <span class="block text-lg font-black text-white">12</span>
+                  <span class="text-[10px] text-slate-200 uppercase font-semibold">Models</span>
+                </div>
+                <div class="text-center px-3">
+                  <span class="block text-lg font-black text-purple-300">5</span>
+                  <span class="text-[10px] text-slate-200 uppercase font-semibold">Enums</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card do Fluxo de Segurança do PIN de 6 Dígitos -->
+          <div class="bg-white border border-brand-gray rounded-custom p-5 shadow-xs space-y-4">
+            <div class="flex items-center justify-between border-b border-brand-gray pb-3">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-brand-yellow text-brand-dark flex items-center justify-center font-bold text-lg">
+                  <i class="bx bx-shield-quarter"></i>
+                </div>
+                <div>
+                  <h3 class="font-extrabold text-sm text-brand-dark">Fluxo do PIN de 6 Dígitos (HandoffPin)</h3>
+                  <p class="text-[11px] text-slate-500">Validação segura presencial na portaria para entrega do pertence</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold bg-purple-50 text-purple-700 border border-purple-200">
+                1:1 Claim & HandoffPin
+              </span>
+            </div>
+
+            <!-- Etapas Visuais -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              <div class="p-3 rounded-xl bg-slate-50 border border-brand-gray text-xs space-y-1">
+                <div class="flex items-center gap-1.5 font-bold text-brand-blue">
+                  <span class="w-4 h-4 rounded-full bg-brand-blue text-white flex items-center justify-center text-[10px]">1</span>
+                  Solicitação de Retirada
+                </div>
+                <p class="text-[11px] font-mono text-purple-700 font-semibold">POST /api/items/:id/claims</p>
+                <p class="text-[11px] text-slate-600">Dono informa detalhes comprovatórios secretos (ex: marcas, adesivos).</p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-slate-50 border border-brand-gray text-xs space-y-1">
+                <div class="flex items-center gap-1.5 font-bold text-purple-700">
+                  <span class="w-4 h-4 rounded-full bg-purple-700 text-white flex items-center justify-center text-[10px]">2</span>
+                  Aprovação da Prova
+                </div>
+                <p class="text-[11px] font-mono text-purple-700 font-semibold">PATCH /api/claims/:id/review</p>
+                <p class="text-[11px] text-slate-600">Autor ou Portaria aprova. Sistema cria o registro no model <strong>HandoffPin</strong>.</p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-slate-50 border border-brand-gray text-xs space-y-1">
+                <div class="flex items-center gap-1.5 font-bold text-amber-700">
+                  <span class="w-4 h-4 rounded-full bg-brand-yellow text-brand-dark flex items-center justify-center text-[10px] font-bold">3</span>
+                  PIN no Smartphone
+                </div>
+                <p class="text-[11px] font-mono text-amber-700 font-semibold">PIN: 849201</p>
+                <p class="text-[11px] text-slate-600">Aluno recebe notificação com o PIN de 6 dígitos com validade de 48h.</p>
+              </div>
+
+              <div class="p-3 rounded-xl bg-slate-50 border border-brand-gray text-xs space-y-1">
+                <div class="flex items-center gap-1.5 font-bold text-blue-700">
+                  <span class="w-4 h-4 rounded-full bg-brand-blue text-white flex items-center justify-center text-[10px]">4</span>
+                  Baixa Presencial
+                </div>
+                <p class="text-[11px] font-mono text-blue-700 font-semibold">POST /api/claims/:id/confirm</p>
+                <p class="text-[11px] text-slate-600">Portaria confere o PIN. Item vira <strong>RETURNED</strong> e gera karma!</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Barra de Filtros e Busca de Rotas -->
+          <div class="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+              
+              <!-- Tabs de Categorias (Desktop) -->
+              <div class="hidden sm:flex items-center gap-1 overflow-x-auto w-full sm:w-auto">
+                <button onclick="setCategoryFilter('ALL')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-blue text-white" data-category="ALL">
+                  Todas (<span class="total-count-badge">16</span>)
+                </button>
+                <button onclick="setCategoryFilter('auth')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all" data-category="auth">
+                  Auth
+                </button>
+                <button onclick="setCategoryFilter('items')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all" data-category="items">
+                  Itens & Feed
+                </button>
+                <button onclick="setCategoryFilter('claims')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all" data-category="claims">
+                  Retirada (PIN)
+                </button>
+                <button onclick="setCategoryFilter('hints')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all" data-category="hints">
+                  Pistas
+                </button>
+                <button onclick="setCategoryFilter('users')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all" data-category="users">
+                  Usuários
+                </button>
+                <button onclick="setCategoryFilter('references')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all" data-category="references">
+                  Blocos & Cat.
+                </button>
+                <button onclick="setCategoryFilter('gamification')" class="category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all" data-category="gamification">
+                  Rankings
+                </button>
+              </div>
+
+              <!-- Token Ativo Display -->
+              <div class="flex items-center gap-1.5 text-xs text-slate-500 w-full sm:w-auto justify-end">
+                <span class="font-medium">Token JWT:</span>
+                <input 
+                  id="globalJwtToken" 
+                  type="text" 
+                  placeholder="Nenhum token ativo (Use o login rápido à esquerda)" 
+                  class="bg-slate-50 border border-brand-gray rounded-md px-2.5 py-1 text-[11px] font-mono text-brand-dark w-64 focus:outline-none focus:border-brand-blue truncate"
+                />
+                <button onclick="clearToken()" class="text-slate-400 hover:text-red-500 text-base" title="Limpar token">
+                  <i class="bx bx-trash"></i>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Lista Dinâmica de Endpoints da API -->
+          <div id="routesContainer" class="space-y-3">
+            <!-- Cards renderizados via JavaScript -->
+          </div>
+
+        </section>
+
       </div>
-    </div>
+    </main>
 
-    <!-- Lista de Endpoints -->
-    <div id="routesContainer" class="flex flex-col gap-4">
-      <!-- Inserido dinamicamente via JavaScript para permitir testes ao vivo -->
-    </div>
+    <!-- ======================================================== -->
+    <!-- 3. BARRA DE NAVEGAÇÃO INFERIOR MOBILE                    -->
+    <!-- ======================================================== -->
+    <nav class="mobile-bottom-nav lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-brand-gray px-6 py-2 flex items-center justify-between z-40 shadow-lg">
+      <a href="../home/index.html" class="flex flex-col items-center gap-1 text-slate-500 hover:text-brand-blue">
+        <i class="bx bx-home-alt-2 text-xl"></i>
+        <span class="text-[10px] font-medium">Feed</span>
+      </a>
+      <a href="../rank/index.html" class="flex flex-col items-center gap-1 text-slate-500 hover:text-brand-blue">
+        <i class="bx bx-trophy text-xl text-brand-yellow"></i>
+        <span class="text-[10px] font-medium">Ranking</span>
+      </a>
+      <a href="#" class="flex flex-col items-center gap-1 text-brand-blue font-bold">
+        <i class="bx bx-code-alt text-xl"></i>
+        <span class="text-[10px]">Rotas API</span>
+      </a>
+      <a href="../perfio/index.html" class="flex flex-col items-center gap-1 text-slate-500 hover:text-brand-blue">
+        <i class="bx bx-user text-xl"></i>
+        <span class="text-[10px] font-medium">Perfil</span>
+      </a>
+    </nav>
 
-  </main>
+  </div>
 
-  <!-- ========================================== -->
-  <!-- MODAL / DRAWER DE TESTE DA REQUISIÇÃO AO VIVO -->
-  <!-- ========================================== -->
-  <div id="testModal" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-brand-gray overflow-hidden">
+  <!-- ======================================================== -->
+  <!-- MODAL / DRAWER INTERATIVO PARA DISPARAR TESTES NA API    -->
+  <!-- ======================================================== -->
+  <div id="testModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs hidden flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-brand-gray overflow-hidden animate-in fade-in zoom-in-95 duration-150">
       
-      <!-- Cabeçalho do Teste -->
-      <div class="px-6 py-4 border-b border-brand-gray flex items-center justify-between bg-gray-50">
-        <div class="flex items-center gap-2.5">
+      <!-- Cabeçalho do Modal -->
+      <div class="px-6 py-4 border-b border-brand-gray flex items-center justify-between bg-slate-50">
+        <div class="flex items-center gap-3">
           <span id="modalMethodBadge" class="px-2.5 py-1 rounded-md text-xs font-mono font-bold">GET</span>
           <span id="modalRoutePath" class="font-mono text-sm font-bold text-brand-dark">/api/...</span>
         </div>
-        <button onclick="closeTestModal()" class="w-8 h-8 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-200 flex items-center justify-center transition-colors">
-          <i class="bx bx-x text-xl"></i>
+        <button onclick="closeTestModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-200 flex items-center justify-center transition-colors">
+          <i class="bx bx-x text-2xl"></i>
         </button>
       </div>
 
-      <!-- Corpo da Configuração do Teste -->
-      <div class="p-6 overflow-y-auto flex-1 flex flex-col gap-4 custom-scrollbar">
+      <!-- Conteúdo do Teste -->
+      <div class="p-6 overflow-y-auto flex-1 space-y-4 custom-scrollbar">
         
-        <!-- Descrição -->
-        <p id="modalDescription" class="text-xs text-gray-600"></p>
+        <p id="modalDescription" class="text-xs text-slate-600 leading-relaxed"></p>
 
-        <!-- Parâmetros de Rota (Path Params) -->
-        <div id="modalPathParamsGroup" class="hidden flex flex-col gap-2">
-          <label class="text-xs font-bold text-gray-700 uppercase tracking-wider">Parâmetros de Caminho (Path Params):</label>
-          <div id="modalPathParamsContainer" class="flex flex-col gap-2"></div>
+        <!-- Path Params -->
+        <div id="modalPathParamsGroup" class="hidden space-y-1.5">
+          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Parâmetros de Rota (Path Params):</label>
+          <div id="modalPathParamsContainer" class="space-y-2"></div>
         </div>
 
-        <!-- Parâmetros de Query (Query Params) -->
-        <div id="modalQueryParamsGroup" class="hidden flex flex-col gap-2">
-          <label class="text-xs font-bold text-gray-700 uppercase tracking-wider">Parâmetros de Consulta (Query Params):</label>
-          <div id="modalQueryParamsContainer" class="flex flex-col gap-2"></div>
+        <!-- Query Params -->
+        <div id="modalQueryParamsGroup" class="hidden space-y-1.5">
+          <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Parâmetros de Busca (Query Params):</label>
+          <div id="modalQueryParamsContainer" class="space-y-2"></div>
         </div>
 
-        <!-- Request Body (JSON) -->
-        <div id="modalBodyGroup" class="hidden flex flex-col gap-2">
+        <!-- JSON Request Body -->
+        <div id="modalBodyGroup" class="hidden space-y-1.5">
           <div class="flex items-center justify-between">
-            <label class="text-xs font-bold text-gray-700 uppercase tracking-wider">Corpo da Requisição (JSON Body):</label>
-            <span class="text-[11px] text-gray-400">Content-Type: application/json</span>
+            <label class="text-xs font-bold text-slate-700 uppercase tracking-wider">Corpo da Requisição (JSON Body):</label>
+            <span class="text-[11px] text-slate-400 font-mono">application/json</span>
           </div>
           <textarea 
             id="modalBodyInput" 
             rows="6" 
-            class="w-full bg-gray-900 text-green-300 font-mono text-xs rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brand-blue"
+            class="w-full bg-slate-900 text-green-300 font-mono text-xs rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-brand-blue"
           ></textarea>
         </div>
 
@@ -340,25 +651,25 @@
         <button 
           id="btnExecuteRequest" 
           onclick="executeLiveRequest()" 
-          class="w-full py-2.5 px-4 rounded-xl bg-brand-blue hover:bg-brand-blueHover text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-all"
+          class="w-full py-2.5 px-4 rounded-xl bg-brand-blue hover:bg-brand-blueHover text-white font-bold text-sm shadow-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
         >
           <i class="bx bx-send text-lg"></i>
-          <span>Enviar Requisição ao Backend</span>
+          <span>Enviar Requisição ao Backend Local</span>
         </button>
 
-        <!-- Resposta do Servidor -->
-        <div id="responseSection" class="hidden flex flex-col gap-2 pt-2 border-t border-brand-gray">
+        <!-- Caixa de Resposta Real do Servidor -->
+        <div id="responseSection" class="hidden space-y-2 pt-3 border-t border-brand-gray">
           <div class="flex items-center justify-between">
-            <label class="text-xs font-bold text-gray-700 uppercase tracking-wider flex items-center gap-2">
-              Resposta do Servidor:
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-slate-700 uppercase">Status:</span>
               <span id="responseStatusBadge" class="px-2 py-0.5 rounded text-[11px] font-mono font-bold">200 OK</span>
-              <span id="responseTime" class="text-gray-400 font-mono text-[11px]">12ms</span>
-            </label>
-            <button onclick="copyResponse()" class="text-xs text-brand-blue hover:underline flex items-center gap-1 font-medium">
-              <i class="bx bx-copy"></i> Copiar
+              <span id="responseTime" class="text-slate-400 font-mono text-[11px]">15ms</span>
+            </div>
+            <button onclick="copyResponse()" class="text-xs text-brand-blue hover:underline flex items-center gap-1 font-semibold cursor-pointer">
+              <i class="bx bx-copy"></i> Copiar JSON
             </button>
           </div>
-          <pre id="responseJsonViewer" class="bg-gray-950 text-gray-100 font-mono text-xs p-3.5 rounded-xl overflow-x-auto max-h-60 custom-scrollbar border border-gray-800"></pre>
+          <pre id="responseJsonViewer" class="bg-slate-950 text-slate-100 font-mono text-xs p-3.5 rounded-xl overflow-x-auto max-h-60 custom-scrollbar border border-slate-800"></pre>
         </div>
 
       </div>
@@ -366,11 +677,11 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- JAVASCRIPT DE DADOS E INTERATIVIDADE       -->
-  <!-- ========================================== -->
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT: DADOS, ROTAS E SIMULADOR MOBILE             -->
+  <!-- ======================================================== -->
   <script>
-    // Catálogo completo de todas as rotas do backend
+    // Catálogo completo de rotas da API
     const API_ROUTES = [
       // 1. AUTENTICAÇÃO
       {
@@ -441,8 +752,8 @@
           title: "Fone de Ouvido Bluetooth JBL",
           description: "Esqueci meu fone preto no Laboratório 04 do Bloco R próximo ao computador 12.",
           type: "LOST",
-          categoryId: "ID_DA_CATEGORIA_AQUI",
-          blockId: "ID_DO_BLOCO_AQUI",
+          categoryId: "UUID_DA_CATEGORIA",
+          blockId: "UUID_DO_BLOCO",
           specificLocation: "Lab 04 - 2º andar",
           hasReward: true
         }
@@ -508,7 +819,7 @@
         method: 'PATCH',
         path: '/api/claims/:id/review',
         title: 'Aprovar Solicitação & Gerar PIN 6 Dígitos',
-        description: 'Aprova a posse comprovada. O sistema gera automaticamente o código PIN de 6 dígitos no modelo HandoffPin.',
+        description: 'Aprova a posse comprovada. O sistema gera automaticamente o código PIN de 6 dígitos no model HandoffPin.',
         authRequired: true,
         pathParams: [{ name: 'id', placeholder: 'ID da Solicitação (UUID)' }],
         bodyTemplate: {
@@ -617,64 +928,112 @@
 
     let currentCategoryFilter = 'ALL';
     let currentSelectedRoute = null;
+    let globalSearchTerm = '';
 
-    // Inicialização da tela
     document.addEventListener('DOMContentLoaded', () => {
-      // Carregar token salvo se existir
       const savedToken = localStorage.getItem('achei_api_token');
       if (savedToken) {
         document.getElementById('globalJwtToken').value = savedToken;
       }
 
+      document.querySelectorAll('.total-count-badge').forEach(el => el.innerText = API_ROUTES.length);
       renderRoutes();
       pingBackend();
     });
 
-    // Testar conectividade com o Backend
+    // Teste de conectividade com o Backend
     async function pingBackend() {
       const baseUrl = document.getElementById('baseUrlInput').value.trim();
-      const badge = document.getElementById('connectionStatusBadge');
+      const headerText = document.getElementById('headerStatusText');
+      const headerBadge = document.getElementById('headerStatusBadge');
+      const sideBox = document.getElementById('sidebarStatusBox');
+      const sideTitle = document.getElementById('sidebarStatusTitle');
+      const sideSub = document.getElementById('sidebarStatusSub');
 
-      badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span><span>Testando...</span>`;
-      badge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200";
+      headerText.innerText = "Verificando...";
+      headerBadge.className = "hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-white text-xs font-semibold cursor-pointer hover:bg-white/15 transition-all";
 
       try {
         const res = await fetch(`${baseUrl}/`, { method: 'GET' });
         if (res.ok) {
           const data = await res.json();
-          badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-blue-600"></span><span>Online (${data.name || 'API'})</span>`;
-          badge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-brand-blue border border-blue-200";
+          headerText.innerText = "Online (API)";
+          headerBadge.className = "hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-700/80 text-white text-xs font-semibold cursor-pointer hover:bg-blue-600 transition-all border border-blue-400/30";
+          headerBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-blue-300"></span><span>Online (API)</span>`;
+
+          sideBox.className = "p-2.5 rounded-xl bg-blue-50 border border-blue-200 flex items-center gap-2";
+          sideBox.innerHTML = `
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-blue"></span>
+            <div class="flex-1">
+              <p class="font-bold text-brand-blue text-[11px] leading-tight">Servidor Conectado</p>
+              <p class="text-[10px] text-slate-500">${data.name || 'Achei Unochapecó'} (v${data.version || '1.0'})</p>
+            </div>
+          `;
         } else {
           throw new Error('Status: ' + res.status);
         }
       } catch (err) {
-        badge.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-500"></span><span>Offline (Inicie com: npm run dev)</span>`;
-        badge.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200";
+        headerBadge.className = "hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-800/80 text-white text-xs font-semibold cursor-pointer hover:bg-red-700 transition-all border border-red-400/30";
+        headerBadge.innerHTML = `<span class="w-2 h-2 rounded-full bg-red-400"></span><span>Offline (3333)</span>`;
+
+        sideBox.className = "p-2.5 rounded-xl bg-red-50 border border-red-200 flex items-center gap-2";
+        sideBox.innerHTML = `
+          <span class="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+          <div class="flex-1">
+            <p class="font-bold text-red-700 text-[11px] leading-tight">Servidor Desconectado</p>
+            <p class="text-[10px] text-slate-500">Inicie com: npm run dev</p>
+          </div>
+        `;
       }
     }
 
-    // Renderizar Cards de Rotas
+    function syncSearchWithFeed(val) {
+      globalSearchTerm = val.toLowerCase().trim();
+      renderRoutes();
+    }
+
+    function setCategoryFilter(category) {
+      currentCategoryFilter = category;
+
+      // Desktop tabs
+      document.querySelectorAll('.category-filter-btn').forEach(btn => {
+        if (btn.dataset.category === category) {
+          btn.className = "category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-blue text-white";
+        } else {
+          btn.className = "category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-slate-600 hover:bg-slate-100 transition-all";
+        }
+      });
+
+      // Mobile chips
+      document.querySelectorAll('.mobile-cat-chip').forEach(btn => {
+        if (btn.dataset.category === category) {
+          btn.className = "mobile-cat-chip shrink-0 px-3 py-1 rounded-full bg-brand-blue text-white text-xs font-bold shadow-xs transition-colors";
+        } else {
+          btn.className = "mobile-cat-chip shrink-0 px-3 py-1 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-brand-gray transition-colors";
+        }
+      });
+
+      renderRoutes();
+    }
+
     function renderRoutes() {
       const container = document.getElementById('routesContainer');
-      const searchTerm = document.getElementById('routeSearchInput').value.toLowerCase().trim();
 
       const filtered = API_ROUTES.filter(route => {
         const matchesCategory = currentCategoryFilter === 'ALL' || route.category === currentCategoryFilter;
-        const matchesSearch = !searchTerm || 
-          route.path.toLowerCase().includes(searchTerm) || 
-          route.title.toLowerCase().includes(searchTerm) ||
-          route.method.toLowerCase().includes(searchTerm);
+        const matchesSearch = !globalSearchTerm || 
+          route.path.toLowerCase().includes(globalSearchTerm) || 
+          route.title.toLowerCase().includes(globalSearchTerm) ||
+          route.method.toLowerCase().includes(globalSearchTerm);
         return matchesCategory && matchesSearch;
       });
 
-      document.getElementById('totalRoutesCount').innerText = API_ROUTES.length;
-
       if (filtered.length === 0) {
         container.innerHTML = `
-          <div class="bg-white rounded-2xl p-12 text-center border border-brand-gray flex flex-col items-center justify-center">
-            <i class="bx bx-search text-4xl text-gray-300 mb-2"></i>
-            <p class="font-bold text-gray-700">Nenhum endpoint encontrado para este filtro.</p>
-            <p class="text-xs text-gray-400 mt-1">Tente pesquisar com outros termos ou selecione outra categoria.</p>
+          <div class="bg-white rounded-custom p-10 text-center border border-brand-gray flex flex-col items-center justify-center">
+            <i class="bx bx-search text-3xl text-slate-300 mb-2"></i>
+            <p class="font-bold text-slate-700 text-sm">Nenhum endpoint encontrado para este filtro.</p>
+            <p class="text-xs text-slate-400 mt-1">Tente pesquisar com outros termos ou selecione outra categoria.</p>
           </div>
         `;
         return;
@@ -683,18 +1042,18 @@
       container.innerHTML = filtered.map(route => {
         const methodClass = getBadgeClass(route.method);
         return `
-          <div class="bg-white rounded-xl border border-brand-gray hover:border-brand-blue/40 shadow-sm transition-all p-5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div class="bg-white rounded-custom border border-brand-gray hover:border-brand-blue/40 shadow-xs transition-all p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             
-            <div class="flex items-start gap-3.5 flex-1">
-              <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold ${methodClass}">
+            <div class="flex items-start gap-3 flex-1">
+              <span class="px-2.5 py-1 rounded-md text-xs font-mono font-bold shrink-0 ${methodClass}">
                 ${route.method}
               </span>
-              <div>
+              <div class="space-y-1">
                 <div class="flex items-center gap-2 flex-wrap">
-                  <span class="font-mono text-sm font-bold text-brand-dark">${route.path}</span>
+                  <span class="font-mono text-xs sm:text-sm font-bold text-brand-dark">${route.path}</span>
                   ${route.authRequired ? `
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
-                      <i class="bx bx-lock-alt"></i> Auth Bearer
+                    <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1">
+                      <i class="bx bx-lock-alt"></i> Auth
                     </span>
                   ` : `
                     <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-brand-blue border border-blue-200">
@@ -702,18 +1061,18 @@
                     </span>
                   `}
                 </div>
-                <h3 class="font-bold text-sm text-gray-800 mt-1">${route.title}</h3>
-                <p class="text-xs text-gray-500 mt-0.5 leading-relaxed">${route.description}</p>
+                <h4 class="font-bold text-xs sm:text-sm text-slate-800">${route.title}</h4>
+                <p class="text-[11px] sm:text-xs text-slate-500 leading-relaxed">${route.description}</p>
               </div>
             </div>
 
-            <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+            <div class="flex items-center gap-2 w-full sm:w-auto justify-end shrink-0 pt-2 sm:pt-0">
               <button 
                 onclick="openTestModal('${route.id}')" 
-                class="px-4 py-2 rounded-lg bg-brand-blueLight hover:bg-brand-blue text-brand-blue hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm"
+                class="w-full sm:w-auto px-4 py-2 rounded-xl bg-brand-blueLight hover:bg-brand-blue text-brand-blue hover:text-white font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-xs cursor-pointer"
               >
                 <i class="bx bx-play-circle text-base"></i>
-                Testar Endpoint
+                <span>Testar</span>
               </button>
             </div>
 
@@ -729,27 +1088,11 @@
         case 'PUT': return 'badge-put';
         case 'PATCH': return 'badge-patch';
         case 'DELETE': return 'badge-delete';
-        default: return 'bg-gray-100 text-gray-800';
+        default: return 'bg-slate-100 text-slate-800';
       }
     }
 
-    function setCategoryFilter(category) {
-      currentCategoryFilter = category;
-      document.querySelectorAll('.category-filter-btn').forEach(btn => {
-        if (btn.dataset.category === category) {
-          btn.className = "category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold transition-all bg-brand-blue text-white";
-        } else {
-          btn.className = "category-filter-btn px-3 py-1.5 rounded-lg text-xs font-bold text-gray-600 hover:bg-gray-100 transition-all";
-        }
-      });
-      renderRoutes();
-    }
-
-    function filterRoutes() {
-      renderRoutes();
-    }
-
-    // Modal de Teste Interativo
+    // Modal de Teste da Rota
     function openTestModal(routeId) {
       const route = API_ROUTES.find(r => r.id === routeId);
       if (!route) return;
@@ -775,17 +1118,16 @@
       routePath.innerText = route.path;
       description.innerText = route.description;
 
-      // Montar campos de Path Params
       if (route.pathParams && route.pathParams.length > 0) {
         pathGroup.classList.remove('hidden');
         pathContainer.innerHTML = route.pathParams.map(param => `
           <div class="flex items-center gap-2">
-            <span class="w-24 text-xs font-mono text-gray-500 font-semibold">${param.name}:</span>
+            <span class="w-24 text-xs font-mono text-slate-500 font-semibold">:${param.name}</span>
             <input 
               type="text" 
               id="pathParam_${param.name}" 
               placeholder="${param.placeholder || ''}" 
-              class="flex-1 bg-gray-50 border border-brand-gray rounded-lg px-3 py-1.5 text-xs font-mono text-brand-dark focus:outline-none focus:border-brand-blue"
+              class="flex-1 bg-slate-50 border border-brand-gray rounded-lg px-3 py-1.5 text-xs font-mono text-brand-dark focus:outline-none focus:border-brand-blue"
             />
           </div>
         `).join('');
@@ -794,18 +1136,17 @@
         pathContainer.innerHTML = '';
       }
 
-      // Montar campos de Query Params
       if (route.queryParams && route.queryParams.length > 0) {
         queryGroup.classList.remove('hidden');
         queryContainer.innerHTML = route.queryParams.map(param => `
           <div class="flex items-center gap-2">
-            <span class="w-24 text-xs font-mono text-gray-500 font-semibold">${param.name}:</span>
+            <span class="w-24 text-xs font-mono text-slate-500 font-semibold">${param.name}:</span>
             <input 
               type="text" 
               id="queryParam_${param.name}" 
               value="${param.default || ''}" 
               placeholder="${param.placeholder || ''}" 
-              class="flex-1 bg-gray-50 border border-brand-gray rounded-lg px-3 py-1.5 text-xs font-mono text-brand-dark focus:outline-none focus:border-brand-blue"
+              class="flex-1 bg-slate-50 border border-brand-gray rounded-lg px-3 py-1.5 text-xs font-mono text-brand-dark focus:outline-none focus:border-brand-blue"
             />
           </div>
         `).join('');
@@ -814,7 +1155,6 @@
         queryContainer.innerHTML = '';
       }
 
-      // Montar Body JSON
       if (route.bodyTemplate) {
         bodyGroup.classList.remove('hidden');
         bodyInput.value = JSON.stringify(route.bodyTemplate, null, 2);
@@ -831,7 +1171,7 @@
       currentSelectedRoute = null;
     }
 
-    // Executar Requisição Real ao Backend
+    // Enviar requisição real
     async function executeLiveRequest() {
       if (!currentSelectedRoute) return;
 
@@ -840,59 +1180,47 @@
 
       let targetUrl = `${baseUrl}${currentSelectedRoute.path}`;
 
-      // Substituir Path Params
       if (currentSelectedRoute.pathParams) {
         for (const param of currentSelectedRoute.pathParams) {
           const val = document.getElementById(`pathParam_${param.name}`)?.value.trim();
           if (!val) {
-            alert(`Por favor, preencha o parâmetro obrigatório de rota: :${param.name}`);
+            alert(`Preencha o parâmetro obrigatório de rota: :${param.name}`);
             return;
           }
           targetUrl = targetUrl.replace(`:${param.name}`, encodeURIComponent(val));
         }
       }
 
-      // Anexar Query Params
       if (currentSelectedRoute.queryParams) {
         const queryParams = new URLSearchParams();
         for (const param of currentSelectedRoute.queryParams) {
           const val = document.getElementById(`queryParam_${param.name}`)?.value.trim();
-          if (val) {
-            queryParams.append(param.name, val);
-          }
+          if (val) queryParams.append(param.name, val);
         }
         const qs = queryParams.toString();
-        if (qs) {
-          targetUrl += `?${qs}`;
-        }
+        if (qs) targetUrl += `?${qs}`;
       }
 
-      // Montar Headers
-      const headers = {
-        'Accept': 'application/json',
-      };
-
-      if (globalToken) {
-        headers['Authorization'] = `Bearer ${globalToken}`;
-      }
+      const headers = { 'Accept': 'application/json' };
+      if (globalToken) headers['Authorization'] = `Bearer ${globalToken}`;
 
       let requestBody = null;
       if (currentSelectedRoute.bodyTemplate) {
         const bodyRaw = document.getElementById('modalBodyInput').value.trim();
         if (bodyRaw) {
           try {
-            JSON.parse(bodyRaw); // Validar JSON
+            JSON.parse(bodyRaw);
             requestBody = bodyRaw;
             headers['Content-Type'] = 'application/json';
           } catch (e) {
-            alert('O corpo da requisição não contém um JSON válido!');
+            alert('JSON inválido no corpo da requisição!');
             return;
           }
         }
       }
 
       const btn = document.getElementById('btnExecuteRequest');
-      btn.innerHTML = `<i class="bx bx-loader-alt animate-spin text-lg"></i> Enviando...`;
+      btn.innerHTML = `<i class="bx bx-loader-alt animate-spin text-lg"></i> Disparando chamada...`;
       btn.disabled = true;
 
       const startTime = performance.now();
@@ -910,9 +1238,9 @@
         showResponse(response.status, duration, data);
       } catch (err) {
         const duration = Math.round(performance.now() - startTime);
-        showResponse(0, duration, { error: 'Falha na conexão com o backend. Verifique se o servidor está rodando em http://localhost:3333.' });
+        showResponse(0, duration, { error: 'Falha na conexão. Certifique-se de que o backend está ativo em http://localhost:3333.' });
       } finally {
-        btn.innerHTML = `<i class="bx bx-send text-lg"></i> Enviar Requisição ao Backend`;
+        btn.innerHTML = `<i class="bx bx-send text-lg"></i> Enviar Requisição ao Backend Local`;
         btn.disabled = false;
       }
     }
@@ -924,12 +1252,11 @@
       const viewer = document.getElementById('responseJsonViewer');
 
       responseSection.classList.remove('hidden');
-
       time.innerText = `${duration}ms`;
 
       if (status >= 200 && status < 300) {
         badge.innerText = `${status} SUCESSO`;
-        badge.className = "px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-green-950 text-green-400 border border-green-800";
+        badge.className = "px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-blue-950 text-blue-300 border border-blue-800";
       } else if (status >= 400 && status < 500) {
         badge.innerText = `${status} ERRO CLIENTE`;
         badge.className = "px-2 py-0.5 rounded text-[11px] font-mono font-bold bg-amber-950 text-amber-400 border border-amber-800";
@@ -944,12 +1271,12 @@
     function copyResponse() {
       const viewer = document.getElementById('responseJsonViewer');
       navigator.clipboard.writeText(viewer.textContent).then(() => {
-        alert('Resposta copiada para a área de transferência!');
+        alert('Resposta JSON copiada!');
       });
     }
 
-    // Login Rápido com usuários do Seed
-    async function quickLogin(email, password, label) {
+    // Login Rápido com usuários semeados
+    async function quickLogin(email, password, name, initials, course) {
       const baseUrl = document.getElementById('baseUrlInput').value.trim();
 
       try {
@@ -964,12 +1291,17 @@
         if (res.ok && data.token) {
           document.getElementById('globalJwtToken').value = data.token;
           localStorage.setItem('achei_api_token', data.token);
-          alert(`✅ Logado com sucesso como: ${label}!\nO token JWT foi preenchido automaticamente.`);
+
+          // Atualiza cabeçalho
+          document.getElementById('userAvatarBadge').innerText = initials;
+          document.getElementById('userDisplayName').innerText = name;
+
+          alert(`✅ Logado com sucesso como: ${name} (${course})!\nO token JWT foi preenchido automaticamente.`);
         } else {
-          alert(`❌ Falha no login rápido: ${data.message || 'Erro desconhecido'}`);
+          alert(`❌ Falha no login: ${data.message || 'Erro desconhecido'}`);
         }
       } catch (err) {
-        alert('❌ Não foi possível conectar ao servidor. Certifique-se de que o backend está ativo com "npm run dev".');
+        alert('❌ Não foi possível conectar ao servidor backend (http://localhost:3333). Verifique se "npm run dev" está rodando no terminal.');
       }
     }
 
@@ -977,6 +1309,27 @@
       document.getElementById('globalJwtToken').value = '';
       localStorage.removeItem('achei_api_token');
     }
+
+    // Modo Simulador Desktop x Mobile
+    function setViewMode(mode) {
+      const btnDesktop = document.getElementById('btnDesktop');
+      const btnMobile = document.getElementById('btnMobile');
+
+      if (mode === 'mobile') {
+        document.body.classList.add('mobile-simulator-active');
+        btnMobile.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnDesktop.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      } else {
+        document.body.classList.remove('mobile-simulator-active');
+        btnDesktop.className = 'px-3 py-1 rounded bg-brand-yellow text-brand-dark font-bold flex items-center gap-1 transition-all shadow-xs';
+        btnMobile.className = 'px-3 py-1 rounded bg-transparent hover:bg-white/10 text-slate-300 font-medium flex items-center gap-1 transition-all';
+      }
+    }
+
+    // Fechar modal ao pressionar ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeTestModal();
+    });
   </script>
 
 </body>
