@@ -8,6 +8,7 @@ import { Sidebar } from '../components/common/Sidebar';
 import { RightSidebar } from '../components/common/RightSidebar';
 import { ItemCard } from '../components/common/ItemCard';
 import { MobileBottomNav } from '../components/common/MobileBottomNav';
+import { Button, Avatar, Card } from '../components/ui';
 import { PublishModal } from '../components/modals/PublishModal';
 import { ClaimModal } from '../components/modals/ClaimModal';
 import { HandoffPinModal } from '../components/modals/HandoffPinModal';
@@ -171,11 +172,9 @@ export default function HomePage() {
           <section className="col-span-1 lg:col-span-6 space-y-4">
             
             {/* Caixa Rápida de Publicação (Composer) */}
-            <div className="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+            <Card className="space-y-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-brand-lilac text-white flex items-center justify-center font-bold text-sm shrink-0 shadow-xs">
-                  LM
-                </div>
+                <Avatar name="Lucas Mendes" size="md" />
                 <input
                   type="text"
                   readOnly
@@ -203,15 +202,16 @@ export default function HomePage() {
                   </button>
                 </div>
 
-                <button
+                <Button
+                  variant="primary"
+                  size="sm"
+                  leftIcon="bx-send"
                   onClick={() => setIsPublishModalOpen(true)}
-                  className="px-4 py-1.5 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-bold text-xs rounded-lg transition-colors shadow-xs flex items-center gap-1 cursor-pointer"
                 >
-                  <i className="bx bx-send text-sm"></i>
-                  <span>Publicar</span>
-                </button>
+                  Publicar
+                </Button>
               </div>
-            </div>
+            </Card>
 
             {/* Abas Segmentadas de Filtro (Todos / Perdidos / Achados) */}
             <div className="flex items-center justify-between bg-white border border-brand-gray rounded-custom p-1.5 shadow-xs">
@@ -335,7 +335,7 @@ export default function HomePage() {
 
             {/* Estado Vazio */}
             {!loading && items.length === 0 && (
-              <div className="bg-white border border-brand-gray rounded-custom p-8 text-center space-y-3 shadow-xs">
+              <Card className="text-center p-8 space-y-3">
                 <div className="w-12 h-12 rounded-full bg-blue-50 text-brand-blue flex items-center justify-center text-2xl mx-auto">
                   <i className="bx bx-search-alt"></i>
                 </div>
@@ -346,20 +346,21 @@ export default function HomePage() {
                     : 'Não há publicações cadastradas com os filtros selecionados no momento.'}
                 </p>
                 {(searchTerm || selectedBlockId !== 'all' || selectedCategoryId !== 'all' || typeFilter !== 'ALL') && (
-                  <button
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    leftIcon="bx-filter-alt"
                     onClick={() => {
                       setSearchTerm('');
                       setSelectedBlockId('all');
                       setSelectedCategoryId('all');
                       setTypeFilter('ALL');
                     }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-bold text-xs transition-colors cursor-pointer shadow-xs"
                   >
-                    <i className="bx bx-filter-alt"></i>
-                    <span>Limpar Filtros</span>
-                  </button>
+                    Limpar Filtros
+                  </Button>
                 )}
-              </div>
+              </Card>
             )}
 
             {/* Lista dos Itens do Feed */}

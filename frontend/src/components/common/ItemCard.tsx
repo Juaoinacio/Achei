@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Item } from '../../types';
 import { toggleItemLike, toggleItemSave } from '../../services/api';
+import { Button, Badge, Card, Avatar } from '../ui';
 
 interface ItemCardProps {
   item: Item;
@@ -26,7 +27,6 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   async function handleToggleLike() {
     if (loadingLike) return;
     setLoadingLike(true);
-    // Otimista
     setLiked(!liked);
     setLikeCount(liked ? likeCount - 1 : likeCount + 1);
 
@@ -35,7 +35,6 @@ export const ItemCard: React.FC<ItemCardProps> = ({
       setLiked(res.liked);
       setLikeCount(res.totalLikes);
     } catch {
-      // Reverter em caso de falha
       setLiked(liked);
       setLikeCount(likeCount);
     } finally {
@@ -59,28 +58,17 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   }
 
   const isLost = item.type === 'LOST';
-  const authorInitials = item.author?.name
-    ? item.author.name.split(' ').map((n) => n[0]).slice(0, 2).join('').toUpperCase()
-    : 'U';
 
   return (
-    <article className="bg-white border border-brand-gray rounded-custom p-4 sm:p-5 shadow-xs hover:border-brand-blue/30 transition-all space-y-3.5">
-      
+    <Card hoverable className="space-y-3.5">
       {/* Cabeçalho do Card: Autor e Badges */}
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
-          {item.author?.avatarUrl ? (
-            <img 
-              src={item.author.avatarUrl} 
-              alt={item.author.name} 
-              className="w-9 h-9 rounded-full object-cover ring-1 ring-brand-gray"
-            />
-          ) : (
-            <div className="w-9 h-9 rounded-full bg-brand-lilacLight text-brand-lilac font-bold text-xs flex items-center justify-center ring-1 ring-purple-200">
-              {authorInitials}
-            </div>
-          )}
-
+          <Avatar
+            src={item.author?.avatarUrl}
+            name={item.author?.name || 'Estudante'}
+            size="md"
+          />
           <div>
             <h4 className="font-bold text-xs sm:text-sm text-brand-dark leading-tight">
               {item.author?.name || 'Estudante'}
@@ -94,29 +82,25 @@ export const ItemCard: React.FC<ItemCardProps> = ({
         {/* Badges de Tipo & Custódia */}
         <div className="flex items-center gap-1.5 flex-wrap justify-end">
           {isLost ? (
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1">
-              <i className="bx bx-help-circle text-xs"></i>
+            <Badge variant="lost" icon="bx-help-circle">
               PERDIDO
-            </span>
+            </Badge>
           ) : (
-            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-blue-50 text-brand-blue border border-blue-200 flex items-center gap-1">
-              <i className="bx bx-check-circle text-xs"></i>
+            <Badge variant="found" icon="bx-check-circle">
               ACHADO
-            </span>
+            </Badge>
           )}
 
           {item.isUnderStaffCustody && (
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200 flex items-center gap-1">
-              <i className="bx bx-shield-quarter"></i>
+            <Badge variant="portaria" icon="bx-shield-quarter">
               PORTARIA
-            </span>
+            </Badge>
           )}
 
           {item.hasReward && (
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-brand-yellowLight text-amber-800 border border-amber-300 flex items-center gap-1">
-              <i className="bx bx-gift"></i>
+            <Badge variant="reward" icon="bx-gift">
               RECOMPENSA
-            </span>
+            </Badge>
           )}
         </div>
       </div>
@@ -124,9 +108,9 @@ export const ItemCard: React.FC<ItemCardProps> = ({
       {/* Foto do Pertence (se houver) */}
       {item.photoUrl && (
         <div className="rounded-xl overflow-hidden bg-slate-100 max-h-72 border border-brand-gray">
-          <img 
-            src={item.photoUrl} 
-            alt={item.title} 
+          <img
+            src={item.photoUrl}
+            alt={item.title}
             className="w-full h-56 sm:h-64 object-cover hover:scale-101 transition-transform duration-200"
           />
         </div>
@@ -160,14 +144,13 @@ export const ItemCard: React.FC<ItemCardProps> = ({
 
       {/* Ações de Rodapé: Curtir, Salvar, Pista e Reivindicação */}
       <div className="flex items-center justify-between gap-2 pt-2 border-t border-brand-gray text-xs">
-        
         <div className="flex items-center gap-2">
           {/* Botão Curtir */}
-          <button 
+          <button
             onClick={handleToggleLike}
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border transition-colors cursor-pointer ${
-              liked 
-                ? 'bg-rose-50 border-rose-200 text-rose-600 font-bold' 
+              liked
+                ? 'bg-rose-50 border-rose-200 text-rose-600 font-bold'
                 : 'bg-slate-50 border-brand-gray text-slate-600 hover:bg-slate-100'
             }`}
             title="Curtir publicação"
@@ -176,12 +159,12 @@ export const ItemCard: React.FC<ItemCardProps> = ({
             <span>{likeCount}</span>
           </button>
 
-          {/* Botão Salvar / Favoritar */}
-          <button 
+          {/* Botão Salvar */}
+          <button
             onClick={handleToggleSave}
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border transition-colors cursor-pointer ${
-              saved 
-                ? 'bg-blue-50 border-blue-200 text-brand-blue font-bold' 
+              saved
+                ? 'bg-blue-50 border-blue-200 text-brand-blue font-bold'
                 : 'bg-slate-50 border-brand-gray text-slate-600 hover:bg-slate-100'
             }`}
             title="Salvar pertence"
@@ -190,7 +173,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
           </button>
 
           {/* Botão Deixar Pista */}
-          <button 
+          <button
             onClick={() => onOpenHintModal(item)}
             className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-brand-gray text-slate-600 font-medium transition-colors cursor-pointer"
             title="Enviar pista para ajudar"
@@ -201,25 +184,27 @@ export const ItemCard: React.FC<ItemCardProps> = ({
           </button>
         </div>
 
-        {/* Ação Principal: Reivindicar ou Concluir Entrega */}
+        {/* Ação Principal: Reivindicar ou Informar Avistamento */}
         <div>
           {isLost ? (
-            <button 
+            <Button
+              variant="secondary"
+              size="sm"
+              leftIcon="bx-message-square-dots"
               onClick={() => onOpenHintModal(item)}
-              className="px-3.5 py-1.5 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white font-bold text-xs transition-colors shadow-xs cursor-pointer flex items-center gap-1"
             >
-              <i className="bx bx-message-square-dots text-sm"></i>
-              <span>Vi esse item!</span>
-            </button>
+              Vi esse item!
+            </Button>
           ) : (
             <div className="flex items-center gap-1.5">
-              <button 
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon="bx-check-shield"
                 onClick={() => onOpenClaimModal(item)}
-                className="px-3.5 py-1.5 rounded-lg bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold text-xs transition-colors shadow-xs cursor-pointer flex items-center gap-1"
               >
-                <i className="bx bx-check-shield text-sm"></i>
-                <span>É meu!</span>
-              </button>
+                É meu!
+              </Button>
 
               {item.isUnderStaffCustody && (
                 <button
@@ -233,9 +218,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
             </div>
           )}
         </div>
-
       </div>
-
-    </article>
+    </Card>
   );
 };

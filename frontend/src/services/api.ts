@@ -20,23 +20,28 @@ function getHeaders(customHeaders: Record<string, string> = {}): HeadersInit {
 
 export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
-  const response = await fetch(url, {
-    ...options,
-    headers: getHeaders(options.headers as Record<string, string>),
-  });
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers: getHeaders(options.headers as Record<string, string>),
+    });
 
-  if (!response.ok) {
-    let errorMessage = `Erro HTTP: ${response.status}`;
-    try {
-      const errorData = await response.json();
-      if (errorData.message) errorMessage = errorData.message;
-    } catch {
-      // Ignore JSON parse error on non-JSON response
+    if (!response.ok) {
+      let errorMessage = `Erro HTTP: ${response.status}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.message) errorMessage = errorData.message;
+      } catch {
+        // Ignore JSON parse error on non-JSON response
+      }
+      throw new Error(errorMessage);
     }
-    throw new Error(errorMessage);
-  }
 
-  return response.json();
+    return await response.json();
+  } catch (err: any) {
+    console.error(`[API Fetch Error] ${url}:`, err.message || err);
+    throw new Error(err.message || 'Falha na conexão com a API da Unochapecó.');
+  }
 }
 
 // ==========================================

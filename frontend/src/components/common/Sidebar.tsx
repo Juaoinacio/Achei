@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { CampusBlock } from '../../types';
+import { Card } from '../ui';
 
 interface SidebarProps {
   blocks: CampusBlock[];
@@ -48,7 +49,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside className="desktop-sidebar hidden lg:block lg:col-span-3 sticky top-[80px] space-y-5 self-start max-h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar pr-1">
       
       {/* Menu Principal de Navegação */}
-      <div className="bg-white border border-brand-gray rounded-custom p-3 shadow-xs space-y-1">
+      <Card className="p-3 space-y-1">
         <button
           onClick={() => onSelectNavTab('feed')}
           className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-semibold transition-colors cursor-pointer text-left ${
@@ -104,10 +105,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <i className="bx bx-trophy text-lg text-brand-yellow"></i>
           <span>Ranking Comunitário</span>
         </Link>
-      </div>
+      </Card>
 
       {/* Filtro por Blocos Oficiais da Unochapecó (Combobox estilo shadcn/ui) */}
-      <div className="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+      <Card className="p-4 space-y-3">
         <div className="flex items-center justify-between border-b border-brand-gray pb-2">
           <h3 className="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
             <i className="bx bx-map text-brand-blue text-sm"></i>
@@ -202,7 +203,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           )}
         </div>
-      </div>
+      </Card>
 
     </aside>
   );

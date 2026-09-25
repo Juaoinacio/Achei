@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Item } from '../../types';
 import { submitHint } from '../../services/api';
+import { Dialog, Button, Input, Textarea, Badge } from '../ui';
 
 interface NewHintModalProps {
   isOpen: boolean;
@@ -23,7 +24,7 @@ export const NewHintModal: React.FC<NewHintModalProps> = ({
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
 
-  if (!isOpen || !item) return null;
+  if (!item) return null;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -56,124 +57,83 @@ export const NewHintModal: React.FC<NewHintModalProps> = ({
     }
   }
 
+  const footer = (
+    <>
+      <Button
+        type="button"
+        variant="outline"
+        size="sm"
+        onClick={onClose}
+        disabled={submitting}
+      >
+        Cancelar
+      </Button>
+      <Button
+        type="button"
+        variant="secondary"
+        size="sm"
+        leftIcon="bx-send"
+        onClick={handleSubmit}
+        isLoading={submitting}
+      >
+        Publicar Pista (+2 Karma)
+      </Button>
+    </>
+  );
+
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-dark/70 backdrop-blur-xs overflow-y-auto"
-      role="dialog"
-      aria-modal="true"
-    >
-      <div className="fixed inset-0" onClick={onClose}></div>
-      <div className="relative bg-white border border-brand-gray rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden my-8 z-10 animate-in fade-in zoom-in-95 duration-150">
-        
-        {/* Modal Header */}
-        <div className="p-5 sm:p-6 border-b border-brand-gray flex items-start justify-between bg-slate-50/60">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2">
-              <span className="px-2 py-0.5 rounded text-[10px] font-extrabold uppercase bg-brand-blue text-white flex items-center gap-1">
-                <i className="bx bx-bulb text-xs"></i> PISTA COLABORATIVA
-              </span>
-              <span className="text-xs text-slate-400 font-medium">Ganhe +2 Karma</span>
-            </div>
-            <h3 className="text-lg font-bold text-brand-dark">
-              Enviar Pista: {item.title}
-            </h3>
-            <p className="text-xs text-slate-500">
-              Ajude a encontrar o pertence compartilhando informações sobre onde ele foi avistado.
-            </p>
-          </div>
-          <button
-            onClick={onClose}
-            className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-brand-dark flex items-center justify-center transition-colors cursor-pointer"
-            aria-label="Fechar"
-          >
-            <i className="bx bx-x text-xl"></i>
-          </button>
+    <Dialog
+      isOpen={isOpen}
+      onClose={onClose}
+      title={`Enviar Pista: ${item.title}`}
+      subtitle="Ajude a encontrar o pertence compartilhando informações sobre onde ele foi avistado."
+      badge={
+        <div className="flex items-center gap-2">
+          <Badge variant="blue" icon="bx-bulb">
+            PISTA COLABORATIVA
+          </Badge>
+          <span className="text-xs text-slate-400 font-medium">Ganhe +2 Karma</span>
         </div>
-
-        {/* Modal Body & Form */}
-        <form onSubmit={handleSubmit}>
-          <div className="p-5 sm:p-6 space-y-4 max-h-[calc(85vh-180px)] overflow-y-auto custom-scrollbar">
-            
-            {errorMsg && (
-              <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-center gap-2">
-                <i className="bx bx-error-circle text-base shrink-0"></i>
-                <span>{errorMsg}</span>
-              </div>
-            )}
-
-            {/* Onde viu */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-brand-dark">
-                Onde você viu o pertence?
-              </label>
-              <div className="relative">
-                <i className="bx bx-map-pin absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                <input
-                  type="text"
-                  value={locationSeen}
-                  onChange={(e) => setLocationSeen(e.target.value)}
-                  placeholder="Ex: Bloco R, Bancada do Laboratório 03 ou próximo à cantina..."
-                  className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all"
-                />
-              </div>
-            </div>
-
-            {/* Quando viu */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-brand-dark">
-                Quando você viu?
-              </label>
-              <div className="relative">
-                <i className="bx bx-time-five absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
-                <input
-                  type="text"
-                  value={timeSeen}
-                  onChange={(e) => setTimeSeen(e.target.value)}
-                  placeholder="Ex: Hoje por volta das 10h15 no intervalo..."
-                  className="w-full pl-9 pr-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all"
-                />
-              </div>
-            </div>
-
-            {/* Detalhes da pista */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-brand-dark">
-                Detalhes da sua Pista <span className="text-brand-blue">*</span>
-              </label>
-              <textarea
-                rows={3}
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                placeholder="Ex: Vi alguém entregando a mochila para o monitor da sala 03 após o término da aula..."
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/20 outline-none transition-all resize-none"
-                required
-              />
-            </div>
-
+      }
+      footer={footer}
+      maxWidth="lg"
+    >
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {errorMsg && (
+          <div className="p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-center gap-2">
+            <i className="bx bx-error-circle text-base shrink-0"></i>
+            <span>{errorMsg}</span>
           </div>
+        )}
 
-          {/* Modal Footer */}
-          <div className="p-4 sm:p-6 border-t border-brand-gray bg-slate-50/60 flex flex-col-reverse sm:flex-row items-center justify-end gap-2.5">
-            <button
-              type="button"
-              onClick={onClose}
-              disabled={submitting}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-lg border border-brand-gray hover:bg-slate-200 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
-            >
-              Cancelar
-            </button>
-            <button
-              type="submit"
-              disabled={submitting}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-lg bg-brand-blue hover:bg-brand-blueHover text-white font-extrabold text-xs transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
-            >
-              <i className="bx bx-send text-base"></i>
-              <span>{submitting ? 'Enviando...' : 'Publicar Pista (+2 Karma)'}</span>
-            </button>
-          </div>
-        </form>
+        {/* Onde viu */}
+        <Input
+          label="Onde você viu o pertence?"
+          leftIcon="bx-map-pin"
+          value={locationSeen}
+          onChange={(e) => setLocationSeen(e.target.value)}
+          placeholder="Ex: Bloco R, Bancada do Laboratório 03 ou próximo à cantina..."
+        />
 
-      </div>
-    </div>
+        {/* Quando viu */}
+        <Input
+          label="Quando você viu?"
+          leftIcon="bx-time-five"
+          value={timeSeen}
+          onChange={(e) => setTimeSeen(e.target.value)}
+          placeholder="Ex: Hoje por volta das 10h15 no intervalo..."
+        />
+
+        {/* Detalhes da pista */}
+        <Textarea
+          label="Detalhes da sua Pista"
+          rows={3}
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Ex: Vi alguém entregando a mochila para o monitor da sala 03 após o término da aula..."
+          required
+        />
+      </form>
+    </Dialog>
   );
 };

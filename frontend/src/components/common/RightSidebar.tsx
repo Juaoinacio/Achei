@@ -2,13 +2,14 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { Card, Badge } from '../ui';
 
 export const RightSidebar: React.FC = () => {
   return (
     <aside className="desktop-sidebar hidden xl:block xl:col-span-3 sticky top-[80px] space-y-5 self-start max-h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar">
       
       {/* Card da Central de Achados & Portaria */}
-      <div className="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+      <Card className="space-y-3">
         <div className="flex items-center gap-2.5 border-b border-brand-gray pb-2.5">
           <div className="w-8 h-8 rounded-lg bg-blue-50 text-brand-blue flex items-center justify-center font-bold text-base border border-blue-200">
             <i className="bx bx-shield-quarter"></i>
@@ -41,10 +42,10 @@ export const RightSidebar: React.FC = () => {
           <i className="bx bx-info-circle text-brand-blue text-sm"></i>
           <span>Apresente documento estudantil com foto na entrega.</span>
         </div>
-      </div>
+      </Card>
 
       {/* Card de Top Guardiões / Ranking Comunitário */}
-      <div className="bg-white border border-brand-gray rounded-custom p-4 shadow-xs space-y-3">
+      <Card className="space-y-3">
         <div className="flex items-center justify-between border-b border-brand-gray pb-2">
           <h3 className="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
             <i className="bx bx-trophy text-brand-yellow text-base"></i>
@@ -80,7 +81,7 @@ export const RightSidebar: React.FC = () => {
             <span className="font-bold text-slate-700 text-xs">18 pts</span>
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Links Institucionais e Rodapé */}
       <div className="px-2 text-[11px] text-slate-400 space-y-1">

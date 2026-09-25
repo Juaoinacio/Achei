@@ -11,7 +11,19 @@ const PORT = process.env.PORT || 3333;
 
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || '*',
+    origin: (origin, callback) => {
+      // Permite requisições sem origin (mobile, curl, SSR)
+      if (!origin) return callback(null, true);
+      // Em desenvolvimento, permite qualquer localhost ou 127.0.0.1
+      if (
+        origin.includes('localhost') ||
+        origin.includes('127.0.0.1') ||
+        process.env.NODE_ENV === 'development'
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     credentials: true,
   })
 );

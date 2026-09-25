@@ -2,13 +2,14 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { Button, Avatar } from '../ui';
 
 interface HeaderProps {
   searchTerm: string;
   onSearchChange: (value: string) => void;
   onOpenPublishModal: () => void;
   userName?: string;
-  userInitials?: string;
+  userAvatar?: string;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -16,7 +17,7 @@ export const Header: React.FC<HeaderProps> = ({
   onSearchChange,
   onOpenPublishModal,
   userName = 'Lucas Mendes',
-  userInitials = 'LM',
+  userAvatar,
 }) => {
   return (
     <header className="bg-brand-blue text-white sticky top-0 z-40 shadow-sm border-b border-brand-blueHover">
@@ -55,25 +56,25 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <button 
+          <Button
+            variant="primary"
+            size="sm"
+            leftIcon="bx-plus"
             onClick={onOpenPublishModal}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-bold text-xs rounded-lg transition-colors shadow-sm cursor-pointer"
+            className="hidden sm:inline-flex"
           >
-            <i className="bx bx-plus text-base"></i>
-            <span>Publicar Item</span>
-          </button>
+            Publicar Item
+          </Button>
 
           <button className="relative w-9 h-9 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors cursor-pointer" title="Pistas e Alertas">
             <i className="bx bx-bell text-xl"></i>
             <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-brand-blue"></span>
           </button>
 
-          <div className="flex items-center gap-2 pl-2 border-l border-white/15 cursor-pointer hover:opacity-90 transition-opacity">
-            <div className="w-8 h-8 rounded-full bg-brand-lilac text-white flex items-center justify-center font-bold text-xs ring-2 ring-white/30 shadow-xs">
-              {userInitials}
-            </div>
+          <Link href="/perfio" className="flex items-center gap-2 pl-2 border-l border-white/15 cursor-pointer hover:opacity-90 transition-opacity">
+            <Avatar src={userAvatar} name={userName} size="sm" />
             <span className="hidden xl:inline text-xs font-semibold text-white">{userName}</span>
-          </div>
+          </Link>
         </div>
 
       </div>
