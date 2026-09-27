@@ -149,3 +149,101 @@ export async function confirmPinDelivery(claimId: string, code: string): Promise
     body: JSON.stringify({ code }),
   });
 }
+
+// ==========================================
+// AUTENTICAÇÃO E SESSÃO
+// ==========================================
+
+export interface LoginDto {
+  email: string;
+  password: string;
+}
+
+export interface RegisterDto {
+  name: string;
+  email: string;
+  password: string;
+  academicCourse?: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: any;
+}
+
+export async function loginUser(data: LoginDto): Promise<AuthResponse> {
+  return fetchApi<AuthResponse>('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function registerUser(data: RegisterDto): Promise<AuthResponse> {
+  return fetchApi<AuthResponse>('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+}
+
+export function saveAuthSession(token: string, user: any): void {
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('achei_token', token);
+    localStorage.setItem('achei_user', JSON.stringify(user));
+  }
+}
+
+export function clearAuthSession(): void {
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('achei_token');
+    localStorage.removeItem('achei_user');
+  }
+}
+
+export function getCurrentUser(): any | null {
+  if (typeof window !== 'undefined') {
+    const userStr = localStorage.getItem('achei_user');
+    if (userStr) {
+      try {
+        return JSON.parse(userStr);
+      } catch {
+        return null;
+      }
+    }
+  }
+  return null;
+}
+
+// ==========================================
+// PERFIL DO USUÁRIO & ITENS PESSOAIS
+// ==========================================
+
+export async function getMyProfile(): Promise<any> {
+  return fetchApi<any>('/users/me');
+}
+
+export async function updateMyProfile(data: { name?: string; academicCourse?: string; avatarUrl?: string }): Promise<any> {
+  return fetchApi<any>('/users/me', {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getMyItems(): Promise<Item[]> {
+  return fetchApi<Item[]>('/users/me/items');
+}
+
+export async function getMySavedItems(): Promise<Item[]> {
+  return fetchApi<Item[]>('/users/me/saved');
+}
+
+// ==========================================
+// RANKING E BADGES
+// ==========================================
+
+export async function getLeaderboard(): Promise<any> {
+  return fetchApi<any>('/rankings');
+}
+
+export async function getBadgesList(): Promise<any> {
+  return fetchApi<any>('/badges');
+}
