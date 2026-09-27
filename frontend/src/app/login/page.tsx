@@ -8,8 +8,8 @@ import { Button, Input } from '../../components/ui';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('lucas.mendes@unochapeco.edu.br');
-  const [password, setPassword] = useState('senha12345');
+  const [email, setEmail] = useState('lucas.silva@unochapeco.edu.br');
+  const [password, setPassword] = useState('123456');
   const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -28,7 +28,17 @@ export default function LoginPage() {
     try {
       const res = await loginUser({ email: email.trim(), password });
       saveAuthSession(res.token, res.user);
-      router.push('/');
+
+      let targetUrl = '/perfio';
+      if (typeof window !== 'undefined') {
+        const params = new URLSearchParams(window.location.search);
+        const redirectParam = params.get('redirect');
+        if (redirectParam) {
+          targetUrl = redirectParam;
+        }
+      }
+
+      router.push(targetUrl);
     } catch (err: any) {
       setErrorMsg(err.message || 'Credenciais inválidas. Verifique seu e-mail e senha.');
     } finally {
@@ -217,7 +227,7 @@ export default function LoginPage() {
               size="md"
               leftIcon="bx-buildings"
               onClick={() => {
-                setEmail('lucas.da.silva@unochapeco.edu.br');
+                setEmail('lucas.silva@unochapeco.edu.br');
                 setPassword('123456');
               }}
               className="w-full text-xs font-semibold"

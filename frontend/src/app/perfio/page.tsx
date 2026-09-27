@@ -36,23 +36,26 @@ export default function ProfilePage() {
     async function loadProfileData() {
       setLoading(true);
       try {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('achei_token') : null;
         const localUser = getCurrentUser();
-        if (!localUser && !localStorage.getItem('achei_token')) {
-          // Se não houver sessão ativa, usa perfil de demonstração
-          setUser({
-            id: '87bb4989-7fa9-4db2-bc10-296eaff7e6bb',
-            name: 'Lucas da Silva',
-            email: 'lucas.da.silva@unochapeco.edu.br',
-            academicCourse: 'Ciência da Computação',
-            reputationScore: 45,
-          });
-        } else {
-          const profile = await getMyProfile().catch(() => localUser);
-          setUser(profile || localUser);
-          if (profile) {
-            setEditName(profile.name || '');
-            setEditCourse(profile.academicCourse || '');
-          }
+
+        if (!token) {
+          router.push('/login?redirect=/perfio');
+          return;
+        }
+
+        const profile = await getMyProfile().catch(() => localUser);
+        if (!profile && !localUser) {
+          clearAuthSession();
+          router.push('/login?redirect=/perfio');
+          return;
+        }
+
+        const activeUser = profile || localUser;
+        setUser(activeUser);
+        if (activeUser) {
+          setEditName(activeUser.name || '');
+          setEditCourse(activeUser.academicCourse || '');
         }
 
         const [itemsData, savedData] = await Promise.all([
@@ -69,7 +72,7 @@ export default function ProfilePage() {
     }
 
     loadProfileData();
-  }, []);
+  }, [router]);
 
   function handleLogout() {
     clearAuthSession();

@@ -34,12 +34,19 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
       } catch {
         // Ignore JSON parse error on non-JSON response
       }
+
+      if (response.status === 401 && typeof window !== 'undefined') {
+        localStorage.removeItem('achei_token');
+      }
+
       throw new Error(errorMessage);
     }
 
     return await response.json();
   } catch (err: any) {
-    console.error(`[API Fetch Error] ${url}:`, err.message || err);
+    if (err.message !== 'Token de autenticação não fornecido.') {
+      console.error(`[API Fetch Error] ${url}:`, err.message || err);
+    }
     throw new Error(err.message || 'Falha na conexão com a API da Unochapecó.');
   }
 }
@@ -199,6 +206,17 @@ export function clearAuthSession(): void {
   }
 }
 
+export function getAuthToken(): string | null {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('achei_token');
+  }
+  return null;
+}
+
+export function isAuthenticated(): boolean {
+  return !!getAuthToken();
+}
+
 export function getCurrentUser(): any | null {
   if (typeof window !== 'undefined') {
     const userStr = localStorage.getItem('achei_user');
@@ -218,6 +236,7 @@ export function getCurrentUser(): any | null {
 // ==========================================
 
 export async function getMyProfile(): Promise<any> {
+  if (!getAuthToken()) return null;
   return fetchApi<any>('/users/me');
 }
 
@@ -229,10 +248,12 @@ export async function updateMyProfile(data: { name?: string; academicCourse?: st
 }
 
 export async function getMyItems(): Promise<Item[]> {
+  if (!getAuthToken()) return [];
   return fetchApi<Item[]>('/users/me/items');
 }
 
 export async function getMySavedItems(): Promise<Item[]> {
+  if (!getAuthToken()) return [];
   return fetchApi<Item[]>('/users/me/saved');
 }
 

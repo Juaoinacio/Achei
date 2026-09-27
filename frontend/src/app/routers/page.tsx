@@ -31,7 +31,7 @@ const API_ROUTES: ApiRouteDef[] = [
     requiresAuth: false,
     sampleBody: {
       email: 'lucas.silva@unochapeco.edu.br',
-      password: 'senha'
+      password: '123456'
     },
   },
   {
@@ -241,7 +241,7 @@ export default function RoutersPage() {
       const res = await fetch(`${backendUrl}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password: 'senha' }),
+        body: JSON.stringify({ email, password: '123456' }),
       });
       if (res.ok) {
         const data = await res.json();
