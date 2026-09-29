@@ -268,3 +268,41 @@ export async function getLeaderboard(): Promise<any> {
 export async function getBadgesList(): Promise<any> {
   return fetchApi<any>('/badges');
 }
+
+// ==========================================
+// UPLOAD DE IMAGENS (CLOUDINARY)
+// ==========================================
+
+export async function uploadImageToCloudinary(
+  file: File,
+  folder: 'items' | 'users' | 'banners' | 'brands' = 'items'
+): Promise<{ url: string; publicId: string; format?: string; width?: number; height?: number }> {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('folder', folder);
+
+  const headers: Record<string, string> = {};
+  const token = getAuthToken();
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const response = await fetch(`${API_BASE_URL}/upload`, {
+    method: 'POST',
+    headers,
+    body: formData,
+  });
+
+  if (!response.ok) {
+    let errorMessage = 'Falha no upload da imagem para o Cloudinary.';
+    try {
+      const errorData = await response.json();
+      if (errorData.message) errorMessage = errorData.message;
+    } catch {
+      // Ignora erro de parse
+    }
+    throw new Error(errorMessage);
+  }
+
+  return await response.json();
+}

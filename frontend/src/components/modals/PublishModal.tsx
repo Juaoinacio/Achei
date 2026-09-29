@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { CampusBlock, Category, ItemType } from '../../types';
-import { createItem } from '../../services/api';
+import { createItem, uploadImageToCloudinary } from '../../services/api';
 import { Dialog, Button, Input, Textarea, Badge } from '../ui';
 
 interface PublishModalProps {
@@ -27,11 +27,28 @@ export const PublishModal: React.FC<PublishModalProps> = ({
   const [blockId, setBlockId] = useState(blocks[0]?.id || '');
   const [specificLocation, setSpecificLocation] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [hasReward, setHasReward] = useState(false);
   const [isUnderStaffCustody, setIsUnderStaffCustody] = useState(false);
   const [custodyLocation, setCustodyLocation] = useState('Portaria Central');
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingImage(true);
+    setErrorMsg('');
+    try {
+      const res = await uploadImageToCloudinary(file, 'items');
+      setPhotoUrl(res.url);
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Erro ao enviar imagem para o Cloudinary.');
+    } finally {
+      setUploadingImage(false);
+    }
+  }
 
   // Sincronizar defaults se blocks ou categories carregarem depois
   React.useEffect(() => {
@@ -227,15 +244,66 @@ export const PublishModal: React.FC<PublishModalProps> = ({
           placeholder="Ex: Sala 204, 2º Andar, próximo aos bebedouros"
         />
 
-        {/* URL da Foto (opcional) */}
-        <Input
-          label="Foto do Item (URL)"
-          leftIcon="bx-camera"
-          type="url"
-          value={photoUrl}
-          onChange={(e) => setPhotoUrl(e.target.value)}
-          placeholder="https://exemplo.com/foto-do-item.jpg"
-        />
+        {/* Upload de Foto via Cloudinary */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between">
+            <label className="block text-xs font-bold text-brand-dark">Foto do Pertence</label>
+            <span className="text-[10px] text-slate-400 font-medium">Cloudinary • achei/items</span>
+          </div>
+
+          {photoUrl ? (
+            <div className="rounded-xl border border-brand-gray overflow-hidden bg-slate-50 p-2.5 flex items-center gap-3">
+              <img
+                src={photoUrl}
+                alt="Preview do item"
+                className="w-14 h-14 object-cover rounded-lg border border-brand-gray shrink-0"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-bold text-brand-dark flex items-center gap-1">
+                  <i className="bx bx-check-circle text-amber-600"></i>
+                  Foto anexada
+                </p>
+                <p className="text-[10px] text-slate-400 truncate">{photoUrl}</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setPhotoUrl('')}
+                className="px-2.5 py-1 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+              >
+                Remover
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <label className="flex flex-col items-center justify-center border-2 border-dashed border-brand-gray hover:border-brand-blue rounded-xl p-4 cursor-pointer bg-slate-50 hover:bg-white transition-all text-center group">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  disabled={uploadingImage}
+                  className="hidden"
+                />
+                <i className={`bx ${uploadingImage ? 'bx-loader-alt bx-spin text-brand-blue' : 'bx-cloud-upload text-slate-400 group-hover:text-brand-blue'} text-3xl mb-1 transition-colors`}></i>
+                <p className="text-xs font-bold text-brand-dark group-hover:text-brand-blue">
+                  {uploadingImage ? 'Enviando imagem para o Cloudinary...' : 'Clique para selecionar foto ou tirar pelo celular'}
+                </p>
+                <p className="text-[10px] text-slate-400 mt-0.5">JPEG, PNG ou WEBP (máx. 10MB)</p>
+              </label>
+
+              {/* Opção alternativa: URL direta */}
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] uppercase font-bold text-slate-400 shrink-0">ou URL:</span>
+                <input
+                  type="url"
+                  value={photoUrl}
+                  onChange={(e) => setPhotoUrl(e.target.value)}
+                  placeholder="https://... (URL da foto externa)"
+                  className="flex-1 px-3 py-1.5 bg-slate-50 border border-brand-gray rounded-lg text-xs text-brand-dark placeholder-slate-400 focus:bg-white focus:border-brand-blue outline-none"
+                />
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Opções contextuais: Recompensa ou Custódia */}
         {type === 'LOST' && (
