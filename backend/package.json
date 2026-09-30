@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:seed": "tsx prisma/seed.ts"
+    "prisma:seed": "tsx prisma/seed.ts",
+    "seed:admin": "tsx prisma/seed-admin.ts",
+    "seed:courses": "tsx prisma/seed-courses.ts"
   },
   "keywords": [
     "achados-e-perdidos",

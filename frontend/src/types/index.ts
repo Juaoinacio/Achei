@@ -23,6 +23,13 @@ export interface Category {
   };
 }
 
+export interface Course {
+  id: string;
+  name: string;
+  department?: string | null;
+  createdAt?: string;
+}
+
 export interface UserSummary {
   id: string;
   name: string;

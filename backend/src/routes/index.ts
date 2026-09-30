@@ -8,6 +8,7 @@ import { hintRoutes } from './hint.routes';
 import { claimRoutes } from './claim.routes';
 import { badgeRoutes } from './badge.routes';
 import { uploadRoutes } from './upload.routes';
+import { courseRoutes } from './course.routes';
 
 const apiRoutes = Router();
 
@@ -15,6 +16,7 @@ apiRoutes.use('/auth', authRoutes);
 apiRoutes.use('/users', userRoutes);
 apiRoutes.use('/blocks', blockRoutes);
 apiRoutes.use('/categories', categoryRoutes);
+apiRoutes.use('/courses', courseRoutes);
 apiRoutes.use('/items', itemRoutes);
 apiRoutes.use('/hints', hintRoutes);
 apiRoutes.use('/claims', claimRoutes);

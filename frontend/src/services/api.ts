@@ -1,4 +1,4 @@
-import { CampusBlock, Category, FeedResponse, Item } from '../types';
+import { CampusBlock, Category, Course, FeedResponse, Item } from '../types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333/api';
 
@@ -130,6 +130,10 @@ export async function getCampusBlocks(): Promise<CampusBlock[]> {
 
 export async function getCategories(): Promise<Category[]> {
   return fetchApi<Category[]>('/categories');
+}
+
+export async function getCourses(): Promise<Course[]> {
+  return fetchApi<Course[]>('/courses');
 }
 
 // ==========================================
