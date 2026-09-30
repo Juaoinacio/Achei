@@ -61,12 +61,6 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-[10px] font-semibold text-brand-yellow uppercase tracking-wider">Unochapecó</span>
             </div>
           </Link>
-
-          <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 bg-white/10 rounded-md text-xs font-medium text-slate-100 hover:bg-white/15 cursor-pointer transition-colors">
-            <i className="bx bx-buildings text-sm text-brand-yellow"></i>
-            <span>Campus Chapecó (Sede)</span>
-            <i className="bx bx-chevron-down text-xs opacity-70"></i>
-          </div>
         </div>
 
         <div className="hidden md:flex flex-1 max-w-lg mx-4">
