@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { registerUser, saveAuthSession } from '../../services/api';
-import { Button, Input } from '../../components/ui';
+import { Button, Input, CourseCombobox } from '../../components/ui';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -63,10 +63,10 @@ export default function RegisterPage() {
   return (
     <div className="bg-brand-bg text-brand-dark font-sans min-h-screen flex flex-col justify-center items-center p-0 lg:p-6 selection:bg-brand-yellow selection:text-brand-dark">
       {/* Card Principal Split-Screen */}
-      <div className="w-full max-w-5xl bg-white border border-brand-gray rounded-none lg:rounded-2xl shadow-sm overflow-hidden grid grid-cols-1 lg:grid-cols-12 min-h-[620px]">
+      <div className="w-full max-w-5xl bg-white border border-brand-gray rounded-none lg:rounded-2xl shadow-sm grid grid-cols-1 lg:grid-cols-12 min-h-[620px] relative">
         
         {/* Lado Esquerdo: Pilares de Segurança & Confiança (Desktop) */}
-        <div className="hidden lg:flex lg:col-span-5 bg-gradient-to-br from-brand-blue via-brand-blue to-brand-blueHover text-white p-10 flex-col justify-between relative overflow-hidden">
+        <div className="hidden lg:flex lg:col-span-5 bg-gradient-to-br from-brand-blue via-brand-blue to-brand-blueHover text-white p-10 flex-col justify-between relative overflow-hidden rounded-l-2xl">
           <div className="absolute -top-16 -right-16 w-56 h-56 rounded-full bg-brand-lilac/25 blur-2xl pointer-events-none"></div>
           <div className="absolute -bottom-20 -left-12 w-64 h-64 rounded-full bg-brand-yellow/15 blur-3xl pointer-events-none"></div>
 
@@ -137,7 +137,7 @@ export default function RegisterPage() {
         </div>
 
         {/* Lado Direito: Formulário de Cadastro */}
-        <div className="col-span-1 lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between bg-white">
+        <div className="col-span-1 lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between bg-white rounded-r-2xl">
           
           {/* Topo Mobile */}
           <div className="lg:hidden flex items-center justify-between border-b border-brand-gray pb-4 mb-4">
@@ -198,28 +198,12 @@ export default function RegisterPage() {
               required
             />
 
-            {/* Curso */}
-            <div className="space-y-1.5">
-              <label className="block text-xs font-bold text-brand-dark">
-                Curso / Área de Graduação <span className="text-brand-blue ml-0.5">*</span>
-              </label>
-              <select
-                value={academicCourse}
-                onChange={(e) => setAcademicCourse(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-brand-gray rounded-xl text-xs sm:text-sm text-brand-dark focus:bg-white focus:border-brand-blue outline-none transition-all"
-              >
-                <option value="Ciência da Computação">Ciência da Computação</option>
-                <option value="Sistemas de Informação">Sistemas de Informação</option>
-                <option value="Medicina">Medicina</option>
-                <option value="Enfermagem">Enfermagem</option>
-                <option value="Direito">Direito</option>
-                <option value="Engenharia Civil">Engenharia Civil</option>
-                <option value="Arquitetura e Urbanismo">Arquitetura e Urbanismo</option>
-                <option value="Administração">Administração</option>
-                <option value="Psicologia">Psicologia</option>
-                <option value="Outro Curso / Servidor">Outro Curso / Servidor</option>
-              </select>
-            </div>
+            {/* Combobox de Cursos Dinâmico da Unochapecó */}
+            <CourseCombobox
+              value={academicCourse}
+              onChange={setAcademicCourse}
+              required
+            />
 
             {/* Grid com Senha e Confirmação */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">

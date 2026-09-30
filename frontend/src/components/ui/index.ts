@@ -5,3 +5,4 @@ export * from './Textarea';
 export * from './Card';
 export * from './Avatar';
 export * from './Dialog';
+export * from './CourseCombobox';

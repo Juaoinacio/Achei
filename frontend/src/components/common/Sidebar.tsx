@@ -46,7 +46,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   );
 
   return (
-    <aside className="desktop-sidebar hidden lg:block lg:col-span-3 sticky top-[80px] space-y-5 self-start max-h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar pr-1">
+    <aside className={`desktop-sidebar hidden lg:block lg:col-span-3 sticky top-[80px] space-y-5 self-start max-h-[calc(100vh-6rem)] custom-scrollbar pr-1 ${comboboxOpen ? 'z-40 overflow-visible' : 'z-10 overflow-y-auto'}`}>
       
       {/* Menu Principal de Navegação */}
       <Card className="p-3 space-y-1">
@@ -108,7 +108,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </Card>
 
       {/* Filtro por Blocos Oficiais da Unochapecó (Combobox estilo shadcn/ui) */}
-      <Card className="p-4 space-y-3">
+      <Card className={`p-4 space-y-3 relative ${comboboxOpen ? 'z-40 overflow-visible' : 'z-10'}`}>
         <div className="flex items-center justify-between border-b border-brand-gray pb-2">
           <h3 className="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
             <i className="bx bx-map text-brand-blue text-sm"></i>
@@ -125,7 +125,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Combobox Container */}
-        <div className="relative" ref={comboboxRef}>
+        <div className={`relative ${comboboxOpen ? 'z-50' : 'z-10'}`} ref={comboboxRef}>
           <button
             type="button"
             onClick={() => setComboboxOpen(!comboboxOpen)}
@@ -140,7 +140,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
           {/* Popover com Campo de Busca e Lista */}
           {comboboxOpen && (
-            <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-brand-gray rounded-xl shadow-xl z-30 p-2 space-y-1.5 animate-in fade-in zoom-in-95 duration-100">
+            <div className="absolute left-0 right-0 top-full mt-1.5 bg-white border border-brand-gray rounded-xl shadow-2xl z-50 p-2 space-y-1.5 animate-in fade-in zoom-in-95 duration-100">
               <div className="relative">
                 <i className="bx bx-search absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                 <input
