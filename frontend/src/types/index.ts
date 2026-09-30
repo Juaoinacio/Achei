@@ -35,9 +35,13 @@ export interface UserSummary {
   name: string;
   email?: string;
   avatarUrl?: string | null;
+  banerUrl?: string | null;
   academicCourse?: string | null;
+  academicPeriod?: number | null;
   role?: UserRole;
   reputationScore?: number;
+  isVerified?: boolean;
+  frequentedBlocks?: Array<{ id: string; name: string; campus?: string }>;
 }
 
 export interface Hint {

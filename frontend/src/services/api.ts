@@ -246,11 +246,26 @@ export async function getMyProfile(): Promise<any> {
   return fetchApi<any>('/users/me');
 }
 
-export async function updateMyProfile(data: { name?: string; academicCourse?: string; avatarUrl?: string }): Promise<any> {
-  return fetchApi<any>('/users/me', {
+export interface UpdateProfileDto {
+  name?: string;
+  academicCourse?: string | null;
+  academicPeriod?: number | null;
+  avatarUrl?: string | null;
+  banerUrl?: string | null;
+  frequentedBlockIds?: string[];
+}
+
+export async function updateMyProfile(data: UpdateProfileDto): Promise<any> {
+  const res = await fetchApi<any>('/users/me', {
     method: 'PUT',
     body: JSON.stringify(data),
   });
+  const updatedUser = res?.user || res;
+  if (typeof window !== 'undefined' && updatedUser) {
+    const existing = getCurrentUser() || {};
+    localStorage.setItem('achei_user', JSON.stringify({ ...existing, ...updatedUser }));
+  }
+  return updatedUser;
 }
 
 export async function getMyItems(): Promise<Item[]> {
