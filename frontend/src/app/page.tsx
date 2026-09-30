@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { CampusBlock, Category, Item, ItemType } from '../types';
-import { getCampusBlocks, getCategories, getFeedItems } from '../services/api';
+import { getCampusBlocks, getCategories, getFeedItems, getAuthToken, getCurrentUser } from '../services/api';
 import { Header } from '../components/common/Header';
 import { Sidebar } from '../components/common/Sidebar';
 import { RightSidebar } from '../components/common/RightSidebar';
@@ -15,6 +16,22 @@ import { HandoffPinModal } from '../components/modals/HandoffPinModal';
 import { NewHintModal } from '../components/modals/NewHintModal';
 
 export default function HomePage() {
+  const router = useRouter();
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  // Validação de Sessão Obrigatória
+  useEffect(() => {
+    const token = getAuthToken();
+    const user = getCurrentUser();
+    if (!token || !user) {
+      router.push('/login?redirect=/');
+      return;
+    }
+    setCurrentUser(user);
+    setAuthChecked(true);
+  }, [router]);
+
   // Dados de Referência
   const [blocks, setBlocks] = useState<CampusBlock[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -101,6 +118,23 @@ export default function HomePage() {
   const lostCount = items.filter((i) => i.type === 'LOST').length;
   const foundCount = items.filter((i) => i.type === 'FOUND').length;
 
+  if (!authChecked) {
+    return (
+      <div className="bg-brand-bg min-h-screen flex flex-col items-center justify-center p-4">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-12 h-12 bg-brand-yellow text-brand-dark rounded-2xl flex items-center justify-center text-3xl font-extrabold shadow-sm animate-pulse">
+            <i className="bx bx-search"></i>
+          </div>
+          <span className="text-xl font-extrabold text-brand-blue tracking-tight">Achei Unochapecó</span>
+          <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mt-2">
+            <i className="bx bx-loader-alt bx-spin text-brand-blue text-base"></i>
+            <span>Verificando autenticação...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-brand-bg text-brand-dark font-sans min-h-screen pb-20 lg:pb-12 selection:bg-brand-yellow selection:text-brand-dark">
       
@@ -109,6 +143,8 @@ export default function HomePage() {
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         onOpenPublishModal={() => setIsPublishModalOpen(true)}
+        userName={currentUser?.name}
+        userAvatar={currentUser?.avatarUrl}
       />
 
       {/* 2. Barra de Busca Mobile */}
@@ -174,7 +210,7 @@ export default function HomePage() {
             {/* Caixa Rápida de Publicação (Composer) */}
             <Card className="space-y-3">
               <div className="flex items-center gap-3">
-                <Avatar name="Lucas Mendes" size="md" />
+                <Avatar name={currentUser?.name || 'Estudante'} src={currentUser?.avatarUrl} size="md" />
                 <input
                   type="text"
                   readOnly

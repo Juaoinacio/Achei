@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { loginUser, saveAuthSession } from '../../services/api';
@@ -14,6 +14,18 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Se já houver sessão ativa, sincroniza cookie e redireciona
+  useEffect(() => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('achei_token') : null;
+    const user = typeof window !== 'undefined' ? localStorage.getItem('achei_user') : null;
+    if (token && user) {
+      document.cookie = `achei_token=${token}; path=/; max-age=604800; SameSite=Lax`;
+      const params = new URLSearchParams(window.location.search);
+      const redirectParam = params.get('redirect');
+      router.push(redirectParam && redirectParam !== '/login' ? redirectParam : '/');
+    }
+  }, [router]);
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -29,11 +41,11 @@ export default function LoginPage() {
       const res = await loginUser({ email: email.trim(), password });
       saveAuthSession(res.token, res.user);
 
-      let targetUrl = '/perfio';
+      let targetUrl = '/';
       if (typeof window !== 'undefined') {
         const params = new URLSearchParams(window.location.search);
         const redirectParam = params.get('redirect');
-        if (redirectParam) {
+        if (redirectParam && redirectParam !== '/login') {
           targetUrl = redirectParam;
         }
       }

@@ -196,6 +196,7 @@ export function saveAuthSession(token: string, user: any): void {
   if (typeof window !== 'undefined') {
     localStorage.setItem('achei_token', token);
     localStorage.setItem('achei_user', JSON.stringify(user));
+    document.cookie = `achei_token=${token}; path=/; max-age=604800; SameSite=Lax`;
   }
 }
 
@@ -203,6 +204,7 @@ export function clearAuthSession(): void {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('achei_token');
     localStorage.removeItem('achei_user');
+    document.cookie = 'achei_token=; path=/; max-age=0; SameSite=Lax';
   }
 }
 

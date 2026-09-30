@@ -33,7 +33,12 @@ export default function RankPage() {
     async function loadRankData() {
       setLoading(true);
       try {
+        const token = typeof window !== 'undefined' ? localStorage.getItem('achei_token') : null;
         const user = getCurrentUser();
+        if (!token || !user) {
+          router.push('/login?redirect=/rank');
+          return;
+        }
         setCurrentUser(user);
 
         const [rankRes, badgesRes] = await Promise.all([
@@ -116,7 +121,7 @@ export default function RankPage() {
     }
 
     loadRankData();
-  }, []);
+  }, [router]);
 
   const filteredLeaderboard = leaderboard.filter(
     (item) =>
