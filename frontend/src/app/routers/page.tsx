@@ -30,8 +30,8 @@ const API_ROUTES: ApiRouteDef[] = [
     description: 'Autentica credenciais institucionais e retorna token JWT com dados do usuário.',
     requiresAuth: false,
     sampleBody: {
-      email: 'lucas.silva@unochapeco.edu.br',
-      password: '123456'
+      email: 'estudante@unochapeco.edu.br',
+      password: 'suasenhaaqui'
     },
   },
   {
@@ -438,27 +438,6 @@ export default function RoutersPage() {
               </p>
 
               <div className="space-y-2">
-                <button
-                  onClick={() => handleQuickLogin('lucas.silva@unochapeco.edu.br', 'Lucas da Silva', 'Ciência da Computação')}
-                  className="w-full text-left p-2.5 rounded-lg border border-brand-gray hover:border-brand-blue hover:bg-blue-50/50 transition-all flex items-center justify-between group cursor-pointer"
-                >
-                  <div>
-                    <p className="font-bold text-xs text-brand-dark group-hover:text-brand-blue">Lucas da Silva</p>
-                    <p className="text-[10px] text-slate-500">Estudante • Ciência da Computação</p>
-                  </div>
-                  <Badge variant="blue" className="text-[10px]">Logar</Badge>
-                </button>
-
-                <button
-                  onClick={() => handleQuickLogin('mariana.becker@unochapeco.edu.br', 'Mariana Becker', 'Arquitetura')}
-                  className="w-full text-left p-2.5 rounded-lg border border-brand-gray hover:border-brand-blue hover:bg-blue-50/50 transition-all flex items-center justify-between group cursor-pointer"
-                >
-                  <div>
-                    <p className="font-bold text-xs text-brand-dark group-hover:text-brand-blue">Mariana Becker</p>
-                    <p className="text-[10px] text-slate-500">Estudante • Arquitetura e Urbanismo</p>
-                  </div>
-                  <Badge variant="portaria" className="text-[10px]">Logar</Badge>
-                </button>
 
                 <button
                   onClick={() => handleQuickLogin('portaria.blocor@unochapeco.edu.br', 'Portaria Bloco R', 'Staff')}

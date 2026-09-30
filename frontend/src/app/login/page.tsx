@@ -8,8 +8,8 @@ import { Button, Input } from '../../components/ui';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('lucas.silva@unochapeco.edu.br');
-  const [password, setPassword] = useState('123456');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -223,28 +223,6 @@ export default function LoginPage() {
               className="w-full mt-2"
             >
               Entrar na Minha Conta
-            </Button>
-
-            {/* Divisória */}
-            <div className="relative flex items-center justify-center my-4">
-              <div className="border-t border-brand-gray w-full"></div>
-              <span className="bg-white px-3 text-xs text-slate-400 font-medium uppercase tracking-wider">ou</span>
-              <div className="border-t border-brand-gray w-full"></div>
-            </div>
-
-            {/* Botão de Acesso Rápido Integrado com a Unochapecó (Minha Uno) */}
-            <Button
-              type="button"
-              variant="outline"
-              size="md"
-              leftIcon="bx-buildings"
-              onClick={() => {
-                setEmail('lucas.silva@unochapeco.edu.br');
-                setPassword('123456');
-              }}
-              className="w-full text-xs font-semibold"
-            >
-              Preencher com Credenciais de Demonstração (Lucas)
             </Button>
           </form>
 

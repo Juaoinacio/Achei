@@ -1,10 +1,44 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Card, Badge } from '../ui';
+import { Card, Avatar } from '../ui';
+import { getLeaderboard } from '../../services/api';
 
 export const RightSidebar: React.FC = () => {
+  const [guardians, setGuardians] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let isMounted = true;
+    async function loadGuardians() {
+      try {
+        const res = await getLeaderboard().catch(() => null);
+        const list = Array.isArray(res)
+          ? res
+          : Array.isArray(res?.data)
+          ? res.data
+          : [];
+
+        const academicOnly = list.filter(
+          (u: any) => u.role !== 'ADMIN' && u.role !== 'STAFF_PORTARIA'
+        );
+
+        if (isMounted) {
+          setGuardians(academicOnly);
+        }
+      } catch (e) {
+        console.error('Erro ao carregar top guardiões:', e);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    }
+    loadGuardians();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <aside className="desktop-sidebar hidden xl:block xl:col-span-3 sticky top-[80px] space-y-5 self-start max-h-[calc(100vh-6rem)] overflow-y-auto custom-scrollbar">
       
@@ -56,31 +90,68 @@ export const RightSidebar: React.FC = () => {
           </Link>
         </div>
 
-        <div className="space-y-2.5 text-xs">
-          {/* 1º Lugar */}
-          <div className="flex items-center justify-between p-2 rounded-lg bg-amber-50/60 border border-amber-200/60">
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-brand-yellow text-brand-dark font-black text-[10px] flex items-center justify-center shadow-xs">1</span>
-              <div>
-                <p className="font-bold text-brand-dark text-xs">Lucas da Silva</p>
-                <p className="text-[10px] text-slate-500">Ciência da Computação</p>
-              </div>
-            </div>
-            <span className="font-extrabold text-amber-900 text-xs">45 pts</span>
+        {loading ? (
+          <div className="py-3 space-y-2">
+            <div className="h-8 bg-slate-100 rounded-lg animate-pulse"></div>
+            <div className="h-8 bg-slate-100 rounded-lg animate-pulse"></div>
           </div>
-
-          {/* 2º Lugar */}
-          <div className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 border border-transparent hover:border-brand-gray transition-colors">
-            <div className="flex items-center gap-2">
-              <span className="w-5 h-5 rounded-full bg-slate-200 text-slate-700 font-bold text-[10px] flex items-center justify-center">2</span>
-              <div>
-                <p className="font-bold text-brand-dark text-xs">Mariana Becker</p>
-                <p className="text-[10px] text-slate-500">Arquitetura</p>
-              </div>
+        ) : guardians.length === 0 ? (
+          <div className="py-6 px-3 text-center bg-slate-50/60 rounded-xl border border-dashed border-brand-gray space-y-1.5">
+            <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center">
+              <i className="bx bx-trophy text-lg"></i>
             </div>
-            <span className="font-bold text-slate-700 text-xs">18 pts</span>
+            <p className="text-xs font-bold text-brand-dark">Nenhum guardião no ranking ainda</p>
+            <p className="text-[11px] text-slate-400 leading-relaxed">
+              Participe devolvendo pertences para pontuar e aparecer aqui!
+            </p>
           </div>
-        </div>
+        ) : (
+          <div className="space-y-2 text-xs">
+            {guardians.slice(0, 5).map((guardian, index) => (
+              <div
+                key={guardian.id || index}
+                className={`flex items-center justify-between p-2 rounded-lg transition-colors ${
+                  index === 0
+                    ? 'bg-amber-50/60 border border-amber-200/60'
+                    : 'hover:bg-slate-50 border border-transparent hover:border-brand-gray'
+                }`}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <span
+                    className={`w-5 h-5 rounded-full font-black text-[10px] flex items-center justify-center shadow-xs shrink-0 ${
+                      index === 0
+                        ? 'bg-brand-yellow text-brand-dark'
+                        : index === 1
+                        ? 'bg-slate-200 text-slate-700'
+                        : index === 2
+                        ? 'bg-amber-100 text-amber-800'
+                        : 'bg-slate-100 text-slate-600'
+                    }`}
+                  >
+                    {index + 1}
+                  </span>
+                  <Avatar
+                    name={guardian.name || 'Estudante'}
+                    src={guardian.avatarUrl}
+                    size="sm"
+                    className="w-6 h-6 text-[10px] shrink-0"
+                  />
+                  <div className="min-w-0">
+                    <p className="font-bold text-brand-dark text-xs truncate">{guardian.name}</p>
+                    <p className="text-[10px] text-slate-500 truncate">{guardian.academicCourse || 'Graduação'}</p>
+                  </div>
+                </div>
+                <span
+                  className={`font-extrabold text-xs whitespace-nowrap ml-2 ${
+                    index === 0 ? 'text-amber-900' : 'text-slate-700'
+                  }`}
+                >
+                  {guardian.reputationScore ?? guardian.score ?? 0} pts
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </Card>
 
       {/* Links Institucionais e Rodapé */}

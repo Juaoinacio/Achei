@@ -15,7 +15,7 @@ import { Item, UserSummary } from '../../types';
 import { Header } from '../../components/common/Header';
 import { ItemCard } from '../../components/common/ItemCard';
 import { MobileBottomNav } from '../../components/common/MobileBottomNav';
-import { Card, Badge, Button, Avatar, Dialog, Input } from '../../components/ui';
+import { Card, Badge, Button, Avatar, Dialog, Input, CourseCombobox } from '../../components/ui';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -154,7 +154,7 @@ export default function ProfilePage() {
               <div className="flex flex-col sm:flex-row sm:items-end gap-3.5">
                 <Avatar
                   src={user?.avatarUrl}
-                  name={user?.name || 'Lucas Mendes'}
+                  name={user?.name || 'Estudante'}
                   size="lg"
                   className="w-24 h-24 sm:w-28 sm:h-28 ring-4 ring-white text-3xl shadow-md rounded-2xl"
                 />
@@ -162,26 +162,28 @@ export default function ProfilePage() {
                 <div className="space-y-1">
                   <div className="flex items-center gap-2 flex-wrap">
                     <h1 className="text-xl sm:text-2xl font-extrabold text-brand-dark">
-                      {user?.name || 'Lucas da Silva'}
+                      {user?.name || 'Estudante Unochapecó'}
                     </h1>
                     <Badge variant="yellow">VERIFICADO</Badge>
                   </div>
 
                   <p className="text-xs sm:text-sm font-semibold text-brand-blue">
-                    {user?.academicCourse || 'Ciência da Computação'} • Estudante Ativo
+                    {user?.academicCourse || 'Graduação'} • Estudante Ativo
                   </p>
 
                   <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500 pt-0.5">
                     <span className="flex items-center gap-1.5">
-                      <i className="bx bx-map-pin text-brand-lilac"></i>
-                      <span>Frequenta:</span>
-                      <span className="px-1.5 py-0.5 rounded bg-slate-100 text-brand-dark font-semibold text-[11px] border border-brand-gray">Bloco R</span>
-                      <span className="px-1.5 py-0.5 rounded bg-slate-100 text-brand-dark font-semibold text-[11px] border border-brand-gray">Biblioteca</span>
+                      <i className="bx bx-buildings text-brand-lilac"></i>
+                      <span>Campus Chapecó (Sede)</span>
                     </span>
-                    <span>•</span>
-                    <span className="font-mono text-[11px] text-slate-400">
-                      {user?.email || 'estudante@unochapeco.edu.br'}
-                    </span>
+                    {user?.email && (
+                      <>
+                        <span>•</span>
+                        <span className="font-mono text-[11px] text-slate-400">
+                          {user.email}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -242,7 +244,7 @@ export default function ProfilePage() {
               <div className="p-3 rounded-xl bg-slate-50 border border-brand-gray">
                 <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Karma Uno</p>
                 <div className="flex items-baseline gap-1 mt-1">
-                  <span className="text-2xl font-extrabold text-amber-900">{user?.reputationScore ?? 45}</span>
+                  <span className="text-2xl font-extrabold text-amber-900">{user?.reputationScore ?? 0}</span>
                   <span className="text-xs text-slate-400 font-medium">pts</span>
                 </div>
               </div>
@@ -290,7 +292,7 @@ export default function ProfilePage() {
                 </Link>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Você acumulou <strong>{user?.reputationScore ?? 45} pontos de Karma</strong> este semestre e está elegível a insígnias de guardião da comunidade.
+                Você acumulou <strong>{user?.reputationScore ?? 0} pontos de Karma</strong> este semestre e está elegível a insígnias de guardião da comunidade.
               </p>
             </Card>
           </aside>
@@ -410,11 +412,10 @@ export default function ProfilePage() {
             required
           />
 
-          <Input
+          <CourseCombobox
             label="Curso de Graduação"
             value={editCourse}
-            onChange={(e) => setEditCourse(e.target.value)}
-            placeholder="Ex: Ciência da Computação"
+            onChange={setEditCourse}
           />
         </form>
       </Dialog>

@@ -46,69 +46,27 @@ export default function RankPage() {
           getBadgesList().catch(() => null),
         ]);
 
-        if (rankRes && Array.isArray(rankRes)) {
-          setLeaderboard(rankRes);
-        } else if (rankRes?.data && Array.isArray(rankRes.data)) {
-          setLeaderboard(rankRes.data);
-        } else {
-          // Fallback de demonstração realista baseado na Unochapecó
-          setLeaderboard([
-            {
-              id: '1',
-              name: 'Lucas da Silva',
-              academicCourse: 'Ciência da Computação',
-              score: 45,
-              returnedCount: 4,
-              foundCount: 5,
-              hintsCount: 5,
-            },
-            {
-              id: '2',
-              name: 'Mariana Becker',
-              academicCourse: 'Arquitetura e Urbanismo',
-              score: 32,
-              returnedCount: 3,
-              foundCount: 3,
-              hintsCount: 2,
-            },
-            {
-              id: '3',
-              name: 'Pedro Henrique Zago',
-              academicCourse: 'Medicina',
-              score: 28,
-              returnedCount: 2,
-              foundCount: 4,
-              hintsCount: 4,
-            },
-            {
-              id: '4',
-              name: 'Gabriela Siqueira',
-              academicCourse: 'Direito',
-              score: 22,
-              returnedCount: 2,
-              foundCount: 2,
-              hintsCount: 1,
-            },
-            {
-              id: '5',
-              name: 'Felipe Alcantara',
-              academicCourse: 'Engenharia Civil',
-              score: 18,
-              returnedCount: 1,
-              foundCount: 2,
-              hintsCount: 4,
-            },
-            {
-              id: '6',
-              name: 'Camila Fachinello',
-              academicCourse: 'Psicologia',
-              score: 14,
-              returnedCount: 1,
-              foundCount: 1,
-              hintsCount: 2,
-            },
-          ]);
-        }
+        const rawList = Array.isArray(rankRes)
+          ? rankRes
+          : Array.isArray(rankRes?.data)
+          ? rankRes.data
+          : [];
+
+        const academicOnly = rawList.filter(
+          (u: any) => u.role !== 'ADMIN' && u.role !== 'STAFF_PORTARIA'
+        );
+
+        setLeaderboard(
+          academicOnly.map((item: any) => ({
+            id: item.id,
+            name: item.name,
+            academicCourse: item.academicCourse || 'Graduação',
+            score: item.reputationScore ?? item.score ?? 0,
+            returnedCount: item.returnedItemsCount ?? item.returnedCount ?? 0,
+            foundCount: item.foundCount ?? 0,
+            hintsCount: item.helpfulHintsCount ?? item.hintsCount ?? 0,
+          }))
+        );
 
         if (badgesRes && Array.isArray(badgesRes)) {
           setBadges(badgesRes);
@@ -141,7 +99,7 @@ export default function RankPage() {
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         onOpenPublishModal={() => router.push('/')}
-        userName={currentUser?.name || 'Lucas Mendes'}
+        userName={currentUser?.name}
         userAvatar={currentUser?.avatarUrl}
       />
 
@@ -317,110 +275,127 @@ export default function RankPage() {
             </Card>
           </aside>
 
-          {/* Coluna Central: Pódio dos 3 Primeiros + Tabela */}
+          {/* Coluna Central: Pódio dos 3 Primeiros + Tabela ou Empty State */}
           <section className="col-span-1 lg:col-span-8 space-y-6">
-            
-            {/* Pódio dos 3 Primeiros */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end pt-4">
-              
-              {/* 2º Lugar */}
-              {top2 && (
-                <Card className="text-center p-4 order-2 sm:order-1 border-slate-300 space-y-2 relative">
-                  <div className="w-6 h-6 rounded-full bg-slate-200 text-slate-700 font-extrabold text-xs flex items-center justify-center mx-auto absolute -top-3 left-1/2 -translate-x-1/2 ring-2 ring-white">
-                    2
-                  </div>
-                  <Avatar name={top2.name} size="md" className="mx-auto mt-2" />
-                  <div>
-                    <h4 className="font-bold text-xs sm:text-sm text-brand-dark truncate">{top2.name}</h4>
-                    <p className="text-[10px] text-slate-500 truncate">{top2.academicCourse}</p>
-                  </div>
-                  <div className="pt-1">
-                    <span className="text-lg font-extrabold text-slate-700">{top2.score} pts</span>
-                  </div>
-                </Card>
-              )}
-
-              {/* 1º Lugar (Destaque Amarelo Solar) */}
-              {top1 && (
-                <div className="bg-gradient-to-b from-amber-50 to-white border-2 border-brand-yellow rounded-custom p-5 text-center order-1 sm:order-2 shadow-md space-y-2 relative -mt-4">
-                  <div className="w-8 h-8 rounded-full bg-brand-yellow text-brand-dark font-black text-sm flex items-center justify-center mx-auto absolute -top-4 left-1/2 -translate-x-1/2 shadow-xs ring-4 ring-white">
-                    <i className="bx bxs-crown text-base"></i>
-                  </div>
-                  <Avatar name={top1.name} size="lg" className="mx-auto mt-2 ring-2 ring-brand-yellow" />
-                  <div>
-                    <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 bg-brand-yellow px-2 py-0.5 rounded-full">
-                      LÍDER DO CAMPUS
-                    </span>
-                    <h3 className="font-extrabold text-sm sm:text-base text-brand-dark mt-1 truncate">{top1.name}</h3>
-                    <p className="text-xs text-slate-500 truncate">{top1.academicCourse}</p>
-                  </div>
-                  <div className="pt-2 border-t border-amber-200/60">
-                    <span className="text-2xl font-black text-amber-900">{top1.score}</span>
-                    <span className="text-xs text-amber-800 font-bold ml-1">pts</span>
-                  </div>
+            {loading ? (
+              <Card className="p-8 text-center space-y-3">
+                <div className="w-10 h-10 border-4 border-brand-blue border-t-transparent rounded-full animate-spin mx-auto"></div>
+                <p className="text-xs text-slate-500 font-semibold">Carregando ranking da Unochapecó...</p>
+              </Card>
+            ) : filteredLeaderboard.length === 0 ? (
+              <Card className="text-center py-16 px-4 space-y-3">
+                <div className="w-14 h-14 rounded-2xl bg-amber-50 text-brand-yellow mx-auto flex items-center justify-center text-3xl border border-amber-200 shadow-xs">
+                  <i className="bx bx-trophy"></i>
                 </div>
-              )}
+                <h3 className="font-extrabold text-base text-brand-dark">Nenhum guardião no ranking ainda</h3>
+                <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
+                  {searchTerm
+                    ? 'Nenhum estudante encontrado com o termo pesquisado.'
+                    : 'Ainda não há pontuações registradas. Os estudantes que devolverem pertences perdidos ou enviarem pistas úteis pontuarão aqui.'}
+                </p>
+              </Card>
+            ) : (
+              <>
+                {/* Pódio dos 3 Primeiros */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end pt-4">
+                  {/* 2º Lugar */}
+                  {top2 && (
+                    <Card className="text-center p-4 order-2 sm:order-1 border-slate-300 space-y-2 relative">
+                      <div className="w-6 h-6 rounded-full bg-slate-200 text-slate-700 font-extrabold text-xs flex items-center justify-center mx-auto absolute -top-3 left-1/2 -translate-x-1/2 ring-2 ring-white">
+                        2
+                      </div>
+                      <Avatar name={top2.name} size="md" className="mx-auto mt-2" />
+                      <div>
+                        <h4 className="font-bold text-xs sm:text-sm text-brand-dark truncate">{top2.name}</h4>
+                        <p className="text-[10px] text-slate-500 truncate">{top2.academicCourse}</p>
+                      </div>
+                      <div className="pt-1">
+                        <span className="text-lg font-extrabold text-slate-700">{top2.score} pts</span>
+                      </div>
+                    </Card>
+                  )}
 
-              {/* 3º Lugar */}
-              {top3 && (
-                <Card className="text-center p-4 order-3 sm:order-3 border-amber-200/80 space-y-2 relative">
-                  <div className="w-6 h-6 rounded-full bg-amber-100 text-amber-900 font-extrabold text-xs flex items-center justify-center mx-auto absolute -top-3 left-1/2 -translate-x-1/2 ring-2 ring-white">
-                    3
+                  {/* 1º Lugar (Destaque Amarelo Solar) */}
+                  {top1 && (
+                    <div className="bg-gradient-to-b from-amber-50 to-white border-2 border-brand-yellow rounded-custom p-5 text-center order-1 sm:order-2 shadow-md space-y-2 relative -mt-4">
+                      <div className="w-8 h-8 rounded-full bg-brand-yellow text-brand-dark font-black text-sm flex items-center justify-center mx-auto absolute -top-4 left-1/2 -translate-x-1/2 shadow-xs ring-4 ring-white">
+                        <i className="bx bxs-crown text-base"></i>
+                      </div>
+                      <Avatar name={top1.name} size="lg" className="mx-auto mt-2 ring-2 ring-brand-yellow" />
+                      <div>
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 bg-brand-yellow px-2 py-0.5 rounded-full">
+                          LÍDER DO CAMPUS
+                        </span>
+                        <h3 className="font-extrabold text-sm sm:text-base text-brand-dark mt-1 truncate">{top1.name}</h3>
+                        <p className="text-xs text-slate-500 truncate">{top1.academicCourse}</p>
+                      </div>
+                      <div className="pt-2 border-t border-amber-200/60">
+                        <span className="text-2xl font-black text-amber-900">{top1.score}</span>
+                        <span className="text-xs text-amber-800 font-bold ml-1">pts</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 3º Lugar */}
+                  {top3 && (
+                    <Card className="text-center p-4 order-3 sm:order-3 border-amber-200/80 space-y-2 relative">
+                      <div className="w-6 h-6 rounded-full bg-amber-100 text-amber-900 font-extrabold text-xs flex items-center justify-center mx-auto absolute -top-3 left-1/2 -translate-x-1/2 ring-2 ring-white">
+                        3
+                      </div>
+                      <Avatar name={top3.name} size="md" className="mx-auto mt-2" />
+                      <div>
+                        <h4 className="font-bold text-xs sm:text-sm text-brand-dark truncate">{top3.name}</h4>
+                        <p className="text-[10px] text-slate-500 truncate">{top3.academicCourse}</p>
+                      </div>
+                      <div className="pt-1">
+                        <span className="text-lg font-extrabold text-amber-900">{top3.score} pts</span>
+                      </div>
+                    </Card>
+                  )}
+                </div>
+
+                {/* Tabela de Classificação do 4º ao 10º Lugar */}
+                <Card className="p-0 overflow-hidden">
+                  <div className="p-4 border-b border-brand-gray flex items-center justify-between bg-slate-50/50">
+                    <h3 className="font-bold text-xs uppercase tracking-wider text-slate-500">
+                      Classificação Geral ({filteredLeaderboard.length} Estudantes)
+                    </h3>
                   </div>
-                  <Avatar name={top3.name} size="md" className="mx-auto mt-2" />
-                  <div>
-                    <h4 className="font-bold text-xs sm:text-sm text-brand-dark truncate">{top3.name}</h4>
-                    <p className="text-[10px] text-slate-500 truncate">{top3.academicCourse}</p>
-                  </div>
-                  <div className="pt-1">
-                    <span className="text-lg font-extrabold text-amber-900">{top3.score} pts</span>
+
+                  <div className="divide-y divide-brand-gray">
+                    {restList.map((item, index) => (
+                      <div key={item.id} className="p-3.5 sm:p-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors">
+                        <div className="flex items-center gap-3">
+                          <span className="w-6 h-6 rounded-full bg-slate-100 text-slate-600 font-extrabold text-xs flex items-center justify-center shrink-0">
+                            {index + 4}
+                          </span>
+                          <Avatar name={item.name} size="sm" />
+                          <div>
+                            <h4 className="font-bold text-xs sm:text-sm text-brand-dark">{item.name}</h4>
+                            <p className="text-[11px] text-slate-500">{item.academicCourse}</p>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <div className="text-right">
+                            <span className="font-extrabold text-sm text-brand-dark">{item.score} pts</span>
+                            {item.returnedCount !== undefined && (
+                              <p className="text-[10px] text-slate-400">{item.returnedCount} devoluções</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    {restList.length === 0 && (
+                      <div className="p-6 text-center text-xs text-slate-400">
+                        Nenhum estudante adicional nesta faixa de classificação.
+                      </div>
+                    )}
                   </div>
                 </Card>
-              )}
-
-            </div>
-
-            {/* Tabela de Classificação do 4º ao 10º Lugar */}
-            <Card className="p-0 overflow-hidden">
-              <div className="p-4 border-b border-brand-gray flex items-center justify-between bg-slate-50/50">
-                <h3 className="font-bold text-xs uppercase tracking-wider text-slate-500">
-                  Classificação Geral ({filteredLeaderboard.length} Estudantes)
-                </h3>
-              </div>
-
-              <div className="divide-y divide-brand-gray">
-                {restList.map((item, index) => (
-                  <div key={item.id} className="p-3.5 sm:p-4 flex items-center justify-between gap-3 hover:bg-slate-50 transition-colors">
-                    <div className="flex items-center gap-3">
-                      <span className="w-6 h-6 rounded-full bg-slate-100 text-slate-600 font-extrabold text-xs flex items-center justify-center shrink-0">
-                        {index + 4}
-                      </span>
-                      <Avatar name={item.name} size="sm" />
-                      <div>
-                        <h4 className="font-bold text-xs sm:text-sm text-brand-dark">{item.name}</h4>
-                        <p className="text-[11px] text-slate-500">{item.academicCourse}</p>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="text-right">
-                        <span className="font-extrabold text-sm text-brand-dark">{item.score} pts</span>
-                        {item.returnedCount !== undefined && (
-                          <p className="text-[10px] text-slate-400">{item.returnedCount} devoluções</p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                {restList.length === 0 && (
-                  <div className="p-6 text-center text-xs text-slate-400">
-                    Nenhum estudante adicional encontrado para esta busca.
-                  </div>
-                )}
-              </div>
-            </Card>
-
+              </>
+            )}
           </section>
 
         </div>

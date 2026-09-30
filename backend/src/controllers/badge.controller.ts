@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../config/prisma';
+import { UserRole } from '@prisma/client';
 
 export class BadgeController {
   async listBadges(_req: Request, res: Response): Promise<void> {
@@ -26,6 +27,11 @@ export class BadgeController {
     const limitNum = Math.min(50, Math.max(1, parseInt(limit as string, 10) || 10));
 
     const leaders = await prisma.user.findMany({
+      where: {
+        role: {
+          notIn: [UserRole.ADMIN, UserRole.STAFF_PORTARIA],
+        },
+      },
       take: limitNum,
       orderBy: { reputationScore: 'desc' },
       select: {
