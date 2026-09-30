@@ -29,6 +29,9 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Notificação toast para ações diretas
+  const [notificationMsg, setNotificationMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
   // Modal de Edição de Perfil
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editName, setEditName] = useState('');
@@ -41,12 +44,16 @@ export default function ProfilePage() {
   // Estados de upload e salvamento
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [uploadingBanner, setUploadingBanner] = useState(false);
+  const [directUploadingBanner, setDirectUploadingBanner] = useState(false);
+  const [directUploadingAvatar, setDirectUploadingAvatar] = useState(false);
   const [savingProfile, setSavingProfile] = useState(false);
   const [modalError, setModalError] = useState('');
 
   // Refs para inputs de arquivo
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const bannerInputRef = useRef<HTMLInputElement>(null);
+  const directAvatarInputRef = useRef<HTMLInputElement>(null);
+  const directBannerInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     async function loadProfileData() {
@@ -109,12 +116,89 @@ export default function ProfilePage() {
     setIsEditModalOpen(true);
   }
 
-  function handleLogout() {
-    clearAuthSession();
-    router.push('/login');
+  // Upload DIRETO de Capa / Banner (Pela tela de perfil) e salvamento imediato
+  async function handleDirectBannerChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setNotificationMsg({ type: 'error', text: 'Por favor, selecione uma imagem válida (PNG, JPG, WEBP).' });
+      setTimeout(() => setNotificationMsg(null), 4000);
+      return;
+    }
+
+    if (file.size > 8 * 1024 * 1024) {
+      setNotificationMsg({ type: 'error', text: 'A capa do perfil deve ter no máximo 8MB.' });
+      setTimeout(() => setNotificationMsg(null), 4000);
+      return;
+    }
+
+    setDirectUploadingBanner(true);
+    try {
+      // 1. Upload da imagem para o Cloudinary
+      const res = await uploadImageToCloudinary(file, 'banners');
+
+      // 2. Salva a URL retornada do Cloudinary no banco de dados imediatamente
+      const updated = await updateMyProfile({
+        banerUrl: res.url,
+      });
+
+      setUser(updated);
+      setEditBanerUrl(res.url);
+      setNotificationMsg({ type: 'success', text: 'Capa do perfil atualizada e salva com sucesso!' });
+      setTimeout(() => setNotificationMsg(null), 4000);
+    } catch (err: any) {
+      console.error('Erro ao salvar capa no Cloudinary:', err);
+      setNotificationMsg({ type: 'error', text: err.message || 'Erro ao enviar capa para o Cloudinary.' });
+      setTimeout(() => setNotificationMsg(null), 4000);
+    } finally {
+      setDirectUploadingBanner(false);
+      if (directBannerInputRef.current) directBannerInputRef.current.value = '';
+    }
   }
 
-  // Upload de Foto de Perfil
+  // Upload DIRETO de Foto de Perfil (Pelo avatar) e salvamento imediato
+  async function handleDirectAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setNotificationMsg({ type: 'error', text: 'Por favor, selecione uma imagem válida (PNG, JPG, WEBP).' });
+      setTimeout(() => setNotificationMsg(null), 4000);
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setNotificationMsg({ type: 'error', text: 'A foto de perfil deve ter no máximo 5MB.' });
+      setTimeout(() => setNotificationMsg(null), 4000);
+      return;
+    }
+
+    setDirectUploadingAvatar(true);
+    try {
+      // 1. Upload da imagem para o Cloudinary
+      const res = await uploadImageToCloudinary(file, 'users');
+
+      // 2. Salva a URL retornada do Cloudinary no banco de dados imediatamente
+      const updated = await updateMyProfile({
+        avatarUrl: res.url,
+      });
+
+      setUser(updated);
+      setEditAvatarUrl(res.url);
+      setNotificationMsg({ type: 'success', text: 'Foto de perfil atualizada e salva com sucesso!' });
+      setTimeout(() => setNotificationMsg(null), 4000);
+    } catch (err: any) {
+      console.error('Erro ao salvar foto de perfil no Cloudinary:', err);
+      setNotificationMsg({ type: 'error', text: err.message || 'Erro ao enviar foto para o Cloudinary.' });
+      setTimeout(() => setNotificationMsg(null), 4000);
+    } finally {
+      setDirectUploadingAvatar(false);
+      if (directAvatarInputRef.current) directAvatarInputRef.current.value = '';
+    }
+  }
+
+  // Upload de Foto de Perfil no Modal
   async function handleAvatarFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -142,7 +226,7 @@ export default function ProfilePage() {
     }
   }
 
-  // Upload de Capa / Banner
+  // Upload de Capa / Banner no Modal
   async function handleBannerFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -179,7 +263,7 @@ export default function ProfilePage() {
     }
   }
 
-  // Salvar Edição Completa do Perfil
+  // Salvar Edição Completa do Perfil no Modal
   async function handleSaveProfile(e: React.FormEvent) {
     e.preventDefault();
     if (!editName.trim() || editName.trim().length < 3) {
@@ -201,6 +285,8 @@ export default function ProfilePage() {
 
       setUser(updated);
       setIsEditModalOpen(false);
+      setNotificationMsg({ type: 'success', text: 'Perfil salvo com sucesso!' });
+      setTimeout(() => setNotificationMsg(null), 4000);
     } catch (err: any) {
       console.error('Erro ao atualizar perfil:', err);
       setModalError(err.message || 'Erro ao salvar alterações no perfil.');
@@ -240,10 +326,44 @@ export default function ProfilePage() {
         userAvatar={user?.avatarUrl || undefined}
       />
 
+      {/* Notificação Toast Flutuante */}
+      {notificationMsg && (
+        <div
+          className={`fixed top-5 right-5 z-50 px-4 py-3 rounded-xl shadow-lg border text-xs font-semibold flex items-center gap-2 transition-all ${
+            notificationMsg.type === 'success'
+              ? 'bg-brand-blue text-white border-blue-400/30'
+              : 'bg-red-600 text-white border-red-500'
+          }`}
+        >
+          <i
+            className={`bx ${
+              notificationMsg.type === 'success' ? 'bx-check-circle text-brand-yellow' : 'bx-error-circle'
+            } text-base`}
+          ></i>
+          <span>{notificationMsg.text}</span>
+        </div>
+      )}
+
       {/* 2. Conteúdo Principal */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5">
         {/* Banner de Capa & Cabeçalho do Perfil */}
         <div className="bg-white border border-brand-gray rounded-custom overflow-hidden shadow-xs mb-6">
+          {/* Inputs Ocultos para Upload Direto */}
+          <input
+            ref={directBannerInputRef}
+            type="file"
+            accept="image/png, image/jpeg, image/webp"
+            className="hidden"
+            onChange={handleDirectBannerChange}
+          />
+          <input
+            ref={directAvatarInputRef}
+            type="file"
+            accept="image/png, image/jpeg, image/webp"
+            className="hidden"
+            onChange={handleDirectAvatarChange}
+          />
+
           {/* Capa com Imagem do Usuário ou Gradiente Oficial (Zero Green) */}
           <div
             className="h-36 sm:h-52 relative overflow-hidden bg-cover bg-center transition-all"
@@ -272,15 +392,25 @@ export default function ProfilePage() {
               </span>
             </div>
 
-            {/* Atalho Rápido para Alterar Capa */}
+            {/* Atalho Rápido para Alterar Capa Direto na Tela */}
             <div className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 z-10">
               <button
                 type="button"
-                onClick={handleOpenEditModal}
-                className="px-3 py-1.5 rounded-lg bg-black/50 hover:bg-black/70 backdrop-blur-md text-white text-xs font-semibold border border-white/20 flex items-center gap-1.5 transition-all shadow-xs cursor-pointer"
+                disabled={directUploadingBanner}
+                onClick={() => directBannerInputRef.current?.click()}
+                className="px-3 py-1.5 rounded-lg bg-black/60 hover:bg-black/80 backdrop-blur-md text-white text-xs font-semibold border border-white/20 flex items-center gap-1.5 transition-all shadow-xs cursor-pointer disabled:opacity-70"
               >
-                <i className="bx bx-camera text-brand-yellow text-sm"></i>
-                <span className="hidden sm:inline">Alterar Capa</span>
+                {directUploadingBanner ? (
+                  <>
+                    <i className="bx bx-loader-alt animate-spin text-brand-yellow text-sm"></i>
+                    <span>Salvando Capa...</span>
+                  </>
+                ) : (
+                  <>
+                    <i className="bx bx-camera text-brand-yellow text-sm"></i>
+                    <span className="hidden sm:inline">Alterar Capa</span>
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -299,11 +429,16 @@ export default function ProfilePage() {
                   />
                   <button
                     type="button"
-                    onClick={handleOpenEditModal}
+                    disabled={directUploadingAvatar}
+                    onClick={() => directAvatarInputRef.current?.click()}
                     title="Alterar foto de perfil"
-                    className="absolute -bottom-1 -right-1 w-8 h-8 rounded-xl bg-brand-blue text-white shadow-md flex items-center justify-center border-2 border-white hover:bg-blue-800 transition-all cursor-pointer"
+                    className="absolute -bottom-1 -right-1 w-8 h-8 rounded-xl bg-brand-blue text-white shadow-md flex items-center justify-center border-2 border-white hover:bg-blue-800 transition-all cursor-pointer disabled:opacity-70"
                   >
-                    <i className="bx bx-camera text-sm"></i>
+                    {directUploadingAvatar ? (
+                      <i className="bx bx-loader-alt animate-spin text-sm"></i>
+                    ) : (
+                      <i className="bx bx-camera text-sm"></i>
+                    )}
                   </button>
                 </div>
 
@@ -360,7 +495,7 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              {/* Botões de Ação do Perfil */}
+              {/* Botões de Ação do Perfil (Sem botão de sair) */}
               <div className="flex items-center gap-2 pt-2 sm:pt-0">
                 <Button
                   variant="outline"
@@ -369,15 +504,6 @@ export default function ProfilePage() {
                   onClick={handleOpenEditModal}
                 >
                   Editar Perfil
-                </Button>
-
-                <Button
-                  variant="danger"
-                  size="sm"
-                  leftIcon="bx-log-out"
-                  onClick={handleLogout}
-                >
-                  Sair
                 </Button>
               </div>
             </div>
@@ -591,7 +717,7 @@ export default function ProfilePage() {
               <label className="block text-xs font-medium text-slate-700 mb-1.5">
                 Capa do Perfil (Banner)
               </label>
-              
+
               <input
                 ref={bannerInputRef}
                 type="file"
@@ -639,6 +765,12 @@ export default function ProfilePage() {
                   )}
                 </div>
               </div>
+              {editBanerUrl && (
+                <div className="mt-1 flex items-center gap-1.5 text-[10px] text-emerald-700 bg-emerald-50 px-2 py-1 rounded border border-emerald-200 truncate">
+                  <i className="bx bx-cloud-check text-xs text-emerald-600 flex-shrink-0"></i>
+                  <span className="truncate">Cloudinary: {editBanerUrl}</span>
+                </div>
+              )}
               <p className="text-[11px] text-slate-400 mt-1">Recomendado: 1200 x 300px (JPG ou PNG até 8MB).</p>
             </div>
 
@@ -664,28 +796,36 @@ export default function ProfilePage() {
                   className="w-14 h-14 ring-2 ring-brand-blue/30 text-xl rounded-xl object-cover bg-white"
                 />
 
-                <div className="flex items-center gap-2">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    leftIcon="bx-camera"
-                    isLoading={uploadingAvatar}
-                    onClick={() => avatarInputRef.current?.click()}
-                  >
-                    {editAvatarUrl ? 'Trocar Foto' : 'Enviar Foto'}
-                  </Button>
-
-                  {editAvatarUrl && (
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
                     <Button
                       type="button"
-                      variant="ghost"
+                      variant="outline"
                       size="sm"
-                      className="text-red-600 hover:bg-red-50 text-xs"
-                      onClick={() => setEditAvatarUrl('')}
+                      leftIcon="bx-camera"
+                      isLoading={uploadingAvatar}
+                      onClick={() => avatarInputRef.current?.click()}
                     >
-                      Remover Foto
+                      {editAvatarUrl ? 'Trocar Foto' : 'Enviar Foto'}
                     </Button>
+
+                    {editAvatarUrl && (
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="text-red-600 hover:bg-red-50 text-xs"
+                        onClick={() => setEditAvatarUrl('')}
+                      >
+                        Remover Foto
+                      </Button>
+                    )}
+                  </div>
+                  {editAvatarUrl && (
+                    <div className="flex items-center gap-1 text-[10px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 truncate max-w-[280px]">
+                      <i className="bx bx-cloud-check text-xs text-emerald-600 flex-shrink-0"></i>
+                      <span className="truncate">Cloudinary: {editAvatarUrl}</span>
+                    </div>
                   )}
                 </div>
               </div>
