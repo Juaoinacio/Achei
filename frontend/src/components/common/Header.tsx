@@ -1,8 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Button, Avatar } from '../ui';
+import { getCurrentUser, clearAuthSession, getAuthToken } from '../../services/api';
 
 interface HeaderProps {
   searchTerm: string;
@@ -16,9 +18,35 @@ export const Header: React.FC<HeaderProps> = ({
   searchTerm,
   onSearchChange,
   onOpenPublishModal,
-  userName = 'Lucas Mendes',
-  userAvatar,
+  userName: propUserName,
+  userAvatar: propUserAvatar,
 }) => {
+  const router = useRouter();
+  const [user, setUser] = useState<any>(null);
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+    const token = getAuthToken();
+    const currentUser = getCurrentUser();
+    if (token && currentUser) {
+      setUser(currentUser);
+      setIsLogged(true);
+    } else {
+      setUser(null);
+      setIsLogged(false);
+    }
+  }, []);
+
+  function handleLogout() {
+    clearAuthSession();
+    setIsLogged(false);
+    setUser(null);
+    router.push('/login');
+  }
+
+  const displayName = propUserName || user?.name;
+  const displayAvatar = propUserAvatar || user?.avatarUrl;
+
   return (
     <header className="bg-brand-blue text-white sticky top-0 z-40 shadow-sm border-b border-brand-blueHover">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
@@ -56,25 +84,52 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <Button
-            variant="primary"
-            size="sm"
-            leftIcon="bx-plus"
-            onClick={onOpenPublishModal}
-            className="hidden sm:inline-flex"
-          >
-            Publicar Item
-          </Button>
+          {isLogged ? (
+            <>
+              <Button
+                variant="primary"
+                size="sm"
+                leftIcon="bx-plus"
+                onClick={onOpenPublishModal}
+                className="hidden sm:inline-flex"
+              >
+                Publicar Item
+              </Button>
 
-          <button className="relative w-9 h-9 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors cursor-pointer" title="Pistas e Alertas">
-            <i className="bx bx-bell text-xl"></i>
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-brand-blue"></span>
-          </button>
+              <button className="relative w-9 h-9 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors cursor-pointer" title="Pistas e Alertas">
+                <i className="bx bx-bell text-xl"></i>
+                <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-brand-blue"></span>
+              </button>
 
-          <Link href="/perfio" className="flex items-center gap-2 pl-2 border-l border-white/15 cursor-pointer hover:opacity-90 transition-opacity">
-            <Avatar src={userAvatar} name={userName} size="sm" />
-            <span className="hidden xl:inline text-xs font-semibold text-white">{userName}</span>
-          </Link>
+              <Link href="/perfio" className="flex items-center gap-2 pl-2 border-l border-white/15 cursor-pointer hover:opacity-90 transition-opacity">
+                <Avatar src={displayAvatar} name={displayName || 'Estudante'} size="sm" />
+                <span className="hidden xl:inline text-xs font-semibold text-white">{displayName || 'Estudante'}</span>
+              </Link>
+
+              {/* Botão de Logout com 1 Clique */}
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer border border-white/15"
+                title="Desconectar e Sair da Conta"
+              >
+                <i className="bx bx-log-out text-base text-brand-yellow"></i>
+                <span className="hidden sm:inline">Sair</span>
+              </button>
+            </>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link href="/login">
+                <Button variant="primary" size="sm" leftIcon="bx-log-in">
+                  Entrar
+                </Button>
+              </Link>
+              <Link href="/register" className="hidden sm:inline-block">
+                <Button variant="outline" size="sm" className="bg-transparent border-white/30 text-white hover:bg-white/10">
+                  Cadastrar
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
 
       </div>
