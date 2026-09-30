@@ -13,7 +13,7 @@ export const initialCourses = [
   { name: 'Psicologia', department: 'Ciências Humanas e Jurídicas' },
 ];
 
-async function main() {
+export async function seedCourses() {
   console.log('🌱 Populando cursos acadêmicos oficiais da Unochapecó...');
 
   for (const course of initialCourses) {
@@ -31,11 +31,13 @@ async function main() {
   console.log(`✅ ${initialCourses.length} cursos cadastrados com sucesso!`);
 }
 
-main()
-  .catch((e) => {
-    console.error('❌ Erro no seed de cursos:', e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+if (require.main === module) {
+  seedCourses()
+    .catch((e) => {
+      console.error('❌ Erro no seed de cursos:', e);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}

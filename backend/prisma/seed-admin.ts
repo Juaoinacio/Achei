@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import { prisma } from '../src/config/prisma';
 import { UserRole } from '@prisma/client';
 
-async function main() {
+export async function seedAdmin() {
   console.log('⚡ Iniciando seed do usuário Administrador...');
 
   const email = 'admin.uno@unochapeco.edu.br';
@@ -37,13 +37,16 @@ async function main() {
   console.log(`🔑 Senha:   ${plainPassword}`);
   console.log(`🛡️ Papel:   ${admin.role}`);
   console.log('--------------------------------------------------');
+  return admin;
 }
 
-main()
-  .catch((e) => {
-    console.error('❌ Erro ao criar usuário admin:', e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+if (require.main === module) {
+  seedAdmin()
+    .catch((e) => {
+      console.error('❌ Erro ao criar usuário admin:', e);
+      process.exit(1);
+    })
+    .finally(async () => {
+      await prisma.$disconnect();
+    });
+}

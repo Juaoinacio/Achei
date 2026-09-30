@@ -12,7 +12,10 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts",
     "seed:admin": "tsx prisma/seed-admin.ts",
-    "seed:courses": "tsx prisma/seed-courses.ts"
+    "seed:courses": "tsx prisma/seed-courses.ts",
+    "seed:blocks": "tsx prisma/seed-blocks.ts",
+    "seed:categories": "tsx prisma/seed-categories.ts",
+    "seed:badges": "tsx prisma/seed-badges.ts"
   },
   "keywords": [
     "achados-e-perdidos",
