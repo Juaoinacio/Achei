@@ -238,11 +238,12 @@ async function main() {
   });
 
   // Usuário 4: Administrador
+  const adminPasswordHash = await bcrypt.hash('barata123', 10);
   const adminUser = await prisma.user.create({
     data: {
-      name: 'Administrador Achei Unochapecó',
-      email: 'admin@unochapeco.edu.br',
-      passwordHash: defaultPasswordHash,
+      name: 'Administrador Unochapecó',
+      email: 'admin.uno@unochapeco.edu.br',
+      passwordHash: adminPasswordHash,
       role: UserRole.ADMIN,
       academicCourse: 'DTI - Tecnologia da Informação',
       academicPeriod: null,
