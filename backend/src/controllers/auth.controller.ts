@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import { z } from 'zod';
 import { prisma } from '../config/prisma';
-import { generateToken } from '../utils/jwt';
+import { generateToken, getTokenExpirationDate } from '../utils/jwt';
 import { AppError } from '../middlewares/error.middleware';
 
 const registerSchema = z.object({
@@ -78,6 +78,21 @@ export class AuthController {
       role: user.role,
     });
 
+    const userAgent = (req.headers['user-agent'] as string) || null;
+    const ipAddress = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || null;
+
+    // Registra sessão ativa no banco de dados
+    await prisma.userSession.create({
+      data: {
+        userId: user.id,
+        token,
+        userAgent,
+        ipAddress,
+        isActive: true,
+        expiresAt: getTokenExpirationDate(),
+      },
+    });
+
     res.status(201).json({
       message: 'Cadastro realizado com sucesso!',
       user,
@@ -118,6 +133,21 @@ export class AuthController {
       role: user.role,
     });
 
+    const userAgent = (req.headers['user-agent'] as string) || null;
+    const ipAddress = (req.headers['x-forwarded-for'] as string) || req.socket.remoteAddress || null;
+
+    // Registra sessão ativa no banco de dados
+    await prisma.userSession.create({
+      data: {
+        userId: user.id,
+        token,
+        userAgent,
+        ipAddress,
+        isActive: true,
+        expiresAt: getTokenExpirationDate(),
+      },
+    });
+
     const { passwordHash: _, ...safeUser } = user;
 
     res.json({
@@ -125,5 +155,63 @@ export class AuthController {
       user: safeUser,
       token,
     });
+  }
+
+  async logout(req: Request, res: Response): Promise<void> {
+    const authHeader = req.headers.authorization;
+    if (authHeader) {
+      const [, token] = authHeader.split(' ');
+      if (token) {
+        await prisma.userSession.updateMany({
+          where: { token },
+          data: { isActive: false },
+        });
+      }
+    }
+
+    res.json({ message: 'Sessão encerrada com sucesso!' });
+  }
+
+  async logoutAll(req: Request, res: Response): Promise<void> {
+    const userId = req.user!.id;
+
+    await prisma.userSession.updateMany({
+      where: { userId, isActive: true },
+      data: { isActive: false },
+    });
+
+    res.json({ message: 'Todas as sessões ativas foram encerradas com sucesso!' });
+  }
+
+  async listSessions(req: Request, res: Response): Promise<void> {
+    const userId = req.user!.id;
+    const authHeader = req.headers.authorization;
+    const currentToken = authHeader?.split(' ')[1];
+
+    const sessions = await prisma.userSession.findMany({
+      where: {
+        userId,
+        isActive: true,
+        expiresAt: { gt: new Date() },
+      },
+      orderBy: { createdAt: 'desc' },
+      select: {
+        id: true,
+        userAgent: true,
+        ipAddress: true,
+        createdAt: true,
+        token: true,
+      },
+    });
+
+    const formatted = sessions.map((s) => ({
+      id: s.id,
+      userAgent: s.userAgent,
+      ipAddress: s.ipAddress,
+      createdAt: s.createdAt,
+      isCurrent: s.token === currentToken,
+    }));
+
+    res.json(formatted);
   }
 }

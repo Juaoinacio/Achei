@@ -1,8 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwt';
 import { UserRole } from '@prisma/client';
+import { prisma } from '../config/prisma';
 
-export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
+export async function authMiddleware(req: Request, res: Response, next: NextFunction): Promise<void> {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -19,6 +20,18 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
 
   try {
     const decoded = verifyToken(token);
+
+    // Validação de Sessão Ativa no Banco de Dados
+    const session = await prisma.userSession.findUnique({
+      where: { token },
+      select: { id: true, isActive: true, expiresAt: true },
+    });
+
+    if (!session || !session.isActive || session.expiresAt < new Date()) {
+      res.status(401).json({ message: 'Sessão encerrada, inválida ou expirada. Faça login novamente.' });
+      return;
+    }
+
     req.user = decoded;
     next();
   } catch (error) {
@@ -26,7 +39,8 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
   }
 }
 
-export function optionalAuthMiddleware(req: Request, _res: Response, next: NextFunction): void {
+
+export async function optionalAuthMiddleware(req: Request, _res: Response, next: NextFunction): Promise<void> {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -38,7 +52,15 @@ export function optionalAuthMiddleware(req: Request, _res: Response, next: NextF
   if (scheme === 'Bearer' && token) {
     try {
       const decoded = verifyToken(token);
-      req.user = decoded;
+
+      const session = await prisma.userSession.findUnique({
+        where: { token },
+        select: { id: true, isActive: true, expiresAt: true },
+      });
+
+      if (session && session.isActive && session.expiresAt >= new Date()) {
+        req.user = decoded;
+      }
     } catch {
       // Ignore token failure on optional auth
     }

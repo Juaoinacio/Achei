@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Card, Badge, Button, Input } from '../../components/ui';
-import { saveAuthSession, getCurrentUser, clearAuthSession } from '../../services/api';
+import { saveAuthSession, getCurrentUser, clearAuthSession, logoutUser } from '../../services/api';
 
 interface ApiRouteDef {
   id: string;
@@ -49,6 +49,36 @@ const API_ROUTES: ApiRouteDef[] = [
       password: 'senha',
       academicCourse: 'Ciência da Computação'
     },
+  },
+  {
+    id: 'auth-logout',
+    method: 'POST',
+    path: '/api/auth/logout',
+    category: 'auth',
+    categoryLabel: 'Autenticação',
+    title: 'Logout e Revogação de Sessão',
+    description: 'Invalida a sessão ativa do token no banco de dados e remove autorização.',
+    requiresAuth: true,
+  },
+  {
+    id: 'auth-sessions',
+    method: 'GET',
+    path: '/api/auth/sessions',
+    category: 'auth',
+    categoryLabel: 'Autenticação',
+    title: 'Sessões Ativas do Usuário',
+    description: 'Lista dispositivos e sessões conectadas do usuário no banco de dados.',
+    requiresAuth: true,
+  },
+  {
+    id: 'auth-logout-all',
+    method: 'POST',
+    path: '/api/auth/logout-all',
+    category: 'auth',
+    categoryLabel: 'Autenticação',
+    title: 'Encerrar Todas as Sessões',
+    description: 'Revoga todos os tokens e sessões ativas do usuário em todos os dispositivos.',
+    requiresAuth: true,
   },
   {
     id: 'users-me',
@@ -256,8 +286,8 @@ export default function RoutersPage() {
     }
   }
 
-  function handleLogout() {
-    clearAuthSession();
+  async function handleLogout() {
+    await logoutUser();
     setCurrentUser(null);
   }
 

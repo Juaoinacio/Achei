@@ -17,3 +17,8 @@ export function generateToken(payload: TokenPayload): string {
 export function verifyToken(token: string): TokenPayload {
   return jwt.verify(token, JWT_SECRET) as TokenPayload;
 }
+
+export function getTokenExpirationDate(): Date {
+  // Padrão: 7 dias a partir do momento de criação
+  return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+}

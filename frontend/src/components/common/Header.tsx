@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Button, Avatar } from '../ui';
-import { getCurrentUser, clearAuthSession, getAuthToken } from '../../services/api';
+import { getCurrentUser, logoutUser, getAuthToken } from '../../services/api';
 
 interface HeaderProps {
   searchTerm: string;
@@ -37,8 +37,8 @@ export const Header: React.FC<HeaderProps> = ({
     }
   }, []);
 
-  function handleLogout() {
-    clearAuthSession();
+  async function handleLogout() {
+    await logoutUser();
     setIsLogged(false);
     setUser(null);
     router.push('/login');

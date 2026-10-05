@@ -208,6 +208,18 @@ export function saveAuthSession(token: string, user: any): void {
   }
 }
 
+export async function logoutUser(): Promise<void> {
+  try {
+    if (getAuthToken()) {
+      await fetchApi('/auth/logout', { method: 'POST' });
+    }
+  } catch (e) {
+    console.warn('Erro ao invalidar sessão no servidor:', e);
+  } finally {
+    clearAuthSession();
+  }
+}
+
 export function clearAuthSession(): void {
   if (typeof window !== 'undefined') {
     localStorage.removeItem('achei_token');
