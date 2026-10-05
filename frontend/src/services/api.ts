@@ -31,6 +31,10 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
       try {
         const errorData = await response.json();
         if (errorData.message) errorMessage = errorData.message;
+        if (errorData.errors && Array.isArray(errorData.errors) && errorData.errors.length > 0) {
+          const details = errorData.errors.map((e: any) => `${e.field ? `${e.field}: ` : ''}${e.message}`).join(', ');
+          errorMessage = `${errorData.message} (${details})`;
+        }
       } catch {
         // Ignore JSON parse error on non-JSON response
       }

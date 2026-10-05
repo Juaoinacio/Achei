@@ -50,15 +50,18 @@ export const PublishModal: React.FC<PublishModalProps> = ({
     }
   }
 
-  // Sincronizar defaults se blocks ou categories carregarem depois
+  // Sincronizar defaults quando modal abre ou quando categorias e blocos carregam
   React.useEffect(() => {
-    if (!categoryId && categories.length > 0) {
-      setCategoryId(categories[0].id);
+    if (isOpen) {
+      if ((!categoryId || !categories.some((c) => c.id === categoryId)) && categories.length > 0) {
+        setCategoryId(categories[0].id);
+      }
+      if ((!blockId || !blocks.some((b) => b.id === blockId)) && blocks.length > 0) {
+        setBlockId(blocks[0].id);
+      }
+      setErrorMsg('');
     }
-    if (!blockId && blocks.length > 0) {
-      setBlockId(blocks[0].id);
-    }
-  }, [categories, blocks, categoryId, blockId]);
+  }, [isOpen, categories, blocks, categoryId, blockId]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -66,8 +69,16 @@ export const PublishModal: React.FC<PublishModalProps> = ({
       setErrorMsg('Por favor, preencha o título e a descrição do pertence.');
       return;
     }
+    if (title.trim().length < 3) {
+      setErrorMsg('O título deve conter no mínimo 3 caracteres.');
+      return;
+    }
+    if (description.trim().length < 3) {
+      setErrorMsg('A descrição deve conter no mínimo 3 caracteres.');
+      return;
+    }
     if (!categoryId || !blockId) {
-      setErrorMsg('Selecione uma categoria e um bloco.');
+      setErrorMsg('Selecione uma categoria e um bloco do campus.');
       return;
     }
 

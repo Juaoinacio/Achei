@@ -9,6 +9,7 @@ const updateProfileSchema = z.object({
   academicPeriod: z.number().int().min(1).max(12).nullable().optional(),
   avatarUrl: z.string().url().nullable().optional(),
   banerUrl: z.string().url().nullable().optional(),
+  bannerUrl: z.string().url().nullable().optional(),
   frequentedBlockIds: z.array(z.string()).optional(),
 });
 
@@ -53,7 +54,10 @@ export class UserController {
       throw new AppError('Usuário não encontrado.', 404);
     }
 
-    res.json(user);
+    res.json({
+      ...user,
+      bannerUrl: user.banerUrl,
+    });
   }
 
   async updateProfile(req: Request, res: Response): Promise<void> {
@@ -65,7 +69,9 @@ export class UserController {
     if (data.academicCourse !== undefined) updateData.academicCourse = data.academicCourse;
     if (data.academicPeriod !== undefined) updateData.academicPeriod = data.academicPeriod;
     if (data.avatarUrl !== undefined) updateData.avatarUrl = data.avatarUrl;
-    if (data.banerUrl !== undefined) updateData.banerUrl = data.banerUrl;
+    
+    const banner = data.banerUrl !== undefined ? data.banerUrl : data.bannerUrl;
+    if (banner !== undefined) updateData.banerUrl = banner;
 
     if (data.frequentedBlockIds !== undefined) {
       updateData.frequentedBlocks = {
@@ -95,7 +101,10 @@ export class UserController {
 
     res.json({
       message: 'Perfil atualizado com sucesso!',
-      user: updatedUser,
+      user: {
+        ...updatedUser,
+        bannerUrl: updatedUser.banerUrl,
+      },
     });
   }
 

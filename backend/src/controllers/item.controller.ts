@@ -6,27 +6,27 @@ import { ItemType, ItemStatus } from '@prisma/client';
 
 const createItemSchema = z.object({
   title: z.string().min(3, 'O título deve ter no mínimo 3 caracteres.'),
-  description: z.string().min(10, 'A descrição deve ter no mínimo 10 caracteres.'),
+  description: z.string().min(3, 'A descrição deve ter no mínimo 3 caracteres.'),
   type: z.nativeEnum(ItemType, { message: 'Tipo inválido. Deve ser LOST ou FOUND.' }),
   categoryId: z.string().uuid('ID de categoria inválido.'),
   blockId: z.string().uuid('ID de bloco inválido.'),
-  specificLocation: z.string().optional(),
-  photoUrl: z.string().url('URL da foto inválida.').optional(),
+  specificLocation: z.string().nullable().optional().or(z.literal('')).transform((v) => (v ? v : undefined)),
+  photoUrl: z.string().url('URL da foto inválida.').nullable().optional().or(z.literal('')).transform((v) => (v ? v : undefined)),
   hasReward: z.boolean().optional(),
   isUnderStaffCustody: z.boolean().optional(),
-  custodyLocation: z.string().optional(),
+  custodyLocation: z.string().nullable().optional().or(z.literal('')).transform((v) => (v ? v : undefined)),
 });
 
 const updateItemSchema = z.object({
   title: z.string().min(3).optional(),
-  description: z.string().min(10).optional(),
+  description: z.string().min(3).optional(),
   categoryId: z.string().uuid().optional(),
   blockId: z.string().uuid().optional(),
-  specificLocation: z.string().optional(),
-  photoUrl: z.string().url().optional(),
+  specificLocation: z.string().nullable().optional().or(z.literal('')).transform((v) => (v ? v : undefined)),
+  photoUrl: z.string().url().nullable().optional().or(z.literal('')).transform((v) => (v ? v : undefined)),
   hasReward: z.boolean().optional(),
   isUnderStaffCustody: z.boolean().optional(),
-  custodyLocation: z.string().optional(),
+  custodyLocation: z.string().nullable().optional().or(z.literal('')).transform((v) => (v ? v : undefined)),
 });
 
 export class ItemController {
