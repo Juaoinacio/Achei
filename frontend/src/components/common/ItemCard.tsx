@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import Link from 'next/link';
 import { Item } from '../../types';
 import { toggleItemLike, toggleItemSave, getCurrentUser } from '../../services/api';
 import { Button, Badge, Card, Avatar } from '../ui';
@@ -12,6 +11,7 @@ interface ItemCardProps {
   onOpenHintModal: (item: Item) => void;
   onOpenPinModal: (item: Item) => void;
   onOpenEditModal?: (item: Item) => void;
+  onOpenDetailModal?: (item: Item, autoFocusComment?: boolean) => void;
 }
 
 export const ItemCard: React.FC<ItemCardProps> = ({
@@ -20,6 +20,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   onOpenHintModal,
   onOpenPinModal,
   onOpenEditModal,
+  onOpenDetailModal,
 }) => {
   const currentUser = getCurrentUser();
   const isAuthor = currentUser && item && currentUser.id === item.authorId;
@@ -66,8 +67,17 @@ export const ItemCard: React.FC<ItemCardProps> = ({
 
   return (
     <Card hoverable className="space-y-3.5 transition-all hover:border-brand-blue/30">
-      {/* Bloco Completo do Pertence com Link */}
-      <Link href={`/item/${item.id}`} className="block space-y-3.5 group cursor-pointer">
+      {/* Bloco Completo do Pertence - Abre Modal de Detalhes */}
+      <div
+        onClick={() => {
+          if (onOpenDetailModal) {
+            onOpenDetailModal(item);
+          } else {
+            onOpenHintModal(item);
+          }
+        }}
+        className="block space-y-3.5 group cursor-pointer"
+      >
         {/* Cabeçalho do Card: Autor e Badges */}
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2.5">
@@ -165,7 +175,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
             </span>
           )}
         </div>
-      </Link>
+      </div>
 
       {/* Ações de Rodapé: Curtir, Salvar, Pista e Reivindicação */}
       <div className="flex items-center justify-between gap-2 pt-2 border-t border-brand-gray text-xs">
@@ -199,9 +209,15 @@ export const ItemCard: React.FC<ItemCardProps> = ({
 
           {/* Botão Comentários */}
           <button
-            onClick={() => onOpenHintModal(item)}
+            onClick={() => {
+              if (onOpenDetailModal) {
+                onOpenDetailModal(item, true);
+              } else {
+                onOpenHintModal(item);
+              }
+            }}
             className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-brand-gray text-slate-600 font-medium transition-colors cursor-pointer"
-            title="Enviar comentário para ajudar"
+            title="Ver item e comentários"
           >
             <i className="bx bx-message-rounded-dots text-brand-blue text-base"></i>
             <span className="hidden sm:inline">Comentários</span>
@@ -216,7 +232,13 @@ export const ItemCard: React.FC<ItemCardProps> = ({
               variant="secondary"
               size="sm"
               leftIcon="bx-message-square-dots"
-              onClick={() => onOpenHintModal(item)}
+              onClick={() => {
+                if (onOpenDetailModal) {
+                  onOpenDetailModal(item, true);
+                } else {
+                  onOpenHintModal(item);
+                }
+              }}
             >
               Vi esse item!
             </Button>

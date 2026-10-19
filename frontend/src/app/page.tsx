@@ -15,6 +15,7 @@ import { ClaimModal } from '../components/modals/ClaimModal';
 import { HandoffPinModal } from '../components/modals/HandoffPinModal';
 import { CommentsModal } from '../components/modals/CommentsModal';
 import { EditItemModal } from '../components/modals/EditItemModal';
+import { ItemDetailModal } from '../components/modals/ItemDetailModal';
 
 export default function HomePage() {
   const router = useRouter();
@@ -59,6 +60,9 @@ export default function HomePage() {
   const [selectedHintItem, setSelectedHintItem] = useState<Item | null>(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedEditItem, setSelectedEditItem] = useState<Item | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedDetailItem, setSelectedDetailItem] = useState<Item | null>(null);
+  const [autoFocusComment, setAutoFocusComment] = useState(false);
 
   // Carregar Blocos e Categorias no Mount
   useEffect(() => {
@@ -373,13 +377,19 @@ export default function HomePage() {
               <ItemCard
                 key={item.id}
                 item={item}
+                onOpenDetailModal={(it, focus) => {
+                  setSelectedDetailItem(it);
+                  setAutoFocusComment(focus ?? false);
+                  setIsDetailModalOpen(true);
+                }}
                 onOpenClaimModal={(it) => {
                   setSelectedClaimItem(it);
                   setIsClaimModalOpen(true);
                 }}
                 onOpenHintModal={(it) => {
-                  setSelectedHintItem(it);
-                  setIsHintModalOpen(true);
+                  setSelectedDetailItem(it);
+                  setAutoFocusComment(true);
+                  setIsDetailModalOpen(true);
                 }}
                 onOpenPinModal={(it) => {
                   setSelectedPinItem(it);
@@ -460,6 +470,30 @@ export default function HomePage() {
         item={selectedEditItem}
         blocks={blocks}
         categories={categories}
+      />
+
+      <ItemDetailModal
+        isOpen={isDetailModalOpen}
+        onClose={() => {
+          setIsDetailModalOpen(false);
+          setSelectedDetailItem(null);
+          setAutoFocusComment(false);
+        }}
+        item={selectedDetailItem}
+        onItemUpdated={() => fetchItems()}
+        onOpenClaimModal={(it) => {
+          setSelectedClaimItem(it);
+          setIsClaimModalOpen(true);
+        }}
+        onOpenPinModal={(it) => {
+          setSelectedPinItem(it);
+          setIsPinModalOpen(true);
+        }}
+        onOpenEditModal={(it) => {
+          setSelectedEditItem(it);
+          setIsEditModalOpen(true);
+        }}
+        autoFocusComment={autoFocusComment}
       />
 
     </div>

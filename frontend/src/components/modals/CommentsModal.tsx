@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Item, Hint } from '../../types';
 import {
   getItemHints,
@@ -191,15 +190,6 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <Link
-              href={`/item/${item.id}`}
-              onClick={onClose}
-              className="text-xs font-semibold text-brand-blue hover:text-blue-700 bg-blue-50 hover:bg-blue-100/70 border border-blue-200 px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1"
-              title="Ver item"
-            >
-              <i className="bx bx-show text-sm"></i>
-              <span className="hidden sm:inline">Ver item</span>
-            </Link>
             <button
               onClick={onClose}
               className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-brand-dark flex items-center justify-center transition-colors cursor-pointer"
