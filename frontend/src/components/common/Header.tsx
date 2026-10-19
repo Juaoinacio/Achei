@@ -90,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
                 Publicar Item
               </Button>
 
-              <button className="relative w-9 h-9 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors cursor-pointer" title="Notificações e Alertas">
+              <button className="relative w-9 h-9 rounded-lg hover:bg-brand-blueHover flex items-center justify-center text-white transition-colors cursor-pointer" title="Notificações e Alertas">
                 <i className="bx bx-bell text-xl"></i>
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-brand-blue"></span>
               </button>
@@ -103,7 +103,7 @@ export const Header: React.FC<HeaderProps> = ({
               {/* Botão de Logout com 1 Clique */}
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold text-slate-200 hover:text-white hover:bg-white/10 transition-colors cursor-pointer border border-white/15"
+                className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold text-white bg-brand-blueHover hover:bg-[#0F224D] transition-colors cursor-pointer border-0 shadow-xs"
                 title="Desconectar e Sair da Conta"
               >
                 <i className="bx bx-log-out text-base text-brand-yellow"></i>
@@ -119,7 +119,7 @@ export const Header: React.FC<HeaderProps> = ({
               </Link>
               <Link
                 href="/register"
-                className="hidden sm:inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border border-white/35 text-white hover:bg-white/15 hover:border-white/60 transition-all select-none active:scale-95 cursor-pointer"
+                className="hidden sm:inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg text-white bg-brand-blueHover hover:bg-[#0F224D] transition-all select-none active:scale-95 cursor-pointer border-0 shadow-xs"
               >
                 Cadastrar
               </Link>

@@ -37,8 +37,8 @@ export const Button: React.FC<ButtonProps> = ({
     primary: 'bg-brand-yellow hover:bg-brand-yellowHover text-brand-dark font-extrabold shadow-xs',
     secondary: 'bg-brand-blue hover:bg-brand-blueHover text-white font-bold shadow-xs',
     lilac: 'bg-brand-lilac hover:bg-brand-lilacHover text-white font-bold shadow-xs',
-    outline: 'bg-white hover:bg-slate-50 text-brand-dark border border-brand-gray font-bold',
-    ghost: 'bg-transparent hover:bg-slate-100 text-slate-600 font-semibold shadow-none',
+    outline: 'bg-white hover:bg-slate-100 text-brand-dark border border-brand-gray hover:border-slate-300 font-bold',
+    ghost: 'bg-transparent hover:bg-slate-200 text-slate-700 font-semibold shadow-none',
     danger: 'bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold',
   };
 
