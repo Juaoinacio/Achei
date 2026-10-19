@@ -74,14 +74,12 @@ export default function HomePage() {
     loadMeta();
   }, []);
 
-  // Carregar Itens da API baseado nos filtros
+  // Carregar Itens da API baseado nos filtros de busca, bloco e categoria
   const fetchItems = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const typeParam = typeFilter === 'ALL' ? undefined : (typeFilter as ItemType);
       const res = await getFeedItems({
-        type: typeParam,
         blockId: selectedBlockId !== 'all' ? selectedBlockId : undefined,
         categoryId: selectedCategoryId !== 'all' ? selectedCategoryId : undefined,
         q: searchTerm.trim() ? searchTerm.trim() : undefined,
@@ -104,7 +102,7 @@ export default function HomePage() {
     } finally {
       setLoading(false);
     }
-  }, [typeFilter, selectedBlockId, selectedCategoryId, searchTerm, activeNavTab]);
+  }, [selectedBlockId, selectedCategoryId, searchTerm, activeNavTab]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -117,6 +115,12 @@ export default function HomePage() {
   const totalCount = items.length;
   const lostCount = items.filter((i) => i.type === 'LOST').length;
   const foundCount = items.filter((i) => i.type === 'FOUND').length;
+
+  // Itens exibidos de acordo com a aba selecionada (Todos / Perdidos / Achados)
+  const displayedItems = items.filter((item) => {
+    if (typeFilter === 'ALL') return true;
+    return item.type === typeFilter;
+  });
 
   if (!authChecked) {
     return (
@@ -328,14 +332,18 @@ export default function HomePage() {
             )}
 
             {/* Estado Vazio */}
-            {!loading && items.length === 0 && (
+            {!loading && displayedItems.length === 0 && (
               <Card className="text-center p-8 space-y-3">
                 <div className="w-12 h-12 rounded-full bg-blue-50 text-brand-blue flex items-center justify-center text-2xl mx-auto">
                   <i className="bx bx-search-alt"></i>
                 </div>
                 <h3 className="font-bold text-sm text-brand-dark">Nenhum pertence encontrado</h3>
                 <p className="text-xs text-slate-500 max-w-sm mx-auto">
-                  {searchTerm
+                  {typeFilter === 'LOST'
+                    ? 'Nenhum pertence perdido cadastrado com os filtros selecionados.'
+                    : typeFilter === 'FOUND'
+                    ? 'Nenhum pertence achado cadastrado com os filtros selecionados.'
+                    : searchTerm
                     ? `Nenhum resultado corresponde à busca "${searchTerm}". Tente outros termos ou limpe o filtro.`
                     : 'Não há publicações cadastradas com os filtros selecionados no momento.'}
                 </p>
@@ -358,7 +366,7 @@ export default function HomePage() {
             )}
 
             {/* Lista dos Itens do Feed */}
-            {items.map((item) => (
+            {displayedItems.map((item) => (
               <ItemCard
                 key={item.id}
                 item={item}
