@@ -232,40 +232,9 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
         </button>
 
         {/* ==================================================== */}
-        {/* COLUNA ESQUERDA (Visual & Badges) - Fundo Claro      */}
+        {/* COLUNA ESQUERDA (Visual da Imagem) - Fundo Claro     */}
         {/* ==================================================== */}
         <div className="lg:col-span-7 bg-slate-100/90 relative flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden h-[260px] sm:h-[320px] lg:h-full lg:border-r border-b lg:border-b-0 border-slate-200/80">
-          {/* Badges Flutuantes Superiores */}
-          <div className="absolute top-3 left-3 sm:top-4 sm:left-4 right-12 z-20 flex items-center gap-1.5 flex-wrap pointer-events-none">
-            <div className="flex items-center gap-1.5 flex-wrap pointer-events-auto">
-              {item.status === 'RETURNED' ? (
-                <Badge variant="returned" size="md" icon="bx-check-double">
-                  {isLost ? 'RECUPERADO' : 'DEVOLVIDO'}
-                </Badge>
-              ) : isLost ? (
-                <Badge variant="lost" size="md" icon="bx-help-circle">
-                  PERDIDO
-                </Badge>
-              ) : (
-                <Badge variant="found" size="md" icon="bx-check-circle">
-                  ACHADO
-                </Badge>
-              )}
-
-              {item.isUnderStaffCustody && (
-                <Badge variant="portaria" size="md" icon="bx-shield-quarter">
-                  NA PORTARIA
-                </Badge>
-              )}
-
-              {item.hasReward && (
-                <Badge variant="reward" size="md" icon="bx-gift">
-                  COM RECOMPENSA
-                </Badge>
-              )}
-            </div>
-          </div>
-
           {/* Imagem ou Ilustração de Placeholder */}
           {item.photoUrl ? (
             <div className="w-full h-full flex items-center justify-center p-2 overflow-hidden">
@@ -290,26 +259,6 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
               </div>
             </div>
           )}
-
-          {/* Badges Flutuantes Inferiores: Localização */}
-          <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 right-3 sm:right-4 z-20 flex items-center justify-between gap-2 flex-wrap pointer-events-none">
-            <div className="flex items-center gap-1.5 flex-wrap pointer-events-auto">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/95 text-brand-dark shadow-xs backdrop-blur-md text-xs font-semibold border border-brand-gray">
-                <i className="bx bx-buildings text-brand-blue"></i>
-                <span>{item.block?.name || 'Campus Unochapecó'}</span>
-                {item.specificLocation && (
-                  <span className="text-slate-500">• {item.specificLocation}</span>
-                )}
-              </span>
-            </div>
-
-            {item.custodyLocation && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-100 text-purple-800 shadow-xs backdrop-blur-md text-xs font-bold border border-purple-200 pointer-events-auto">
-                <i className="bx bx-map-pin"></i>
-                <span>Guarda: {item.custodyLocation}</span>
-              </span>
-            )}
-          </div>
         </div>
 
         {/* ==================================================== */}
@@ -380,13 +329,61 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           {/* 2. Área de Detalhes & Feed de Comentários com Scroll */}
           <div className="flex-1 min-h-0 p-3.5 sm:p-4 overflow-y-auto space-y-4 custom-scrollbar">
             {/* Título e Descrição */}
-            <div className="space-y-1.5 pb-3 border-b border-slate-100">
+            <div className="space-y-2 pb-3 border-b border-slate-100">
+              {/* Badges de Tipo e Status */}
+              <div className="flex items-center gap-1.5 flex-wrap mb-2">
+                {item.status === 'RETURNED' ? (
+                  <Badge variant="returned" size="md" icon="bx-check-double">
+                    {isLost ? 'RECUPERADO' : 'DEVOLVIDO'}
+                  </Badge>
+                ) : isLost ? (
+                  <Badge variant="lost" size="md" icon="bx-help-circle">
+                    PERDIDO
+                  </Badge>
+                ) : (
+                  <Badge variant="found" size="md" icon="bx-check-circle">
+                    ACHADO
+                  </Badge>
+                )}
+
+                {item.isUnderStaffCustody && (
+                  <Badge variant="portaria" size="md" icon="bx-shield-quarter">
+                    NA PORTARIA
+                  </Badge>
+                )}
+
+                {item.hasReward && (
+                  <Badge variant="reward" size="md" icon="bx-gift">
+                    COM RECOMPENSA
+                  </Badge>
+                )}
+              </div>
+
               <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug">
                 {item.title}
               </h3>
               <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap">
                 {item.description}
               </p>
+
+              {/* Localização */}
+              <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-brand-dark text-xs font-semibold border border-slate-200">
+                  <i className="bx bx-buildings text-brand-blue"></i>
+                  <span>{item.block?.name || 'Campus Unochapecó'}</span>
+                  {item.specificLocation && (
+                    <span className="text-slate-500">• {item.specificLocation}</span>
+                  )}
+                </span>
+
+                {item.custodyLocation && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-100 text-purple-800 text-xs font-bold border border-purple-200">
+                    <i className="bx bx-map-pin"></i>
+                    <span>Guarda: {item.custodyLocation}</span>
+                  </span>
+                )}
+              </div>
+
               <div className="flex items-center gap-2 text-[11px] text-slate-400 pt-1">
                 <span>Publicado {formatRelativeTime(item.createdAt)}</span>
                 {item.category && (
