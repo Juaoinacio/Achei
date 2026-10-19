@@ -335,101 +335,98 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             </div>
           </div>
 
-          {/* 2. Área de Detalhes & Feed de Comentários com Scroll */}
-          <div className="flex-1 min-h-0 p-3.5 sm:p-4 overflow-y-auto space-y-4 custom-scrollbar">
-            {/* Título e Status lado a lado (justify-between) */}
-            <div className="space-y-2 pb-3 border-b border-slate-100">
-              {/* Metadados: Categoria • Tempo Relativo */}
-              <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-                {item.category && (
-                  <>
-                    <span className="font-bold text-brand-blue">
-                      {item.category.name}
-                    </span>
-                    <span>•</span>
-                  </>
+          {/* 2. Cabeçalho Travado: Detalhes do Pertence (Título, Status, Localização) */}
+          <div className="p-3.5 sm:p-4 shrink-0 bg-white space-y-2 border-b border-brand-gray">
+            {/* Metadados: Categoria • Tempo Relativo */}
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+              {item.category && (
+                <>
+                  <span className="font-bold text-brand-blue">
+                    {item.category.name}
+                  </span>
+                  <span>•</span>
+                </>
+              )}
+              <span>Publicado {formatRelativeTime(item.createdAt)}</span>
+            </div>
+
+            <div className="flex items-start justify-between gap-3">
+              <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug flex-1">
+                {item.title}
+              </h3>
+
+              {/* Badges de Tipo e Status */}
+              <div className="flex items-center gap-1.5 flex-wrap justify-end shrink-0">
+                {item.status === 'RETURNED' ? (
+                  <Badge variant="returned" size="sm" icon="bx-check-double">
+                    {isLost ? 'RECUPERADO' : 'DEVOLVIDO'}
+                  </Badge>
+                ) : isLost ? (
+                  <Badge variant="lost" size="sm" icon="bx-help-circle">
+                    PERDIDO
+                  </Badge>
+                ) : (
+                  <Badge variant="found" size="sm" icon="bx-check-circle">
+                    ACHADO
+                  </Badge>
                 )}
-                <span>Publicado {formatRelativeTime(item.createdAt)}</span>
+
+                {item.isUnderStaffCustody && (
+                  <Badge variant="portaria" size="sm" icon="bx-shield-quarter">
+                    PORTARIA
+                  </Badge>
+                )}
+
+                {item.hasReward && (
+                  <Badge variant="reward" size="sm" icon="bx-gift">
+                    RECOMPENSA
+                  </Badge>
+                )}
               </div>
+            </div>
+            <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap">
+              {item.description}
+            </p>
 
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug flex-1">
-                  {item.title}
-                </h3>
+            {/* Localização */}
+            <div className="flex items-center gap-1.5 flex-wrap pt-1">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-brand-dark text-xs font-semibold border border-slate-200">
+                <i className="bx bx-buildings text-brand-blue"></i>
+                <span>{item.block?.name || 'Campus Unochapecó'}</span>
+                {item.specificLocation && (
+                  <span className="text-slate-500">• {item.specificLocation}</span>
+                )}
+              </span>
 
-                {/* Badges de Tipo e Status */}
-                <div className="flex items-center gap-1.5 flex-wrap justify-end shrink-0">
-                  {item.status === 'RETURNED' ? (
-                    <Badge variant="returned" size="sm" icon="bx-check-double">
-                      {isLost ? 'RECUPERADO' : 'DEVOLVIDO'}
-                    </Badge>
-                  ) : isLost ? (
-                    <Badge variant="lost" size="sm" icon="bx-help-circle">
-                      PERDIDO
-                    </Badge>
-                  ) : (
-                    <Badge variant="found" size="sm" icon="bx-check-circle">
-                      ACHADO
-                    </Badge>
-                  )}
-
-                  {item.isUnderStaffCustody && (
-                    <Badge variant="portaria" size="sm" icon="bx-shield-quarter">
-                      PORTARIA
-                    </Badge>
-                  )}
-
-                  {item.hasReward && (
-                    <Badge variant="reward" size="sm" icon="bx-gift">
-                      RECOMPENSA
-                    </Badge>
-                  )}
-                </div>
-              </div>
-              <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap">
-                {item.description}
-              </p>
-
-              {/* Localização */}
-              <div className="flex items-center gap-1.5 flex-wrap pt-1">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-brand-dark text-xs font-semibold border border-slate-200">
-                  <i className="bx bx-buildings text-brand-blue"></i>
-                  <span>{item.block?.name || 'Campus Unochapecó'}</span>
-                  {item.specificLocation && (
-                    <span className="text-slate-500">• {item.specificLocation}</span>
-                  )}
+              {item.custodyLocation && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-100 text-purple-800 text-xs font-bold border border-purple-200">
+                  <i className="bx bx-map-pin"></i>
+                  <span>Guarda: {item.custodyLocation}</span>
                 </span>
-
-                {item.custodyLocation && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-100 text-purple-800 text-xs font-bold border border-purple-200">
-                    <i className="bx bx-map-pin"></i>
-                    <span>Guarda: {item.custodyLocation}</span>
-                  </span>
-                )}
-              </div>
-
-
-              {/* Banner de Item Concluído/Resolvido */}
-              {item.status === 'RETURNED' && (
-                <div className="mt-2.5 p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2 text-xs text-emerald-900 font-medium">
-                  <i className="bx bx-check-double text-lg text-emerald-700 shrink-0"></i>
-                  <span>
-                    Este pertence foi marcado como <strong>{isLost ? 'recuperado pelo dono' : 'devolvido'}</strong> e o caso está encerrado com sucesso.
-                  </span>
-                </div>
               )}
             </div>
 
-            {/* Seção de Comentários */}
-            <div className="space-y-3 pt-0.5">
-              <div className="flex items-center justify-between">
-                <h5 className="font-bold text-xs uppercase tracking-wider text-slate-500">
-                  Comentários {hints.length}
-                </h5>
-                <span className="text-[11px] text-slate-400">
-                  Ajude com pistas e detalhes
+            {/* Banner de Item Concluído/Resolvido */}
+            {item.status === 'RETURNED' && (
+              <div className="mt-2.5 p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2 text-xs text-emerald-900 font-medium">
+                <i className="bx bx-check-double text-lg text-emerald-700 shrink-0"></i>
+                <span>
+                  Este pertence foi marcado como <strong>{isLost ? 'recuperado pelo dono' : 'devolvido'}</strong> e o caso está encerrado com sucesso.
                 </span>
               </div>
+            )}
+          </div>
+
+          {/* 3. Área Exclusiva de Comentários com Scroll */}
+          <div className="flex-1 min-h-0 p-3.5 sm:p-4 overflow-y-auto space-y-3 custom-scrollbar">
+            <div className="flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-xs pb-1 z-10">
+              <h5 className="font-bold text-xs uppercase tracking-wider text-slate-500">
+                Comentários {hints.length}
+              </h5>
+              <span className="text-[11px] text-slate-400">
+                Ajude com pistas e detalhes
+              </span>
+            </div>
 
               {commentError && (
                 <div className="p-2.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-center justify-between">
@@ -511,7 +508,6 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                 ))
               )}
             </div>
-          </div>
 
           {/* 3. Rodapé com Ações & Envio de Comentário */}
           <div className="p-3 sm:p-3.5 bg-slate-50/80 space-y-2.5 shrink-0">
