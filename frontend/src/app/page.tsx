@@ -87,20 +87,30 @@ export default function HomePage() {
     setLoading(true);
     setError(null);
     try {
+      const statusParam =
+        activeNavTab === 'returned'
+          ? 'RETURNED'
+          : activeNavTab === 'my-items'
+          ? 'ALL'
+          : undefined;
+
       const res = await getFeedItems({
         blockId: selectedBlockId !== 'all' ? selectedBlockId : undefined,
         categoryId: selectedCategoryId !== 'all' ? selectedCategoryId : undefined,
         q: searchTerm.trim() ? searchTerm.trim() : undefined,
+        status: statusParam,
         limit: 50,
       });
 
       let feedData = res.data;
 
-      // Filtro local adicional caso a aba lateral seja "saved" ou "returned"
+      // Filtro local adicional caso a aba lateral seja "saved", "returned" ou "my-items"
       if (activeNavTab === 'saved') {
         feedData = feedData.filter((i) => i.isSaved);
       } else if (activeNavTab === 'returned') {
         feedData = feedData.filter((i) => i.status === 'RETURNED');
+      } else if (activeNavTab === 'my-items' && currentUser) {
+        feedData = feedData.filter((i) => i.authorId === currentUser.id);
       }
 
       setItems(feedData);
@@ -110,7 +120,7 @@ export default function HomePage() {
     } finally {
       setLoading(false);
     }
-  }, [selectedBlockId, selectedCategoryId, searchTerm, activeNavTab]);
+  }, [selectedBlockId, selectedCategoryId, searchTerm, activeNavTab, currentUser]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -459,10 +469,19 @@ export default function HomePage() {
           setIsEditModalOpen(false);
           setSelectedEditItem(null);
         }}
-        onSuccess={() => fetchItems()}
+        onSuccess={(updatedItem) => {
+          fetchItems();
+          if (updatedItem && selectedDetailItem && selectedDetailItem.id === updatedItem.id) {
+            setSelectedDetailItem(updatedItem);
+          }
+        }}
         onDeleteSuccess={() => {
           setIsEditModalOpen(false);
           setSelectedEditItem(null);
+          if (isDetailModalOpen) {
+            setIsDetailModalOpen(false);
+            setSelectedDetailItem(null);
+          }
           fetchItems();
         }}
         item={selectedEditItem}

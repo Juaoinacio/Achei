@@ -40,7 +40,7 @@ export class ItemController {
       q,
       isCustody,
       hasReward,
-      status = ItemStatus.ACTIVE,
+      status,
       page = '1',
       limit = '12',
     } = req.query;
@@ -49,9 +49,13 @@ export class ItemController {
     const limitNum = Math.min(50, Math.max(1, parseInt(limit as string, 10) || 12));
     const skip = (pageNum - 1) * limitNum;
 
-    const where: any = {
-      status: status as ItemStatus,
-    };
+    const where: any = {};
+
+    if (status && status !== 'ALL') {
+      where.status = status as ItemStatus;
+    } else if (status === undefined) {
+      where.status = ItemStatus.ACTIVE;
+    }
 
     if (type && (type === ItemType.LOST || type === ItemType.FOUND)) {
       where.type = type;
@@ -317,6 +321,24 @@ export class ItemController {
       include: {
         category: true,
         block: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            academicCourse: true,
+            avatarUrl: true,
+            role: true,
+            reputationScore: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            hints: true,
+            claims: true,
+          },
+        },
       },
     });
 
@@ -367,6 +389,34 @@ export class ItemController {
         status: ItemStatus.RETURNED,
         resolvedAt: new Date(),
         resolvedById: userId,
+      },
+      include: {
+        category: true,
+        block: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            academicCourse: true,
+            avatarUrl: true,
+            role: true,
+            reputationScore: true,
+          },
+        },
+        resolvedBy: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            hints: true,
+            claims: true,
+          },
+        },
       },
     });
 

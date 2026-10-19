@@ -238,7 +238,11 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           {/* Badges Flutuantes Superiores */}
           <div className="absolute top-3 left-3 sm:top-4 sm:left-4 right-12 z-20 flex items-center gap-1.5 flex-wrap pointer-events-none">
             <div className="flex items-center gap-1.5 flex-wrap pointer-events-auto">
-              {isLost ? (
+              {item.status === 'RETURNED' ? (
+                <Badge variant="returned" size="md" icon="bx-check-double">
+                  {isLost ? 'RECUPERADO' : 'DEVOLVIDO'}
+                </Badge>
+              ) : isLost ? (
                 <Badge variant="lost" size="md" icon="bx-help-circle">
                   PERDIDO
                 </Badge>
@@ -257,12 +261,6 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
               {item.hasReward && (
                 <Badge variant="reward" size="md" icon="bx-gift">
                   COM RECOMPENSA
-                </Badge>
-              )}
-
-              {item.status === 'RETURNED' && (
-                <Badge variant="returned" size="md" icon="bx-check-double">
-                  DEVOLVIDO
                 </Badge>
               )}
             </div>
@@ -400,6 +398,16 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                   </>
                 )}
               </div>
+
+              {/* Banner de Item Concluído/Resolvido */}
+              {item.status === 'RETURNED' && (
+                <div className="mt-2.5 p-2.5 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-2 text-xs text-emerald-900 font-medium">
+                  <i className="bx bx-check-double text-lg text-emerald-700 shrink-0"></i>
+                  <span>
+                    Este pertence foi marcado como <strong>{isLost ? 'recuperado pelo dono' : 'devolvido'}</strong> e o caso está encerrado com sucesso.
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Seção de Comentários */}
@@ -535,33 +543,42 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
               {/* Botões de Ação Principal */}
               <div className="flex items-center gap-1.5">
-                {!isLost && onOpenClaimModal && (
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    leftIcon="bx-check-shield"
-                    onClick={() => {
-                      onClose();
-                      onOpenClaimModal(item);
-                    }}
-                  >
-                    É meu!
-                  </Button>
-                )}
+                {item.status === 'RETURNED' ? (
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200">
+                    <i className="bx bx-check-double text-base"></i>
+                    {isLost ? 'Pertence Recuperado' : 'Pertence Devolvido'}
+                  </span>
+                ) : (
+                  <>
+                    {!isLost && onOpenClaimModal && (
+                      <Button
+                        variant="primary"
+                        size="sm"
+                        leftIcon="bx-check-shield"
+                        onClick={() => {
+                          onClose();
+                          onOpenClaimModal(item);
+                        }}
+                      >
+                        É meu!
+                      </Button>
+                    )}
 
-                {item.isUnderStaffCustody && onOpenPinModal && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    leftIcon="bx-key"
-                    onClick={() => {
-                      onClose();
-                      onOpenPinModal(item);
-                    }}
-                    className="bg-purple-50 text-purple-800 border-purple-200 hover:bg-purple-100 font-bold"
-                  >
-                    PIN Portaria
-                  </Button>
+                    {item.isUnderStaffCustody && onOpenPinModal && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        leftIcon="bx-key"
+                        onClick={() => {
+                          onClose();
+                          onOpenPinModal(item);
+                        }}
+                        className="bg-purple-50 text-purple-800 border-purple-200 hover:bg-purple-100 font-bold"
+                      >
+                        PIN Portaria
+                      </Button>
+                    )}
+                  </>
                 )}
               </div>
             </div>

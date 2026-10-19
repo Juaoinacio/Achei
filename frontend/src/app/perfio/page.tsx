@@ -10,14 +10,17 @@ import {
   getMySavedItems,
   updateMyProfile,
   getCampusBlocks,
+  getCategories,
   uploadImageToCloudinary,
   clearAuthSession,
 } from '../../services/api';
-import { Item, UserSummary, CampusBlock } from '../../types';
+import { Item, UserSummary, CampusBlock, Category } from '../../types';
 import { Header } from '../../components/common/Header';
 import { ItemCard } from '../../components/common/ItemCard';
 import { MobileBottomNav } from '../../components/common/MobileBottomNav';
 import { Card, Badge, Button, Avatar, Dialog, Input, CourseCombobox } from '../../components/ui';
+import { EditItemModal } from '../../components/modals/EditItemModal';
+import { ItemDetailModal } from '../../components/modals/ItemDetailModal';
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -26,8 +29,15 @@ export default function ProfilePage() {
   const [myItems, setMyItems] = useState<Item[]>([]);
   const [savedItems, setSavedItems] = useState<Item[]>([]);
   const [campusBlocks, setCampusBlocks] = useState<CampusBlock[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+
+  // Modais de Pertence (Detalhes e Edição)
+  const [selectedDetailItem, setSelectedDetailItem] = useState<Item | null>(null);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [selectedEditItem, setSelectedEditItem] = useState<Item | null>(null);
+  const [isEditItemModalOpen, setIsEditItemModalOpen] = useState(false);
 
   // Notificação toast para ações diretas
   const [notificationMsg, setNotificationMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -67,9 +77,10 @@ export default function ProfilePage() {
           return;
         }
 
-        const [profile, blocksData, itemsData, savedData] = await Promise.all([
+        const [profile, blocksData, catsData, itemsData, savedData] = await Promise.all([
           getMyProfile().catch(() => localUser),
           getCampusBlocks().catch(() => []),
+          getCategories().catch(() => []),
           getMyItems().catch(() => []),
           getMySavedItems().catch(() => []),
         ]);
@@ -83,6 +94,7 @@ export default function ProfilePage() {
         const activeUser = profile || localUser;
         setUser(activeUser);
         setCampusBlocks(blocksData || []);
+        setCategories(catsData || []);
         setMyItems(itemsData || []);
         setSavedItems(savedData || []);
 
@@ -98,6 +110,23 @@ export default function ProfilePage() {
 
     loadProfileData();
   }, [router]);
+
+  async function reloadItems() {
+    try {
+      const [itemsData, savedData, profile] = await Promise.all([
+        getMyItems().catch(() => []),
+        getMySavedItems().catch(() => []),
+        getMyProfile().catch(() => null),
+      ]);
+      setMyItems(itemsData || []);
+      setSavedItems(savedData || []);
+      if (profile) {
+        setUser(profile);
+      }
+    } catch (e) {
+      console.error('Erro ao recarregar dados do perfil:', e);
+    }
+  }
 
   function syncEditState(targetUser: UserSummary) {
     setEditName(targetUser.name || '');
@@ -659,8 +688,19 @@ export default function ProfilePage() {
               <ItemCard
                 key={item.id}
                 item={item}
+                onOpenDetailModal={(it) => {
+                  setSelectedDetailItem(it);
+                  setIsDetailModalOpen(true);
+                }}
+                onOpenEditModal={(it) => {
+                  setSelectedEditItem(it);
+                  setIsEditItemModalOpen(true);
+                }}
                 onOpenClaimModal={() => {}}
-                onOpenHintModal={() => {}}
+                onOpenHintModal={(it) => {
+                  setSelectedDetailItem(it);
+                  setIsDetailModalOpen(true);
+                }}
                 onOpenPinModal={() => {}}
               />
             ))}
@@ -908,6 +948,49 @@ export default function ProfilePage() {
           </div>
         </form>
       </Dialog>
+
+      {/* Modais de Gerenciamento e Detalhes de Pertences */}
+      <ItemDetailModal
+        isOpen={isDetailModalOpen}
+        onClose={() => {
+          setIsDetailModalOpen(false);
+          setSelectedDetailItem(null);
+        }}
+        item={selectedDetailItem}
+        onItemUpdated={() => reloadItems()}
+        onOpenEditModal={(it) => {
+          setSelectedEditItem(it);
+          setIsEditItemModalOpen(true);
+        }}
+        onOpenClaimModal={() => {}}
+        onOpenPinModal={() => {}}
+      />
+
+      <EditItemModal
+        isOpen={isEditItemModalOpen}
+        onClose={() => {
+          setIsEditItemModalOpen(false);
+          setSelectedEditItem(null);
+        }}
+        onSuccess={(updatedItem) => {
+          reloadItems();
+          if (updatedItem && selectedDetailItem && selectedDetailItem.id === updatedItem.id) {
+            setSelectedDetailItem(updatedItem);
+          }
+        }}
+        onDeleteSuccess={() => {
+          setIsEditItemModalOpen(false);
+          setSelectedEditItem(null);
+          if (isDetailModalOpen) {
+            setIsDetailModalOpen(false);
+            setSelectedDetailItem(null);
+          }
+          reloadItems();
+        }}
+        item={selectedEditItem}
+        blocks={campusBlocks}
+        categories={categories}
+      />
 
       {/* 4. Navegação Mobile */}
       <MobileBottomNav onOpenPublishModal={() => router.push('/')} activeTab="profile" />

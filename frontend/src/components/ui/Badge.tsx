@@ -30,7 +30,7 @@ export const Badge: React.FC<BadgeProps> = ({
     found: 'bg-blue-50 text-brand-blue border border-blue-200',
     portaria: 'bg-purple-50 text-purple-700 border border-purple-200',
     reward: 'bg-brand-yellowLight text-amber-900 border border-amber-300',
-    returned: 'bg-slate-100 text-slate-700 border border-slate-200',
+    returned: 'bg-emerald-50 text-emerald-800 border border-emerald-200',
     neutral: 'bg-slate-50 text-slate-600 border border-brand-gray',
     blue: 'bg-brand-blue text-white',
     yellow: 'bg-brand-yellow text-brand-dark',

@@ -67,6 +67,7 @@ export interface GetItemsFilters {
   q?: string;
   isCustody?: boolean;
   hasReward?: boolean;
+  status?: ItemStatus | 'ALL';
   page?: number;
   limit?: number;
 }
@@ -81,6 +82,7 @@ export async function getFeedItems(filters: GetItemsFilters = {}): Promise<FeedR
   if (filters.q) params.append('q', filters.q);
   if (filters.isCustody !== undefined) params.append('isCustody', String(filters.isCustody));
   if (filters.hasReward !== undefined) params.append('hasReward', String(filters.hasReward));
+  if (filters.status) params.append('status', filters.status);
   if (filters.page) params.append('page', String(filters.page));
   if (filters.limit) params.append('limit', String(filters.limit));
 

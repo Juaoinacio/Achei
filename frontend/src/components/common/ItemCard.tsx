@@ -115,7 +115,11 @@ export const ItemCard: React.FC<ItemCardProps> = ({
               </span>
             )}
 
-            {isLost ? (
+            {item.status === 'RETURNED' ? (
+              <Badge variant="returned" icon="bx-check-double">
+                {isLost ? 'RECUPERADO' : 'DEVOLVIDO'}
+              </Badge>
+            ) : isLost ? (
               <Badge variant="lost" icon="bx-help-circle">
                 PERDIDO
               </Badge>
@@ -227,7 +231,12 @@ export const ItemCard: React.FC<ItemCardProps> = ({
 
         {/* Ação Principal: Reivindicar ou Informar Avistamento */}
         <div>
-          {isLost ? (
+          {item.status === 'RETURNED' ? (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200">
+              <i className="bx bx-check-double text-base"></i>
+              <span>{isLost ? 'Resolvido' : 'Devolvido'}</span>
+            </span>
+          ) : isLost ? (
             <Button
               variant="secondary"
               size="sm"
