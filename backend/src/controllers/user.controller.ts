@@ -163,6 +163,18 @@ export class UserController {
       include: {
         category: true,
         block: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            academicCourse: true,
+            academicPeriod: true,
+            avatarUrl: true,
+            role: true,
+            reputationScore: true,
+          },
+        },
         _count: {
           select: { hints: true, likes: true, claims: true },
         },
@@ -184,7 +196,16 @@ export class UserController {
             category: true,
             block: true,
             author: {
-              select: { id: true, name: true, avatarUrl: true },
+              select: {
+                id: true,
+                name: true,
+                email: true,
+                academicCourse: true,
+                academicPeriod: true,
+                avatarUrl: true,
+                role: true,
+                reputationScore: true,
+              },
             },
             _count: {
               select: { hints: true, likes: true },

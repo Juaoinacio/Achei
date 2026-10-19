@@ -219,8 +219,8 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
       {/* Backdrop */}
       <div className="fixed inset-0" onClick={onClose} />
 
-      {/* Modal Container inspirado no Instagram (sem borda externa) */}
-      <div className="relative bg-white rounded-2xl w-full max-w-4xl lg:max-w-5xl shadow-2xl overflow-hidden z-10 flex flex-col lg:grid lg:grid-cols-12 max-h-[92vh] sm:max-h-[88vh] animate-in zoom-in-95 duration-150 border-0">
+      {/* Modal Container inspirado no Instagram (tamanho fixo estático) */}
+      <div className="relative bg-white rounded-2xl w-full max-w-5xl h-[92vh] sm:h-[88vh] lg:h-[650px] shadow-2xl overflow-hidden z-10 flex flex-col lg:grid lg:grid-cols-12 animate-in zoom-in-95 duration-150 border-0">
         
         {/* Botão Fechar Mobile Flutuante */}
         <button
@@ -234,7 +234,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
         {/* ==================================================== */}
         {/* COLUNA ESQUERDA (Visual & Badges) - Fundo Claro      */}
         {/* ==================================================== */}
-        <div className="lg:col-span-7 bg-slate-100/90 relative flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden min-h-[240px] sm:min-h-[320px] lg:min-h-full lg:border-r border-b lg:border-b-0 border-slate-200/80">
+        <div className="lg:col-span-7 bg-slate-100/90 relative flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden h-[260px] sm:h-[320px] lg:h-full lg:border-r border-b lg:border-b-0 border-slate-200/80">
           {/* Badges Flutuantes Superiores */}
           <div className="absolute top-3 left-3 sm:top-4 sm:left-4 right-12 z-20 flex items-center gap-1.5 flex-wrap pointer-events-none">
             <div className="flex items-center gap-1.5 flex-wrap pointer-events-auto">
@@ -268,11 +268,11 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
           {/* Imagem ou Ilustração de Placeholder */}
           {item.photoUrl ? (
-            <div className="w-full h-full flex items-center justify-center max-h-[460px] p-2">
+            <div className="w-full h-full flex items-center justify-center p-2 overflow-hidden">
               <img
                 src={item.photoUrl}
                 alt={item.title}
-                className="max-w-full max-h-[420px] object-contain rounded-xl shadow-xs"
+                className="max-w-full max-h-full object-contain rounded-xl shadow-xs"
               />
             </div>
           ) : (
@@ -378,7 +378,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           </div>
 
           {/* 2. Área de Detalhes & Feed de Comentários com Scroll */}
-          <div className="flex-1 p-3.5 sm:p-4 overflow-y-auto space-y-4 custom-scrollbar max-h-[300px] sm:max-h-[340px] lg:max-h-[380px]">
+          <div className="flex-1 min-h-0 p-3.5 sm:p-4 overflow-y-auto space-y-4 custom-scrollbar">
             {/* Título e Descrição */}
             <div className="space-y-1.5 pb-3 border-b border-slate-100">
               <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug">

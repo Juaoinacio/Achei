@@ -38,6 +38,7 @@ export default function ProfilePage() {
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedEditItem, setSelectedEditItem] = useState<Item | null>(null);
   const [isEditItemModalOpen, setIsEditItemModalOpen] = useState(false);
+  const [autoFocusComment, setAutoFocusComment] = useState(false);
 
   // Notificação toast para ações diretas
   const [notificationMsg, setNotificationMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -688,8 +689,9 @@ export default function ProfilePage() {
               <ItemCard
                 key={item.id}
                 item={item}
-                onOpenDetailModal={(it) => {
+                onOpenDetailModal={(it, focus) => {
                   setSelectedDetailItem(it);
+                  setAutoFocusComment(focus ?? false);
                   setIsDetailModalOpen(true);
                 }}
                 onOpenEditModal={(it) => {
@@ -699,6 +701,7 @@ export default function ProfilePage() {
                 onOpenClaimModal={() => {}}
                 onOpenHintModal={(it) => {
                   setSelectedDetailItem(it);
+                  setAutoFocusComment(true);
                   setIsDetailModalOpen(true);
                 }}
                 onOpenPinModal={() => {}}
@@ -955,6 +958,7 @@ export default function ProfilePage() {
         onClose={() => {
           setIsDetailModalOpen(false);
           setSelectedDetailItem(null);
+          setAutoFocusComment(false);
         }}
         item={selectedDetailItem}
         onItemUpdated={() => reloadItems()}
@@ -964,6 +968,7 @@ export default function ProfilePage() {
         }}
         onOpenClaimModal={() => {}}
         onOpenPinModal={() => {}}
+        autoFocusComment={autoFocusComment}
       />
 
       <EditItemModal
