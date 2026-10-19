@@ -76,7 +76,7 @@ export const NewHintModal: React.FC<NewHintModalProps> = ({
         onClick={handleSubmit}
         isLoading={submitting}
       >
-        Publicar Comentário (+2 Karma)
+        Publicar Comentário
       </Button>
     </>
   );
@@ -88,12 +88,9 @@ export const NewHintModal: React.FC<NewHintModalProps> = ({
       title={`Comentários: ${item.title}`}
       subtitle="Ajude a encontrar o pertence compartilhando informações sobre onde ele foi avistado ou detalhes relevantes."
       badge={
-        <div className="flex items-center gap-2">
-          <Badge variant="blue" icon="bx-message-rounded-dots">
-            COMENTÁRIO COLABORATIVO
-          </Badge>
-          <span className="text-xs text-slate-400 font-medium">Ganhe +2 Karma</span>
-        </div>
+        <Badge variant="blue" icon="bx-message-rounded-dots">
+          COMENTÁRIO COLABORATIVO
+        </Badge>
       }
       footer={footer}
       maxWidth="lg"

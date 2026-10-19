@@ -265,12 +265,13 @@ export class ItemController {
       },
     });
 
-    // Award reputation: +5 points for reporting a found item, +2 for lost item
-    const reputationPoints = data.type === ItemType.FOUND ? 5 : 2;
-    await prisma.user.update({
-      where: { id: userId },
-      data: { reputationScore: { increment: reputationPoints } },
-    });
+    // Award reputation: +5 points only for reporting a found item
+    if (data.type === ItemType.FOUND) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: { reputationScore: { increment: 5 } },
+      });
+    }
 
     res.status(201).json({
       message: 'Item publicado com sucesso!',

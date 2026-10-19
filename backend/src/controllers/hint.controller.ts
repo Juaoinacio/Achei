@@ -98,6 +98,10 @@ export class HintController {
       throw new AppError('Apenas o autor da publicação pode marcar um comentário como útil.', 403);
     }
 
+    if (hint.authorId === userId) {
+      throw new AppError('Você não pode marcar seu próprio comentário como útil.', 400);
+    }
+
     if (hint.isHelpful) {
       res.json({ message: 'Este comentário já está marcado como útil.', hint });
       return;

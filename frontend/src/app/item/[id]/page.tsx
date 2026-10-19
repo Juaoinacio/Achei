@@ -486,8 +486,8 @@ export default function ItemDetailPage() {
                             )}
                           </div>
 
-                          {/* Se for o autor do item e o comentário não for útil */}
-                          {isAuthor && !hint.isHelpful && (
+                          {/* Se for o autor do item e o comentário não for útil nem do próprio autor */}
+                          {isAuthor && !hint.isHelpful && hint.authorId !== currentUser?.id && (
                             <div className="mt-1 pl-1">
                               <button
                                 onClick={() => handleMarkHelpful(hint.id)}

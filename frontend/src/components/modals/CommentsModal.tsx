@@ -309,7 +309,7 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
                     </div>
 
                     {/* Ação para o autor marcar como útil */}
-                    {isAuthor && !hint.isHelpful && (
+                    {isAuthor && !hint.isHelpful && hint.authorId !== currentUser?.id && (
                       <div className="mt-1 flex items-center gap-2 pl-1">
                         <button
                           onClick={() => handleMarkHelpful(hint.id)}
@@ -362,7 +362,7 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
             disabled={!newComment.trim() || submitting}
             className="shrink-0 font-bold"
           >
-            Publicar (+2 Karma)
+            Publicar
           </Button>
         </form>
       </div>
