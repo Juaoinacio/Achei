@@ -9,7 +9,7 @@ import { Sidebar } from '../components/common/Sidebar';
 import { RightSidebar } from '../components/common/RightSidebar';
 import { ItemCard } from '../components/common/ItemCard';
 import { MobileBottomNav } from '../components/common/MobileBottomNav';
-import { Button, Avatar, Card } from '../components/ui';
+import { Button, Card } from '../components/ui';
 import { PublishModal } from '../components/modals/PublishModal';
 import { ClaimModal } from '../components/modals/ClaimModal';
 import { HandoffPinModal } from '../components/modals/HandoffPinModal';
@@ -207,48 +207,6 @@ export default function HomePage() {
           {/* Coluna Central: Feed Social de Pertences */}
           <section className="col-span-1 lg:col-span-6 space-y-4">
             
-            {/* Caixa Rápida de Publicação (Composer) */}
-            <Card className="space-y-3">
-              <div className="flex items-center gap-3">
-                <Avatar name={currentUser?.name || 'Estudante'} src={currentUser?.avatarUrl} size="md" />
-                <input
-                  type="text"
-                  readOnly
-                  onClick={() => setIsPublishModalOpen(true)}
-                  placeholder="Perdeu ou encontrou algo no campus? Publique aqui..."
-                  className="flex-1 px-4 py-2.5 bg-slate-50 hover:bg-slate-100 border border-brand-gray rounded-lg text-xs sm:text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-blue cursor-pointer transition-all"
-                />
-              </div>
-
-              <div className="flex items-center justify-between pt-2 border-t border-brand-gray">
-                <div className="flex items-center gap-1 sm:gap-2">
-                  <button
-                    onClick={() => setIsPublishModalOpen(true)}
-                    className="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <i className="bx bx-camera text-base text-brand-blue"></i>
-                    <span className="hidden sm:inline">Adicionar Foto</span>
-                  </button>
-                  <button
-                    onClick={() => setIsPublishModalOpen(true)}
-                    className="px-2.5 py-1.5 rounded-lg hover:bg-slate-100 text-slate-600 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <i className="bx bx-map-pin text-base text-brand-lilac"></i>
-                    <span className="hidden sm:inline">Selecionar Bloco</span>
-                  </button>
-                </div>
-
-                <Button
-                  variant="primary"
-                  size="sm"
-                  leftIcon="bx-send"
-                  onClick={() => setIsPublishModalOpen(true)}
-                >
-                  Publicar
-                </Button>
-              </div>
-            </Card>
-
             {/* Abas Segmentadas de Filtro (Todos / Perdidos / Achados) */}
             <div className="flex items-center justify-between bg-white border border-brand-gray rounded-custom p-1.5 shadow-xs">
               <div className="flex items-center gap-1 w-full sm:w-auto">
