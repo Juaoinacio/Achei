@@ -336,7 +336,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           </div>
 
           {/* 2. Cabeçalho Travado: Detalhes do Pertence (Título, Status, Localização) */}
-          <div className="p-3.5 sm:p-4 shrink-0 bg-white space-y-2 border-b border-brand-gray">
+          <div className="p-3.5 sm:p-4 shrink-0 bg-white space-y-2 border-b border-brand-gray relative z-20">
             {/* Metadados: Categoria • Tempo Relativo */}
             <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
               {item.category && (
@@ -417,16 +417,19 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             )}
           </div>
 
-          {/* 3. Área Exclusiva de Comentários com Scroll */}
+          {/* 3. Cabeçalho Fixo dos Comentários */}
+          <div className="px-3.5 sm:px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0 z-10">
+            <h5 className="font-bold text-xs uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
+              <i className="bx bx-message-rounded-dots text-brand-blue"></i>
+              <span>Comentários ({hints.length})</span>
+            </h5>
+            <span className="text-[11px] text-slate-400">
+              Ajude com pistas e detalhes
+            </span>
+          </div>
+
+          {/* 4. Área Exclusiva de Rolagem dos Comentários */}
           <div className="flex-1 min-h-0 p-3.5 sm:p-4 overflow-y-auto space-y-3 custom-scrollbar">
-            <div className="flex items-center justify-between sticky top-0 bg-white/95 backdrop-blur-xs pb-1 z-10">
-              <h5 className="font-bold text-xs uppercase tracking-wider text-slate-500">
-                Comentários {hints.length}
-              </h5>
-              <span className="text-[11px] text-slate-400">
-                Ajude com pistas e detalhes
-              </span>
-            </div>
 
               {commentError && (
                 <div className="p-2.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-center justify-between">
@@ -509,8 +512,8 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
               )}
             </div>
 
-          {/* 3. Rodapé com Ações & Envio de Comentário */}
-          <div className="p-3 sm:p-3.5 bg-slate-50/80 space-y-2.5 shrink-0">
+          {/* 5. Rodapé Fixo com Ações & Envio de Comentário */}
+          <div className="p-3 sm:p-3.5 bg-white border-t border-slate-200 space-y-2.5 shrink-0 z-20 relative shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
             {/* Ações Sociais e Reivindicação */}
             <div className="flex items-center justify-between gap-2 flex-wrap">
               <div className="flex items-center gap-1.5">
