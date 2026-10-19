@@ -40,7 +40,7 @@ export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): 
       }
 
       if (response.status === 401 && typeof window !== 'undefined') {
-        localStorage.removeItem('achei_token');
+        clearAuthSession();
       }
 
       throw new Error(errorMessage);

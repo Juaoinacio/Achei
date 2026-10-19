@@ -5,28 +5,16 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('achei_token')?.value;
   const { pathname } = request.nextUrl;
 
-  // Rotas e recursos públicos que não exigem autenticação
-  const isPublicRoute =
-    pathname.startsWith('/login') ||
-    pathname.startsWith('/register') ||
-    pathname.startsWith('/password') ||
-    pathname.startsWith('/_not-found') ||
-    pathname.startsWith('/api') ||
-    pathname.startsWith('/_next') ||
-    pathname.includes('favicon.ico');
+  // Rotas restritas que exigem login ativo obrigatoriamente (ex: área de perfil do estudante)
+  const isProtectedRoute =
+    pathname.startsWith('/perfio') ||
+    pathname.startsWith('/perfil');
 
-  // 1. Usuário NÃO autenticado tentando acessar rota protegida (ex: /, /perfio, /rank, /routers)
-  if (!isPublicRoute && !token) {
+  // 1. Usuário NÃO autenticado tentando acessar rota restrita
+  if (isProtectedRoute && !token) {
     const loginUrl = new URL('/login', request.url);
-    if (pathname !== '/') {
-      loginUrl.searchParams.set('redirect', pathname);
-    }
+    loginUrl.searchParams.set('redirect', pathname);
     return NextResponse.redirect(loginUrl);
-  }
-
-  // 2. Usuário JÁ autenticado tentando acessar /login ou /register
-  if (token && (pathname === '/login' || pathname === '/register')) {
-    return NextResponse.redirect(new URL('/', request.url));
   }
 
   return NextResponse.next();

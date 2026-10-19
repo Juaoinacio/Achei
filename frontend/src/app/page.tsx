@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { CampusBlock, Category, Item, ItemType } from '../types';
-import { getCampusBlocks, getCategories, getFeedItems, getAuthToken, getCurrentUser } from '../services/api';
+import { getCampusBlocks, getCategories, getFeedItems, getAuthToken, getCurrentUser, clearAuthSession } from '../services/api';
 import { Header } from '../components/common/Header';
 import { Sidebar } from '../components/common/Sidebar';
 import { RightSidebar } from '../components/common/RightSidebar';
@@ -20,19 +20,20 @@ import { ItemDetailModal } from '../components/modals/ItemDetailModal';
 export default function HomePage() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [authChecked, setAuthChecked] = useState(false);
 
-  // Validação de Sessão Obrigatória
+  // Sincronização de Sessão (Permite que visitantes explorem a Home livremente)
   useEffect(() => {
     const token = getAuthToken();
     const user = getCurrentUser();
-    if (!token || !user) {
-      router.push('/login?redirect=/');
-      return;
+    if (token && user) {
+      setCurrentUser(user);
+    } else {
+      if (token && !user) {
+        clearAuthSession();
+      }
+      setCurrentUser(null);
     }
-    setCurrentUser(user);
-    setAuthChecked(true);
-  }, [router]);
+  }, []);
 
   // Dados de Referência
   const [blocks, setBlocks] = useState<CampusBlock[]>([]);
@@ -129,22 +130,22 @@ export default function HomePage() {
     return item.type === typeFilter;
   });
 
-  if (!authChecked) {
-    return (
-      <div className="bg-brand-bg min-h-screen flex flex-col items-center justify-center p-4">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-12 h-12 bg-brand-yellow text-brand-dark rounded-2xl flex items-center justify-center text-3xl font-extrabold shadow-sm animate-pulse">
-            <i className="bx bx-search"></i>
-          </div>
-          <span className="text-xl font-extrabold text-brand-blue tracking-tight">Achei Unochapecó</span>
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 mt-2">
-            <i className="bx bx-loader-alt bx-spin text-brand-blue text-base"></i>
-            <span>Verificando autenticação...</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const handleOpenPublish = () => {
+    if (!currentUser) {
+      router.push('/login?redirect=/');
+    } else {
+      setIsPublishModalOpen(true);
+    }
+  };
+
+  const handleOpenClaim = (it: Item) => {
+    if (!currentUser) {
+      router.push('/login?redirect=/');
+      return;
+    }
+    setSelectedClaimItem(it);
+    setIsClaimModalOpen(true);
+  };
 
   return (
     <div className="bg-brand-bg text-brand-dark font-sans min-h-screen pb-20 lg:pb-12 selection:bg-brand-yellow selection:text-brand-dark">
@@ -153,7 +154,7 @@ export default function HomePage() {
       <Header
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
-        onOpenPublishModal={() => setIsPublishModalOpen(true)}
+        onOpenPublishModal={handleOpenPublish}
         userName={currentUser?.name}
         userAvatar={currentUser?.avatarUrl}
       />
@@ -382,10 +383,7 @@ export default function HomePage() {
                   setAutoFocusComment(focus ?? false);
                   setIsDetailModalOpen(true);
                 }}
-                onOpenClaimModal={(it) => {
-                  setSelectedClaimItem(it);
-                  setIsClaimModalOpen(true);
-                }}
+                onOpenClaimModal={handleOpenClaim}
                 onOpenHintModal={(it) => {
                   setSelectedDetailItem(it);
                   setAutoFocusComment(true);
@@ -412,7 +410,7 @@ export default function HomePage() {
 
       {/* 5. Navegação Inferior Mobile */}
       <MobileBottomNav
-        onOpenPublishModal={() => setIsPublishModalOpen(true)}
+        onOpenPublishModal={handleOpenPublish}
         activeTab="feed"
       />
 
@@ -481,10 +479,7 @@ export default function HomePage() {
         }}
         item={selectedDetailItem}
         onItemUpdated={() => fetchItems()}
-        onOpenClaimModal={(it) => {
-          setSelectedClaimItem(it);
-          setIsClaimModalOpen(true);
-        }}
+        onOpenClaimModal={handleOpenClaim}
         onOpenPinModal={(it) => {
           setSelectedPinItem(it);
           setIsPinModalOpen(true);
