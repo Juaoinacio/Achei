@@ -219,22 +219,22 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
       {/* Backdrop */}
       <div className="fixed inset-0" onClick={onClose} />
 
-      {/* Modal Container inspirado no Instagram */}
-      <div className="relative bg-white border border-brand-gray rounded-2xl w-full max-w-4xl lg:max-w-5xl shadow-2xl overflow-hidden z-10 flex flex-col lg:grid lg:grid-cols-12 max-h-[92vh] sm:max-h-[88vh] animate-in zoom-in-95 duration-150">
+      {/* Modal Container inspirado no Instagram (sem borda externa) */}
+      <div className="relative bg-white rounded-2xl w-full max-w-4xl lg:max-w-5xl shadow-2xl overflow-hidden z-10 flex flex-col lg:grid lg:grid-cols-12 max-h-[92vh] sm:max-h-[88vh] animate-in zoom-in-95 duration-150 border-0">
         
-        {/* Botão Fechar Flutuante (topo direito) */}
+        {/* Botão Fechar Mobile Flutuante */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center transition-colors cursor-pointer"
+          className="lg:hidden absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-white/90 hover:bg-white text-brand-dark shadow-sm flex items-center justify-center transition-colors cursor-pointer border border-slate-200"
           title="Fechar"
         >
           <i className="bx bx-x text-xl"></i>
         </button>
 
         {/* ==================================================== */}
-        {/* COLUNA ESQUERDA (Visual & Badges) - 7 cols em desktop */}
+        {/* COLUNA ESQUERDA (Visual & Badges) - Fundo Claro      */}
         {/* ==================================================== */}
-        <div className="lg:col-span-7 bg-slate-900/95 relative flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden min-h-[240px] sm:min-h-[320px] lg:min-h-full">
+        <div className="lg:col-span-7 bg-slate-100/90 relative flex flex-col items-center justify-center p-4 sm:p-6 overflow-hidden min-h-[240px] sm:min-h-[320px] lg:min-h-full lg:border-r border-b lg:border-b-0 border-slate-200/80">
           {/* Badges Flutuantes Superiores */}
           <div className="absolute top-3 left-3 sm:top-4 sm:left-4 right-12 z-20 flex items-center gap-1.5 flex-wrap pointer-events-none">
             <div className="flex items-center gap-1.5 flex-wrap pointer-events-auto">
@@ -270,23 +270,23 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
           {/* Imagem ou Ilustração de Placeholder */}
           {item.photoUrl ? (
-            <div className="w-full h-full flex items-center justify-center max-h-[460px]">
+            <div className="w-full h-full flex items-center justify-center max-h-[460px] p-2">
               <img
                 src={item.photoUrl}
                 alt={item.title}
-                className="max-w-full max-h-[420px] object-contain rounded-xl shadow-md"
+                className="max-w-full max-h-[420px] object-contain rounded-xl shadow-xs"
               />
             </div>
           ) : (
-            <div className="w-full py-12 flex flex-col items-center justify-center text-center text-slate-300 space-y-2.5">
-              <div className="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center text-3xl text-brand-yellow backdrop-blur-xs">
+            <div className="w-full py-12 flex flex-col items-center justify-center text-center text-slate-500 space-y-2.5">
+              <div className="w-16 h-16 rounded-2xl bg-white text-brand-blue border border-brand-gray shadow-xs flex items-center justify-center text-3xl">
                 <i className={`bx ${item.category?.iconName || 'bx-cube'}`}></i>
               </div>
               <div>
                 <span className="text-xs uppercase tracking-wider text-slate-400 font-bold block">
                   {item.category?.name || 'Pertence'}
                 </span>
-                <p className="text-xs font-semibold text-white/90">
+                <p className="text-xs font-semibold text-slate-600">
                   Sem foto anexada pelo autor
                 </p>
               </div>
@@ -296,17 +296,17 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           {/* Badges Flutuantes Inferiores: Localização */}
           <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 right-3 sm:right-4 z-20 flex items-center justify-between gap-2 flex-wrap pointer-events-none">
             <div className="flex items-center gap-1.5 flex-wrap pointer-events-auto">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-black/60 text-white backdrop-blur-md text-xs font-semibold border border-white/20">
-                <i className="bx bx-buildings text-brand-yellow"></i>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-white/95 text-brand-dark shadow-xs backdrop-blur-md text-xs font-semibold border border-brand-gray">
+                <i className="bx bx-buildings text-brand-blue"></i>
                 <span>{item.block?.name || 'Campus Unochapecó'}</span>
                 {item.specificLocation && (
-                  <span className="text-white/70">• {item.specificLocation}</span>
+                  <span className="text-slate-500">• {item.specificLocation}</span>
                 )}
               </span>
             </div>
 
             {item.custodyLocation && (
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-900/80 text-white backdrop-blur-md text-xs font-medium border border-purple-400/30 pointer-events-auto">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-100 text-purple-800 shadow-xs backdrop-blur-md text-xs font-bold border border-purple-200 pointer-events-auto">
                 <i className="bx bx-map-pin"></i>
                 <span>Guarda: {item.custodyLocation}</span>
               </span>
@@ -319,7 +319,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
         {/* ==================================================== */}
         <div className="lg:col-span-5 flex flex-col h-full bg-white divide-y divide-brand-gray min-h-0 overflow-hidden">
           {/* 1. Perfil do Autor */}
-          <div className="p-3.5 sm:p-4 flex items-center justify-between gap-3 bg-slate-50/70 shrink-0 pr-12 lg:pr-12">
+          <div className="p-3.5 sm:p-4 flex items-center justify-between gap-3 bg-slate-50/70 shrink-0">
             <div className="flex items-center gap-2.5 min-w-0">
               <Avatar
                 src={item.author?.avatarUrl}
@@ -366,6 +366,16 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                 <i className="bx bxs-star text-amber-500 text-xs"></i>
                 <span>{item.author?.reputationScore ?? 0}</span>
               </div>
+
+              {/* Botão Fechar Modal */}
+              <button
+                onClick={onClose}
+                className="w-8 h-8 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-brand-dark flex items-center justify-center transition-colors cursor-pointer ml-1"
+                title="Fechar"
+                aria-label="Fechar modal"
+              >
+                <i className="bx bx-x text-2xl"></i>
+              </button>
             </div>
           </div>
 
