@@ -61,89 +61,90 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   const isLost = item.type === 'LOST';
 
   return (
-    <Card hoverable className="space-y-3.5">
-      {/* Cabeçalho do Card: Autor e Badges */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-2.5">
-          <Avatar
-            src={item.author?.avatarUrl}
-            name={item.author?.name || 'Estudante'}
-            size="md"
-          />
-          <div>
-            <h4 className="font-bold text-xs sm:text-sm text-brand-dark leading-tight">
-              {item.author?.name || 'Estudante'}
-            </h4>
-            <p className="text-[11px] text-slate-500">
-              {item.author?.academicCourse || 'Unochapecó'}
-            </p>
+    <Card hoverable className="space-y-3.5 transition-all hover:border-brand-blue/30">
+      {/* Bloco Completo do Pertence com Link */}
+      <Link href={`/item/${item.id}`} className="block space-y-3.5 group cursor-pointer">
+        {/* Cabeçalho do Card: Autor e Badges */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-center gap-2.5">
+            <Avatar
+              src={item.author?.avatarUrl}
+              name={item.author?.name || 'Estudante'}
+              size="md"
+            />
+            <div>
+              <h4 className="font-bold text-xs sm:text-sm text-brand-dark leading-tight group-hover:text-brand-blue transition-colors">
+                {item.author?.name || 'Estudante'}
+              </h4>
+              <p className="text-[11px] text-slate-500">
+                {item.author?.academicCourse || 'Unochapecó'}
+              </p>
+            </div>
+          </div>
+
+          {/* Badges de Tipo & Custódia */}
+          <div className="flex items-center gap-1.5 flex-wrap justify-end">
+            {isLost ? (
+              <Badge variant="lost" icon="bx-help-circle">
+                PERDIDO
+              </Badge>
+            ) : (
+              <Badge variant="found" icon="bx-check-circle">
+                ACHADO
+              </Badge>
+            )}
+
+            {item.isUnderStaffCustody && (
+              <Badge variant="portaria" icon="bx-shield-quarter">
+                PORTARIA
+              </Badge>
+            )}
+
+            {item.hasReward && (
+              <Badge variant="reward" icon="bx-gift">
+                RECOMPENSA
+              </Badge>
+            )}
           </div>
         </div>
 
-        {/* Badges de Tipo & Custódia */}
-        <div className="flex items-center gap-1.5 flex-wrap justify-end">
-          {isLost ? (
-            <Badge variant="lost" icon="bx-help-circle">
-              PERDIDO
-            </Badge>
-          ) : (
-            <Badge variant="found" icon="bx-check-circle">
-              ACHADO
-            </Badge>
-          )}
+        {/* Foto do Pertence (se houver) */}
+        {item.photoUrl && (
+          <div className="rounded-xl overflow-hidden bg-slate-100 max-h-72 border border-brand-gray">
+            <img
+              src={item.photoUrl}
+              alt={item.title}
+              className="w-full h-56 sm:h-64 object-cover group-hover:scale-101 transition-transform duration-200"
+            />
+          </div>
+        )}
 
-          {item.isUnderStaffCustody && (
-            <Badge variant="portaria" icon="bx-shield-quarter">
-              PORTARIA
-            </Badge>
-          )}
-
-          {item.hasReward && (
-            <Badge variant="reward" icon="bx-gift">
-              RECOMPENSA
-            </Badge>
-          )}
-        </div>
-      </div>
-
-      {/* Foto do Pertence (se houver) */}
-      {item.photoUrl && (
-        <Link href={`/item/${item.id}`} className="block rounded-xl overflow-hidden bg-slate-100 max-h-72 border border-brand-gray group">
-          <img
-            src={item.photoUrl}
-            alt={item.title}
-            className="w-full h-56 sm:h-64 object-cover group-hover:scale-101 transition-transform duration-200 cursor-pointer"
-          />
-        </Link>
-      )}
-
-      {/* Título & Descrição */}
-      <div className="space-y-1">
-        <Link href={`/item/${item.id}`} className="block group">
-          <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug group-hover:text-brand-blue transition-colors cursor-pointer">
+        {/* Título & Descrição */}
+        <div className="space-y-1">
+          <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug group-hover:text-brand-blue transition-colors">
             {item.title}
           </h3>
-        </Link>
-        <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3">
-          {item.description}
-        </p>
-      </div>
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3">
+            {item.description}
+          </p>
+        </div>
 
-      {/* Localização & Categoria */}
-      <div className="flex items-center gap-2 flex-wrap text-xs text-slate-500 pt-1">
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-50 text-brand-dark font-medium border border-brand-gray">
-          <i className="bx bx-buildings text-brand-blue"></i>
-          <strong>{item.block?.name || 'Campus Chapecó'}</strong>
-          {item.specificLocation && <span className="text-slate-400">• {item.specificLocation}</span>}
-        </span>
-
-        {item.category && (
-          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600 border border-brand-gray">
-            <i className={`bx ${item.category.iconName || 'bx-tag'} text-brand-lilac`}></i>
-            {item.category.name}
+        {/* Localização & Categoria */}
+        <div className="flex items-center gap-2 flex-wrap text-xs text-slate-500 pt-1">
+          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-50 text-brand-dark font-medium border border-brand-gray group-hover:bg-slate-100 transition-colors">
+            <i className="bx bx-buildings text-brand-blue"></i>
+            <strong>{item.block?.name || 'Campus Chapecó'}</strong>
+            {item.specificLocation && <span className="text-slate-400">• {item.specificLocation}</span>}
           </span>
-        )}
-      </div>
+
+          {item.category && (
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-50 text-slate-600 border border-brand-gray group-hover:bg-slate-100 transition-colors">
+              <i className={`bx ${item.category.iconName || 'bx-tag'} text-brand-lilac`}></i>
+              {item.category.name}
+            </span>
+          )}
+        </div>
+      </Link>
 
       {/* Ações de Rodapé: Curtir, Salvar, Pista e Reivindicação */}
       <div className="flex items-center justify-between gap-2 pt-2 border-t border-brand-gray text-xs">

@@ -195,10 +195,10 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
               href={`/item/${item.id}`}
               onClick={onClose}
               className="text-xs font-semibold text-brand-blue hover:text-blue-700 bg-blue-50 hover:bg-blue-100/70 border border-blue-200 px-2.5 py-1.5 rounded-lg transition-colors flex items-center gap-1"
-              title="Abrir tela cheia"
+              title="Ver item"
             >
-              <i className="bx bx-expand-alt text-sm"></i>
-              <span className="hidden sm:inline">Tela cheia</span>
+              <i className="bx bx-show text-sm"></i>
+              <span className="hidden sm:inline">Ver item</span>
             </Link>
             <button
               onClick={onClose}
