@@ -86,14 +86,20 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
     setSaved(item.isSaved ?? false);
 
     if (item.hints && item.hints.length > 0) {
-      setHints(item.hints);
+      const sorted = [...item.hints].sort(
+        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setHints(sorted);
     }
 
     async function loadHints() {
       setLoadingHints(true);
       try {
         const data = await getItemHints(item!.id);
-        setHints(data);
+        const sorted = [...data].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setHints(sorted);
       } catch (err: any) {
         console.error('Erro ao carregar comentários:', err);
       } finally {
@@ -180,10 +186,13 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
       const res = await submitHint(item.id, newComment.trim());
       const createdHint = res?.hint;
       if (createdHint) {
-        setHints((prev) => [...prev, createdHint]);
+        setHints((prev) => [createdHint, ...prev]);
       } else {
         const refreshed = await getItemHints(item.id);
-        setHints(refreshed);
+        const sorted = [...refreshed].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setHints(sorted);
       }
       setNewComment('');
       if (onItemUpdated) onItemUpdated();

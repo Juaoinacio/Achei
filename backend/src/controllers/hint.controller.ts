@@ -70,7 +70,7 @@ export class HintController {
 
     const hints = await prisma.hint.findMany({
       where: { itemId },
-      orderBy: { createdAt: 'asc' },
+      orderBy: { createdAt: 'desc' },
       include: {
         author: {
           select: { id: true, name: true, avatarUrl: true, role: true },

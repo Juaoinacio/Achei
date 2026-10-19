@@ -84,7 +84,10 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
       setErrorMsg('');
       try {
         const data = await getItemHints(item!.id);
-        setHints(data);
+        const sorted = [...data].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setHints(sorted);
       } catch (err: any) {
         console.error('Erro ao carregar comentários:', err);
         setErrorMsg('Não foi possível carregar os comentários.');
@@ -116,11 +119,14 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
       const res = await submitHint(item!.id, newComment.trim());
       const createdHint = res?.hint;
       if (createdHint) {
-        setHints((prev) => [...prev, createdHint]);
+        setHints((prev) => [createdHint, ...prev]);
       } else {
         // Fallback: recarrega lista da API
         const refreshed = await getItemHints(item!.id);
-        setHints(refreshed);
+        const sorted = [...refreshed].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setHints(sorted);
       }
       setNewComment('');
       if (onItemUpdated) onItemUpdated();
