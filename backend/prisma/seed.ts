@@ -5,6 +5,7 @@ import { seedBlocks } from './seed-blocks';
 import { seedCategories } from './seed-categories';
 import { seedBadges } from './seed-badges';
 import { seedAdmin } from './seed-admin';
+import { seedStudents } from './seed-students';
 
 async function main() {
   console.log('====================================================');
@@ -15,24 +16,28 @@ async function main() {
 
   try {
     // 1. Cursos Acadêmicos Oficiais da Unochapecó
-    console.log('\n[1/5] Cursos Acadêmicos:');
+    console.log('\n[1/6] Cursos Acadêmicos:');
     await seedCourses();
 
     // 2. Blocos Oficiais do Campus Chapecó (10 Blocos)
-    console.log('\n[2/5] Blocos do Campus:');
+    console.log('\n[2/6] Blocos do Campus:');
     await seedBlocks();
 
     // 3. Categorias Oficiais de Pertences
-    console.log('\n[3/5] Categorias de Pertences:');
+    console.log('\n[3/6] Categorias de Pertences:');
     await seedCategories();
 
     // 4. Medalhas e Gamificação (Badges)
-    console.log('\n[4/5] Medalhas & Gamificação:');
+    console.log('\n[4/6] Medalhas & Gamificação:');
     await seedBadges();
 
     // 5. Usuário Administrador do Sistema (admin.uno@unochapeco.edu.br)
-    console.log('\n[5/5] Administrador Geral:');
+    console.log('\n[5/6] Administrador Geral:');
     await seedAdmin();
+
+    // 6. Três Estudantes Oficiais da Unochapecó
+    console.log('\n[6/6] Estudantes Oficiais:');
+    await seedStudents();
 
     const elapsed = ((Date.now() - startTime) / 1000).toFixed(2);
     console.log('\n====================================================');

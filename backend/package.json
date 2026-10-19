@@ -15,7 +15,8 @@
     "seed:courses": "tsx prisma/seed-courses.ts",
     "seed:blocks": "tsx prisma/seed-blocks.ts",
     "seed:categories": "tsx prisma/seed-categories.ts",
-    "seed:badges": "tsx prisma/seed-badges.ts"
+    "seed:badges": "tsx prisma/seed-badges.ts",
+    "seed:students": "tsx prisma/seed-students.ts"
   },
   "keywords": [
     "achados-e-perdidos",
