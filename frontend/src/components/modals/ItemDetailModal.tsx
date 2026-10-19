@@ -334,9 +334,8 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
               <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
                 {item.category && (
                   <>
-                    <span className="font-bold text-brand-blue flex items-center gap-1">
-                      <i className={`bx ${item.category.iconName || 'bx-tag'} text-xs`}></i>
-                      <span>{item.category.name}</span>
+                    <span className="font-bold text-brand-blue">
+                      {item.category.name}
                     </span>
                     <span>•</span>
                   </>
