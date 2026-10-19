@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Item } from '../../types';
-import { toggleItemLike, toggleItemSave } from '../../services/api';
+import { toggleItemLike, toggleItemSave, getCurrentUser } from '../../services/api';
 import { Button, Badge, Card, Avatar } from '../ui';
 
 interface ItemCardProps {
@@ -11,6 +11,7 @@ interface ItemCardProps {
   onOpenClaimModal: (item: Item) => void;
   onOpenHintModal: (item: Item) => void;
   onOpenPinModal: (item: Item) => void;
+  onOpenEditModal?: (item: Item) => void;
 }
 
 export const ItemCard: React.FC<ItemCardProps> = ({
@@ -18,7 +19,10 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   onOpenClaimModal,
   onOpenHintModal,
   onOpenPinModal,
+  onOpenEditModal,
 }) => {
+  const currentUser = getCurrentUser();
+  const isAuthor = currentUser && item && currentUser.id === item.authorId;
   const [liked, setLiked] = useState(item.isLiked ?? false);
   const [likeCount, setLikeCount] = useState(item._count?.likes ?? 0);
   const [saved, setSaved] = useState(item.isSaved ?? false);
@@ -82,8 +86,25 @@ export const ItemCard: React.FC<ItemCardProps> = ({
             </div>
           </div>
 
-          {/* Badges de Tipo & Custódia */}
+          {/* Badges de Tipo & Custódia + Ação de Editar do Autor */}
           <div className="flex items-center gap-1.5 flex-wrap justify-end">
+            {isAuthor && onOpenEditModal && (
+              <span
+                role="button"
+                tabIndex={0}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onOpenEditModal(item);
+                }}
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-bold text-brand-blue hover:text-blue-800 bg-blue-50 hover:bg-blue-100/80 border border-blue-200 transition-colors cursor-pointer"
+                title="Editar ou cancelar sua publicação"
+              >
+                <i className="bx bx-edit text-sm"></i>
+                <span>Editar</span>
+              </span>
+            )}
+
             {isLost ? (
               <Badge variant="lost" icon="bx-help-circle">
                 PERDIDO

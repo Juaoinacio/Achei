@@ -14,6 +14,7 @@ import { PublishModal } from '../components/modals/PublishModal';
 import { ClaimModal } from '../components/modals/ClaimModal';
 import { HandoffPinModal } from '../components/modals/HandoffPinModal';
 import { CommentsModal } from '../components/modals/CommentsModal';
+import { EditItemModal } from '../components/modals/EditItemModal';
 
 export default function HomePage() {
   const router = useRouter();
@@ -56,6 +57,8 @@ export default function HomePage() {
   const [selectedPinItem, setSelectedPinItem] = useState<Item | null>(null);
   const [isHintModalOpen, setIsHintModalOpen] = useState(false);
   const [selectedHintItem, setSelectedHintItem] = useState<Item | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedEditItem, setSelectedEditItem] = useState<Item | null>(null);
 
   // Carregar Blocos e Categorias no Mount
   useEffect(() => {
@@ -382,6 +385,10 @@ export default function HomePage() {
                   setSelectedPinItem(it);
                   setIsPinModalOpen(true);
                 }}
+                onOpenEditModal={(it) => {
+                  setSelectedEditItem(it);
+                  setIsEditModalOpen(true);
+                }}
               />
             ))}
 
@@ -436,6 +443,23 @@ export default function HomePage() {
         }}
         onItemUpdated={() => fetchItems()}
         item={selectedHintItem}
+      />
+
+      <EditItemModal
+        isOpen={isEditModalOpen}
+        onClose={() => {
+          setIsEditModalOpen(false);
+          setSelectedEditItem(null);
+        }}
+        onSuccess={() => fetchItems()}
+        onDeleteSuccess={() => {
+          setIsEditModalOpen(false);
+          setSelectedEditItem(null);
+          fetchItems();
+        }}
+        item={selectedEditItem}
+        blocks={blocks}
+        categories={categories}
       />
 
     </div>

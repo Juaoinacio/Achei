@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { Item, Hint } from '../../../types';
+import { Item, Hint, CampusBlock, Category } from '../../../types';
 import {
   getItemById,
   getItemHints,
@@ -13,12 +13,15 @@ import {
   toggleItemSave,
   getCurrentUser,
   getAuthToken,
+  getCampusBlocks,
+  getCategories,
 } from '../../../services/api';
 import { Header } from '../../../components/common/Header';
 import { Avatar, Badge, Button } from '../../../components/ui';
 import { ClaimModal } from '../../../components/modals/ClaimModal';
 import { HandoffPinModal } from '../../../components/modals/HandoffPinModal';
 import { PublishModal } from '../../../components/modals/PublishModal';
+import { EditItemModal } from '../../../components/modals/EditItemModal';
 
 function formatRelativeTime(dateString: string): string {
   try {
@@ -68,9 +71,27 @@ export default function ItemDetailPage() {
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
   const [isPinModalOpen, setIsPinModalOpen] = useState(false);
   const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [blocks, setBlocks] = useState<CampusBlock[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   const currentUser = getCurrentUser();
   const isAuthor = currentUser && item && currentUser.id === item.authorId;
+
+  // Carrega blocos e categorias
+  useEffect(() => {
+    async function loadMeta() {
+      try {
+        const [blocksData, catsData] = await Promise.all([
+          getCampusBlocks().catch(() => []),
+          getCategories().catch(() => []),
+        ]);
+        setBlocks(blocksData);
+        setCategories(catsData);
+      } catch {}
+    }
+    loadMeta();
+  }, []);
 
   // Carrega Item e Comentários
   useEffect(() => {
@@ -355,13 +376,26 @@ export default function ItemDetailPage() {
                   </div>
                 </div>
 
-                {/* Karma Score do Autor */}
-                <div
-                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs font-extrabold shrink-0"
-                  title="Pontos de reputação comunitária"
-                >
-                  <i className="bx bxs-star text-amber-500"></i>
-                  <span>{item.author?.reputationScore ?? 0}</span>
+                <div className="flex items-center gap-2 shrink-0">
+                  {isAuthor && (
+                    <button
+                      onClick={() => setIsEditModalOpen(true)}
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-brand-blue border border-blue-200 text-xs font-bold transition-colors cursor-pointer"
+                      title="Editar ou cancelar sua publicação"
+                    >
+                      <i className="bx bx-edit text-sm"></i>
+                      <span>Editar</span>
+                    </button>
+                  )}
+
+                  {/* Karma Score do Autor */}
+                  <div
+                    className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 text-xs font-extrabold"
+                    title="Pontos de reputação comunitária"
+                  >
+                    <i className="bx bxs-star text-amber-500"></i>
+                    <span>{item.author?.reputationScore ?? 0}</span>
+                  </div>
                 </div>
               </div>
 
@@ -593,8 +627,21 @@ export default function ItemDetailPage() {
         isOpen={isPublishModalOpen}
         onClose={() => setIsPublishModalOpen(false)}
         onSuccess={() => router.push('/')}
-        blocks={[]}
-        categories={[]}
+        blocks={blocks}
+        categories={categories}
+      />
+
+      <EditItemModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSuccess={(updated) => setItem(updated)}
+        onDeleteSuccess={() => {
+          setIsEditModalOpen(false);
+          router.push('/');
+        }}
+        item={item}
+        blocks={blocks}
+        categories={categories}
       />
     </div>
   );

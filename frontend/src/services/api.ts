@@ -1,4 +1,4 @@
-import { CampusBlock, Category, Course, FeedResponse, Hint, Item } from '../types';
+import { CampusBlock, Category, Course, FeedResponse, Hint, Item, ItemStatus } from '../types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333/api';
 
@@ -109,6 +109,38 @@ export async function createItem(data: CreateItemDto): Promise<{ message: string
   return fetchApi<{ message: string; item: Item }>('/items', {
     method: 'POST',
     body: JSON.stringify(data),
+  });
+}
+
+export interface UpdateItemDto {
+  title?: string;
+  description?: string;
+  categoryId?: string;
+  blockId?: string;
+  specificLocation?: string;
+  photoUrl?: string;
+  hasReward?: boolean;
+  isUnderStaffCustody?: boolean;
+  custodyLocation?: string;
+  status?: ItemStatus;
+}
+
+export async function updateItem(id: string, data: UpdateItemDto): Promise<{ message: string; item: Item }> {
+  return fetchApi<{ message: string; item: Item }>(`/items/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+  });
+}
+
+export async function deleteItem(id: string): Promise<{ message: string }> {
+  return fetchApi<{ message: string }>(`/items/${id}`, {
+    method: 'DELETE',
+  });
+}
+
+export async function markItemAsReturned(id: string): Promise<{ message: string; item: Item }> {
+  return fetchApi<{ message: string; item: Item }>(`/items/${id}/return`, {
+    method: 'PATCH',
   });
 }
 
