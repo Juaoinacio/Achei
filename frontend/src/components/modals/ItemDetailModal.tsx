@@ -328,40 +328,42 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
           {/* 2. Área de Detalhes & Feed de Comentários com Scroll */}
           <div className="flex-1 min-h-0 p-3.5 sm:p-4 overflow-y-auto space-y-4 custom-scrollbar">
-            {/* Título e Descrição */}
+            {/* Título e Status lado a lado (justify-between) */}
             <div className="space-y-2 pb-3 border-b border-slate-100">
-              {/* Badges de Tipo e Status */}
-              <div className="flex items-center gap-1.5 flex-wrap mb-2">
-                {item.status === 'RETURNED' ? (
-                  <Badge variant="returned" size="md" icon="bx-check-double">
-                    {isLost ? 'RECUPERADO' : 'DEVOLVIDO'}
-                  </Badge>
-                ) : isLost ? (
-                  <Badge variant="lost" size="md" icon="bx-help-circle">
-                    PERDIDO
-                  </Badge>
-                ) : (
-                  <Badge variant="found" size="md" icon="bx-check-circle">
-                    ACHADO
-                  </Badge>
-                )}
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug flex-1">
+                  {item.title}
+                </h3>
 
-                {item.isUnderStaffCustody && (
-                  <Badge variant="portaria" size="md" icon="bx-shield-quarter">
-                    NA PORTARIA
-                  </Badge>
-                )}
+                {/* Badges de Tipo e Status */}
+                <div className="flex items-center gap-1.5 flex-wrap justify-end shrink-0">
+                  {item.status === 'RETURNED' ? (
+                    <Badge variant="returned" size="sm" icon="bx-check-double">
+                      {isLost ? 'RECUPERADO' : 'DEVOLVIDO'}
+                    </Badge>
+                  ) : isLost ? (
+                    <Badge variant="lost" size="sm" icon="bx-help-circle">
+                      PERDIDO
+                    </Badge>
+                  ) : (
+                    <Badge variant="found" size="sm" icon="bx-check-circle">
+                      ACHADO
+                    </Badge>
+                  )}
 
-                {item.hasReward && (
-                  <Badge variant="reward" size="md" icon="bx-gift">
-                    COM RECOMPENSA
-                  </Badge>
-                )}
+                  {item.isUnderStaffCustody && (
+                    <Badge variant="portaria" size="sm" icon="bx-shield-quarter">
+                      PORTARIA
+                    </Badge>
+                  )}
+
+                  {item.hasReward && (
+                    <Badge variant="reward" size="sm" icon="bx-gift">
+                      RECOMPENSA
+                    </Badge>
+                  )}
+                </div>
               </div>
-
-              <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug">
-                {item.title}
-              </h3>
               <p className="text-xs text-slate-700 leading-relaxed whitespace-pre-wrap">
                 {item.description}
               </p>
