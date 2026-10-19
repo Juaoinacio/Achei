@@ -392,7 +392,7 @@ export default function ItemDetailPage() {
                 <div className="space-y-3 pt-1">
                   <div className="flex items-center justify-between">
                     <h5 className="font-bold text-xs uppercase tracking-wider text-slate-500">
-                      Comentários ({hints.length})
+                      Comentários {hints.length}
                     </h5>
                     <span className="text-[11px] text-slate-400">
                       Ajude com pistas e detalhes

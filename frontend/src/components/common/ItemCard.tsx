@@ -184,7 +184,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
           >
             <i className="bx bx-message-rounded-dots text-brand-blue text-base"></i>
             <span className="hidden sm:inline">Comentários</span>
-            {item._count?.hints ? <span className="font-bold">({item._count.hints})</span> : null}
+            {item._count?.hints ? <span className="font-bold">{item._count.hints}</span> : null}
           </button>
         </div>
 
