@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { Item } from '../../types';
 import { toggleItemLike, toggleItemSave } from '../../services/api';
 import { Button, Badge, Card, Avatar } from '../ui';
@@ -107,20 +108,22 @@ export const ItemCard: React.FC<ItemCardProps> = ({
 
       {/* Foto do Pertence (se houver) */}
       {item.photoUrl && (
-        <div className="rounded-xl overflow-hidden bg-slate-100 max-h-72 border border-brand-gray">
+        <Link href={`/item/${item.id}`} className="block rounded-xl overflow-hidden bg-slate-100 max-h-72 border border-brand-gray group">
           <img
             src={item.photoUrl}
             alt={item.title}
-            className="w-full h-56 sm:h-64 object-cover hover:scale-101 transition-transform duration-200"
+            className="w-full h-56 sm:h-64 object-cover group-hover:scale-101 transition-transform duration-200 cursor-pointer"
           />
-        </div>
+        </Link>
       )}
 
       {/* Título & Descrição */}
       <div className="space-y-1">
-        <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug">
-          {item.title}
-        </h3>
+        <Link href={`/item/${item.id}`} className="block group">
+          <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug group-hover:text-brand-blue transition-colors cursor-pointer">
+            {item.title}
+          </h3>
+        </Link>
         <p className="text-xs sm:text-sm text-slate-600 leading-relaxed line-clamp-3">
           {item.description}
         </p>

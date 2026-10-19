@@ -1,4 +1,4 @@
-import { CampusBlock, Category, Course, FeedResponse, Item } from '../types';
+import { CampusBlock, Category, Course, FeedResponse, Hint, Item } from '../types';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333/api';
 
@@ -148,6 +148,22 @@ export async function submitHint(itemId: string, content: string): Promise<any> 
   return fetchApi(`/items/${itemId}/hints`, {
     method: 'POST',
     body: JSON.stringify({ content }),
+  });
+}
+
+export async function getItemHints(itemId: string): Promise<Hint[]> {
+  return fetchApi<Hint[]>(`/items/${itemId}/hints`);
+}
+
+export async function markHintHelpful(hintId: string): Promise<any> {
+  return fetchApi(`/hints/${hintId}/helpful`, {
+    method: 'PATCH',
+  });
+}
+
+export async function deleteHint(hintId: string): Promise<any> {
+  return fetchApi(`/hints/${hintId}`, {
+    method: 'DELETE',
   });
 }
 

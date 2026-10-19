@@ -13,7 +13,7 @@ import { Button, Card } from '../components/ui';
 import { PublishModal } from '../components/modals/PublishModal';
 import { ClaimModal } from '../components/modals/ClaimModal';
 import { HandoffPinModal } from '../components/modals/HandoffPinModal';
-import { NewHintModal } from '../components/modals/NewHintModal';
+import { CommentsModal } from '../components/modals/CommentsModal';
 
 export default function HomePage() {
   const router = useRouter();
@@ -428,13 +428,13 @@ export default function HomePage() {
         item={selectedPinItem}
       />
 
-      <NewHintModal
+      <CommentsModal
         isOpen={isHintModalOpen}
         onClose={() => {
           setIsHintModalOpen(false);
           setSelectedHintItem(null);
         }}
-        onSuccess={() => fetchItems()}
+        onItemUpdated={() => fetchItems()}
         item={selectedHintItem}
       />
 
