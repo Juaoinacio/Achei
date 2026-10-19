@@ -300,7 +300,7 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
                       {/* Badge Comentário Útil */}
                       {hint.isHelpful && (
                         <div className="pt-1">
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-bold">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-bold">
                             <i className="bx bxs-star text-amber-500"></i>
                             ⭐ Comentário Útil
                           </span>

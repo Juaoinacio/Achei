@@ -113,7 +113,7 @@ export default function RankPage() {
 
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="space-y-2 max-w-2xl">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-bold text-brand-yellow uppercase tracking-wider">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-white/10 border border-white/20 text-xs font-bold text-brand-yellow uppercase tracking-wider">
                 <i className="bx bx-medal text-sm"></i>
                 Reconhecimento Acadêmico Unochapecó
               </div>
@@ -323,7 +323,7 @@ export default function RankPage() {
                       </div>
                       <Avatar name={top1.name} size="lg" className="mx-auto mt-2 ring-2 ring-brand-yellow" />
                       <div>
-                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 bg-brand-yellow px-2 py-0.5 rounded-full">
+                        <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-800 bg-brand-yellow px-2 py-0.5 rounded-md">
                           LÍDER DO CAMPUS
                         </span>
                         <h3 className="font-extrabold text-sm sm:text-base text-brand-dark mt-1 truncate">{top1.name}</h3>

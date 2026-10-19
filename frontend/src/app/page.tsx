@@ -172,7 +172,7 @@ export default function HomePage() {
       <div className="lg:hidden bg-white border-b border-brand-gray px-4 py-2 overflow-x-auto no-scrollbar flex items-center gap-2 shadow-xs">
         <button
           onClick={() => setSelectedBlockId('all')}
-          className={`shrink-0 px-3 py-1 rounded-full text-xs font-bold transition-colors cursor-pointer ${
+          className={`shrink-0 px-3 py-1 rounded-md text-xs font-bold transition-colors cursor-pointer ${
             selectedBlockId === 'all'
               ? 'bg-brand-blue text-white shadow-xs'
               : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border border-brand-gray'
@@ -186,7 +186,7 @@ export default function HomePage() {
             <button
               key={block.id}
               onClick={() => setSelectedBlockId(block.id)}
-              className={`shrink-0 px-3 py-1 rounded-full text-xs font-semibold border transition-colors cursor-pointer ${
+              className={`shrink-0 px-3 py-1 rounded-md text-xs font-semibold border transition-colors cursor-pointer ${
                 isSelected
                   ? 'bg-brand-blue text-white border-brand-blue font-bold shadow-xs'
                   : 'bg-slate-100 hover:bg-slate-200 text-slate-700 border-brand-gray'

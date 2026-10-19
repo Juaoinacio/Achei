@@ -329,7 +329,7 @@ export default function ItemDetailPage() {
               {/* Badges Flutuantes no Rodapé do Visual */}
               <div className="absolute bottom-4 left-4 right-4 z-10 flex items-center justify-between gap-2 flex-wrap pointer-events-none">
                 <div className="flex items-center gap-2 flex-wrap pointer-events-auto">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-black/60 text-white backdrop-blur-md text-xs font-semibold border border-white/20">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-black/60 text-white backdrop-blur-md text-xs font-semibold border border-white/20">
                     <i className="bx bx-buildings text-brand-yellow"></i>
                     <span>{item.block?.name || 'Campus Unochapecó'}</span>
                     {item.specificLocation && (
@@ -339,7 +339,7 @@ export default function ItemDetailPage() {
                 </div>
 
                 {item.custodyLocation && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-purple-900/80 text-white backdrop-blur-md text-xs font-medium border border-purple-400/30 pointer-events-auto">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-purple-900/80 text-white backdrop-blur-md text-xs font-medium border border-purple-400/30 pointer-events-auto">
                     <i className="bx bx-map-pin"></i>
                     <span>Guarda: {item.custodyLocation}</span>
                   </span>
@@ -365,7 +365,7 @@ export default function ItemDetailPage() {
                         {item.author?.name || 'Estudante'}
                       </h4>
                       {item.author?.role === 'STAFF_PORTARIA' && (
-                        <span className="bg-purple-100 text-purple-700 text-[10px] font-bold px-1.5 py-0.2 rounded">
+                        <span className="bg-purple-100 text-purple-700 text-[10px] font-bold px-1.5 py-0.5 rounded-md">
                           Portaria
                         </span>
                       )}
@@ -479,7 +479,7 @@ export default function ItemDetailPage() {
 
                             {hint.isHelpful && (
                               <div className="pt-1">
-                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-bold">
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 text-amber-800 border border-amber-300 text-[10px] font-bold">
                                   ⭐ Comentário Útil
                                 </span>
                               </div>

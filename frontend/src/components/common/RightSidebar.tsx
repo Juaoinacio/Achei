@@ -57,7 +57,7 @@ export const RightSidebar: React.FC = () => {
         <div className="space-y-2 text-xs text-slate-600">
           <div className="flex items-center justify-between">
             <span className="text-slate-500">Status do Balcão:</span>
-            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-brand-blue bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-brand-blue bg-blue-50 px-2 py-0.5 rounded-md border border-blue-200">
               <span className="w-1.5 h-1.5 rounded-full bg-brand-blue animate-pulse"></span>
               Aberto
             </span>

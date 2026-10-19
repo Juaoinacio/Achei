@@ -488,7 +488,7 @@ export default function RoutersPage() {
             
             {/* Banner de Introdução */}
             <div className="bg-gradient-to-r from-brand-blue to-brand-blueHover text-white rounded-2xl p-6 shadow-sm">
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-extrabold bg-brand-yellow text-brand-dark mb-2">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-extrabold bg-brand-yellow text-brand-dark mb-2">
                 <i className="bx bx-check-circle"></i> Prisma 7 + PostgreSQL + Express 5
               </span>
               <h1 className="text-2xl font-extrabold tracking-tight">Catálogo de Rotas & APIs</h1>

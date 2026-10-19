@@ -97,7 +97,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
                   e.stopPropagation();
                   onOpenEditModal(item);
                 }}
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-lg text-xs font-bold text-brand-blue hover:text-blue-800 bg-blue-50 hover:bg-blue-100/80 border border-blue-200 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-xs font-bold text-brand-blue hover:text-blue-800 bg-blue-50 hover:bg-blue-100/80 border border-blue-200 transition-colors cursor-pointer"
                 title="Editar ou cancelar sua publicação"
               >
                 <i className="bx bx-edit text-sm"></i>
