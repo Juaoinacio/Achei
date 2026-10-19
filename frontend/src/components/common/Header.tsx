@@ -117,10 +117,11 @@ export const Header: React.FC<HeaderProps> = ({
                   Entrar
                 </Button>
               </Link>
-              <Link href="/register" className="hidden sm:inline-block">
-                <Button variant="outline" size="sm" className="bg-transparent border-white/30 text-white hover:bg-white/10">
-                  Cadastrar
-                </Button>
+              <Link
+                href="/register"
+                className="hidden sm:inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border border-white/35 text-white hover:bg-white/15 hover:border-white/60 transition-all select-none active:scale-95 cursor-pointer"
+              >
+                Cadastrar
               </Link>
             </div>
           )}
