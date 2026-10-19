@@ -421,7 +421,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           <div className="px-3.5 sm:px-4 py-2.5 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0 z-10">
             <h5 className="font-bold text-xs uppercase tracking-wider text-slate-600 flex items-center gap-1.5">
               <i className="bx bx-message-rounded-dots text-brand-blue"></i>
-              <span>Comentários ({hints.length})</span>
+              <span>Comentários {hints.length}</span>
             </h5>
             <span className="text-[11px] text-slate-400">
               Ajude com pistas e detalhes
