@@ -204,15 +204,15 @@ const API_ROUTES: ApiRouteDef[] = [
     },
   },
 
-  // 5. Pistas Comunitárias
+  // 5. Comentários Comunitários
   {
     id: 'hints-create',
     method: 'POST',
     path: '/api/hints',
     category: 'hints',
-    categoryLabel: 'Pistas Comunitárias',
-    title: 'Adicionar Pista em um Item',
-    description: 'Publica informação útil que ajuda a localizar um pertence perdido no campus.',
+    categoryLabel: 'Comentários Comunitários',
+    title: 'Adicionar Comentário em um Item',
+    description: 'Publica comentário ou informação útil que ajuda a localizar um pertence no campus.',
     requiresAuth: true,
     sampleBody: {
       itemId: 'ID_DO_ITEM',
@@ -238,7 +238,7 @@ const API_ROUTES: ApiRouteDef[] = [
     category: 'gamification',
     categoryLabel: 'Gamificação & Ranking',
     title: 'Lista de Medalhas & Conquistas',
-    description: 'Retorna todas as insígnias desbloqueáveis por devoluções e pistas úteis.',
+    description: 'Retorna todas as insígnias desbloqueáveis por devoluções e comentários úteis.',
     requiresAuth: false,
   },
 ];
@@ -505,7 +505,7 @@ export default function RoutersPage() {
                   { id: 'auth', label: 'Auth' },
                   { id: 'items', label: 'Itens' },
                   { id: 'claims', label: 'Retirada PIN' },
-                  { id: 'hints', label: 'Pistas' },
+                  { id: 'hints', label: 'Comentários' },
                   { id: 'users', label: 'Usuários' },
                   { id: 'gamification', label: 'Rankings' },
                 ].map((cat) => (

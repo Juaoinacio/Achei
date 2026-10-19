@@ -90,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
                 Publicar Item
               </Button>
 
-              <button className="relative w-9 h-9 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors cursor-pointer" title="Pistas e Alertas">
+              <button className="relative w-9 h-9 rounded-lg hover:bg-white/10 flex items-center justify-center text-white transition-colors cursor-pointer" title="Notificações e Alertas">
                 <i className="bx bx-bell text-xl"></i>
                 <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-brand-yellow ring-2 ring-brand-blue"></span>
               </button>

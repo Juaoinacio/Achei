@@ -255,8 +255,8 @@ export default function RankPage() {
                     +2
                   </span>
                   <div>
-                    <h4 className="font-bold text-brand-dark text-xs">Pista Útil Confirmada</h4>
-                    <p className="text-slate-500 text-[11px]">Quando o proprietário confirma que sua dica ajudou a encontrar o pertence.</p>
+                    <h4 className="font-bold text-brand-dark text-xs">Comentário Útil Confirmado</h4>
+                    <p className="text-slate-500 text-[11px]">Quando o proprietário confirma que seu comentário ajudou a encontrar o pertence.</p>
                   </div>
                 </div>
               </div>
@@ -291,7 +291,7 @@ export default function RankPage() {
                 <p className="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
                   {searchTerm
                     ? 'Nenhum estudante encontrado com o termo pesquisado.'
-                    : 'Ainda não há pontuações registradas. Os estudantes que devolverem pertences perdidos ou enviarem pistas úteis pontuarão aqui.'}
+                    : 'Ainda não há pontuações registradas. Os estudantes que devolverem pertences perdidos ou enviarem comentários úteis pontuarão aqui.'}
                 </p>
               </Card>
             ) : (

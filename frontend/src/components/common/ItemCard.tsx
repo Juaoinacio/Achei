@@ -172,14 +172,14 @@ export const ItemCard: React.FC<ItemCardProps> = ({
             <i className={`bx ${saved ? 'bxs-bookmark text-brand-blue' : 'bx-bookmark'} text-base`}></i>
           </button>
 
-          {/* Botão Deixar Pista */}
+          {/* Botão Comentários */}
           <button
             onClick={() => onOpenHintModal(item)}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-brand-gray text-slate-600 font-medium transition-colors cursor-pointer"
-            title="Enviar pista para ajudar"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 hover:bg-slate-100 border border-brand-gray text-slate-600 font-medium transition-colors cursor-pointer"
+            title="Enviar comentário para ajudar"
           >
-            <i className="bx bx-bulb text-brand-yellow text-base"></i>
-            <span className="hidden sm:inline">Pista</span>
+            <i className="bx bx-message-rounded-dots text-brand-blue text-base"></i>
+            <span className="hidden sm:inline">Comentários</span>
             {item._count?.hints ? <span className="font-bold">({item._count.hints})</span> : null}
           </button>
         </div>

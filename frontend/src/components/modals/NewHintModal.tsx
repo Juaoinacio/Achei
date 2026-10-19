@@ -30,7 +30,7 @@ export const NewHintModal: React.FC<NewHintModalProps> = ({
     e.preventDefault();
     if (!item) return;
     if (!content.trim()) {
-      setErrorMsg('Por favor, informe os detalhes da pista para ajudar.');
+      setErrorMsg('Por favor, informe os detalhes do comentário para ajudar.');
       return;
     }
 
@@ -51,7 +51,7 @@ export const NewHintModal: React.FC<NewHintModalProps> = ({
       onSuccess();
       onClose();
     } catch (err: any) {
-      setErrorMsg(err.message || 'Erro ao enviar pista. Tente novamente.');
+      setErrorMsg(err.message || 'Erro ao enviar comentário. Tente novamente.');
     } finally {
       setSubmitting(false);
     }
@@ -76,7 +76,7 @@ export const NewHintModal: React.FC<NewHintModalProps> = ({
         onClick={handleSubmit}
         isLoading={submitting}
       >
-        Publicar Pista (+2 Karma)
+        Publicar Comentário (+2 Karma)
       </Button>
     </>
   );
@@ -85,12 +85,12 @@ export const NewHintModal: React.FC<NewHintModalProps> = ({
     <Dialog
       isOpen={isOpen}
       onClose={onClose}
-      title={`Enviar Pista: ${item.title}`}
-      subtitle="Ajude a encontrar o pertence compartilhando informações sobre onde ele foi avistado."
+      title={`Comentários: ${item.title}`}
+      subtitle="Ajude a encontrar o pertence compartilhando informações sobre onde ele foi avistado ou detalhes relevantes."
       badge={
         <div className="flex items-center gap-2">
-          <Badge variant="blue" icon="bx-bulb">
-            PISTA COLABORATIVA
+          <Badge variant="blue" icon="bx-message-rounded-dots">
+            COMENTÁRIO COLABORATIVO
           </Badge>
           <span className="text-xs text-slate-400 font-medium">Ganhe +2 Karma</span>
         </div>
@@ -108,7 +108,7 @@ export const NewHintModal: React.FC<NewHintModalProps> = ({
 
         {/* Onde viu */}
         <Input
-          label="Onde você viu o pertence?"
+          label="Onde você viu o pertence? (opcional)"
           leftIcon="bx-map-pin"
           value={locationSeen}
           onChange={(e) => setLocationSeen(e.target.value)}
@@ -117,16 +117,16 @@ export const NewHintModal: React.FC<NewHintModalProps> = ({
 
         {/* Quando viu */}
         <Input
-          label="Quando você viu?"
+          label="Quando você viu? (opcional)"
           leftIcon="bx-time-five"
           value={timeSeen}
           onChange={(e) => setTimeSeen(e.target.value)}
           placeholder="Ex: Hoje por volta das 10h15 no intervalo..."
         />
 
-        {/* Detalhes da pista */}
+        {/* Detalhes do comentário */}
         <Textarea
-          label="Detalhes da sua Pista"
+          label="Detalhes do seu Comentário"
           rows={3}
           value={content}
           onChange={(e) => setContent(e.target.value)}

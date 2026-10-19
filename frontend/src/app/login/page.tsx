@@ -105,7 +105,7 @@ export default function LoginPage() {
               </div>
               <div className="p-2 rounded-lg bg-white/10">
                 <p className="text-xl font-extrabold text-white">18 min</p>
-                <p className="text-[11px] text-slate-200 font-medium">Tempo Médio 1ª Pista</p>
+                <p className="text-[11px] text-slate-200 font-medium">Tempo Médio 1º Comentário</p>
               </div>
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function LoginPage() {
               Acessar Conta
             </h1>
             <p className="text-xs sm:text-sm text-slate-600">
-              Entre com suas credenciais acadêmicas para publicar itens e registrar pistas.
+              Entre com suas credenciais acadêmicas para publicar itens e registrar comentários.
             </p>
           </div>
 

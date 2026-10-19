@@ -5,7 +5,7 @@ import { AppError } from '../middlewares/error.middleware';
 import { NotificationType } from '@prisma/client';
 
 const createHintSchema = z.object({
-  content: z.string().min(5, 'A pista deve conter no mínimo 5 caracteres.'),
+  content: z.string().min(5, 'O comentário deve conter no mínimo 5 caracteres.'),
 });
 
 export class HintController {
@@ -24,7 +24,7 @@ export class HintController {
     }
 
     if (item.status === 'RETURNED' || item.status === 'CANCELLED') {
-      throw new AppError('Não é possível adicionar pistas a um item já finalizado.', 400);
+      throw new AppError('Não é possível adicionar comentários a um item já finalizado.', 400);
     }
 
     const hint = await prisma.hint.create({
@@ -46,8 +46,8 @@ export class HintController {
         data: {
           userId: item.authorId,
           type: NotificationType.HINT_RECEIVED,
-          title: 'Nova pista recebida!',
-          message: `Alguém adicionou uma nova pista no seu item: "${item.title}".`,
+          title: 'Novo comentário recebido!',
+          message: `Alguém comentou no seu pertence: "${item.title}".`,
           referenceId: item.id,
         },
       });
@@ -60,7 +60,7 @@ export class HintController {
     }
 
     res.status(201).json({
-      message: 'Pista enviada com sucesso!',
+      message: 'Comentário enviado com sucesso!',
       hint,
     });
   }
@@ -91,15 +91,15 @@ export class HintController {
     });
 
     if (!hint) {
-      throw new AppError('Pista não encontrada.', 404);
+      throw new AppError('Comentário não encontrado.', 404);
     }
 
     if (hint.item.authorId !== userId) {
-      throw new AppError('Apenas o autor da publicação pode marcar uma pista como útil.', 403);
+      throw new AppError('Apenas o autor da publicação pode marcar um comentário como útil.', 403);
     }
 
     if (hint.isHelpful) {
-      res.json({ message: 'Esta pista já está marcada como útil.', hint });
+      res.json({ message: 'Este comentário já está marcado como útil.', hint });
       return;
     }
 
@@ -119,14 +119,14 @@ export class HintController {
       data: {
         userId: hint.authorId,
         type: NotificationType.HINT_RECEIVED,
-        title: 'Sua pista foi útil! ⭐',
-        message: `O autor de "${hint.item.title}" marcou sua pista como útil. Você ganhou +3 pontos de reputação!`,
+        title: 'Seu comentário foi útil! ⭐',
+        message: `O autor de "${hint.item.title}" marcou seu comentário como útil. Você ganhou +3 pontos de reputação!`,
         referenceId: hint.itemId,
       },
     });
 
     res.json({
-      message: 'Pista marcada como útil com sucesso!',
+      message: 'Comentário marcado como útil com sucesso!',
       hint: updatedHint,
     });
   }
@@ -139,15 +139,15 @@ export class HintController {
     const hint = await prisma.hint.findUnique({ where: { id } });
 
     if (!hint) {
-      throw new AppError('Pista não encontrada.', 404);
+      throw new AppError('Comentário não encontrado.', 404);
     }
 
     if (hint.authorId !== userId && userRole !== 'ADMIN') {
-      throw new AppError('Você não tem permissão para excluir esta pista.', 403);
+      throw new AppError('Você não tem permissão para excluir este comentário.', 403);
     }
 
     await prisma.hint.delete({ where: { id } });
 
-    res.json({ message: 'Pista excluída com sucesso.' });
+    res.json({ message: 'Comentário excluído com sucesso.' });
   }
 }
