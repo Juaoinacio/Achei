@@ -330,6 +330,20 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
           <div className="flex-1 min-h-0 p-3.5 sm:p-4 overflow-y-auto space-y-4 custom-scrollbar">
             {/* Título e Status lado a lado (justify-between) */}
             <div className="space-y-2 pb-3 border-b border-slate-100">
+              {/* Metadados: Categoria • Tempo Relativo */}
+              <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                {item.category && (
+                  <>
+                    <span className="font-bold text-brand-blue flex items-center gap-1">
+                      <i className={`bx ${item.category.iconName || 'bx-tag'} text-xs`}></i>
+                      <span>{item.category.name}</span>
+                    </span>
+                    <span>•</span>
+                  </>
+                )}
+                <span>Publicado {formatRelativeTime(item.createdAt)}</span>
+              </div>
+
               <div className="flex items-start justify-between gap-3">
                 <h3 className="font-extrabold text-sm sm:text-base text-brand-dark leading-snug flex-1">
                   {item.title}
@@ -386,17 +400,6 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                 )}
               </div>
 
-              <div className="flex items-center gap-2 text-[11px] text-slate-400 pt-1">
-                <span>Publicado {formatRelativeTime(item.createdAt)}</span>
-                {item.category && (
-                  <>
-                    <span>•</span>
-                    <span className="font-medium text-brand-blue">
-                      {item.category.name}
-                    </span>
-                  </>
-                )}
-              </div>
 
               {/* Banner de Item Concluído/Resolvido */}
               {item.status === 'RETURNED' && (
