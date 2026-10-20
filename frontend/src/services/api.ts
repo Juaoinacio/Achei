@@ -1,6 +1,12 @@
 import { CampusBlock, Category, Course, FeedResponse, Hint, Item, ItemStatus } from '../types';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3333/api';
+function getApiBaseUrl(): string {
+  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (typeof window !== 'undefined' && window.location.hostname) {
+    return `http://${window.location.hostname}:3333/api`;
+  }
+  return 'http://localhost:3333/api';
+}
 
 function getHeaders(customHeaders: Record<string, string> = {}): HeadersInit {
   const headers: Record<string, string> = {
@@ -19,7 +25,7 @@ function getHeaders(customHeaders: Record<string, string> = {}): HeadersInit {
 }
 
 export async function fetchApi<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const url = `${getApiBaseUrl()}${endpoint}`;
   try {
     const response = await fetch(url, {
       ...options,
@@ -374,7 +380,7 @@ export async function uploadImageToCloudinary(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(`${API_BASE_URL}/upload`, {
+  const response = await fetch(`${getApiBaseUrl()}/upload`, {
     method: 'POST',
     headers,
     body: formData,
