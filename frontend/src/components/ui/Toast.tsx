@@ -12,7 +12,7 @@ export interface ToastProps {
 export const Toast: React.FC<ToastProps> = ({
   message,
   type = 'error',
-  duration = 1000,
+  duration = 2000,
   onClose,
 }) => {
   const [isExiting, setIsExiting] = useState(false);
@@ -20,7 +20,7 @@ export const Toast: React.FC<ToastProps> = ({
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsExiting(true);
-      setTimeout(onClose, 250);
+      setTimeout(onClose, 300);
     }, duration);
 
     return () => clearTimeout(timer);
@@ -28,7 +28,7 @@ export const Toast: React.FC<ToastProps> = ({
 
   const handleDismiss = () => {
     setIsExiting(true);
-    setTimeout(onClose, 200);
+    setTimeout(onClose, 300);
   };
 
   const isError = type === 'error';
@@ -37,9 +37,9 @@ export const Toast: React.FC<ToastProps> = ({
   return (
     <div
       role="alert"
-      className={`fixed top-5 right-5 z-[70] max-w-sm sm:max-w-md w-auto overflow-hidden rounded-2xl shadow-2xl border transition-all duration-250 ease-out ${
+      className={`fixed top-5 right-5 z-[70] max-w-sm sm:max-w-md w-auto overflow-hidden rounded-2xl shadow-2xl border ${
         isExiting
-          ? 'opacity-0 translate-x-8 scale-95'
+          ? 'animate-toast-out pointer-events-none'
           : 'animate-toast-in'
       } ${
         isError
