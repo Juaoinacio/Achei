@@ -233,7 +233,6 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
         <Toast
           message={commentError}
           type="error"
-          duration={4000}
           onClose={() => setCommentError('')}
         />
       )}

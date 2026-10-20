@@ -166,7 +166,6 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
         <Toast
           message={errorMsg}
           type="error"
-          duration={4000}
           onClose={() => setErrorMsg('')}
         />
       )}

@@ -12,7 +12,7 @@ export interface ToastProps {
 export const Toast: React.FC<ToastProps> = ({
   message,
   type = 'error',
-  duration = 4000,
+  duration = 1000,
   onClose,
 }) => {
   const [isExiting, setIsExiting] = useState(false);
