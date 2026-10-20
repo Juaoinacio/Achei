@@ -6,3 +6,4 @@ export * from './Card';
 export * from './Avatar';
 export * from './Dialog';
 export * from './CourseCombobox';
+export * from './Toast';

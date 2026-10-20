@@ -10,7 +10,7 @@ import {
   toggleItemSave,
   getCurrentUser,
 } from '../../services/api';
-import { Avatar, Badge, Button } from '../ui';
+import { Avatar, Badge, Button, Toast } from '../ui';
 
 interface ItemDetailModalProps {
   isOpen: boolean;
@@ -228,6 +228,16 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
       {/* Backdrop */}
       <div className="fixed inset-0" onClick={onClose} />
 
+      {/* Toast Flutuante com Timer e Animação Suave */}
+      {commentError && (
+        <Toast
+          message={commentError}
+          type="error"
+          duration={4000}
+          onClose={() => setCommentError('')}
+        />
+      )}
+
       {/* Modal Container inspirado no Instagram (tamanho fixo estático) */}
       <div className="relative bg-white rounded-2xl w-full max-w-5xl h-[92vh] sm:h-[88vh] lg:h-[650px] shadow-2xl overflow-hidden z-10 flex flex-col lg:grid lg:grid-cols-12 animate-in zoom-in-95 duration-150 border-0">
         
@@ -430,18 +440,6 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
 
           {/* 4. Área Exclusiva de Rolagem dos Comentários */}
           <div className="flex-1 min-h-0 p-3.5 sm:p-4 overflow-y-auto space-y-3 custom-scrollbar">
-
-              {commentError && (
-                <div className="p-2.5 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl flex items-center justify-between">
-                  <span>{commentError}</span>
-                  <button
-                    onClick={() => setCommentError('')}
-                    className="text-rose-500 hover:text-rose-700 cursor-pointer"
-                  >
-                    <i className="bx bx-x"></i>
-                  </button>
-                </div>
-              )}
 
               {loadingHints ? (
                 <div className="py-6 flex items-center justify-center text-slate-400 gap-2 text-xs">
