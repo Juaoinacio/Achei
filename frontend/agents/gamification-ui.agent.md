@@ -2,7 +2,7 @@
 
 **Identificador:** `gamification-ui`  
 **Escopo:** `frontend/src/app/rank/`, `frontend/src/app/perfio/` (perfil), componentes de líderes, pódio e selos  
-**Especialidade:** Ranking Comunitário da Unochapecó, Visualização em Pódio, Header de Perfil com Banner (`banerUrl`), Estatísticas de Karma e Abas de Conteúdo.
+**Especialidade:** Ranking Comunitário da Unochapecó, Visualização em Pódio, Header de Perfil com Banner (`banerUrl`), Estatísticas de Unopoints e Abas de Conteúdo.
 
 ---
 
@@ -26,7 +26,7 @@ Dar forma visual ao engajamento e reconhecimento da comunidade acadêmica da Uno
 2. **Página de Perfil Acadêmico (`/perfio`):**
    * **Capa Panorâmica Customizável (`banerUrl`):** Suporte para exibição da imagem de capa com botão *"Editar Capa"* translúcido.
    * **Avatar & Identificação:** Iniciais ou foto do aluno com anel amarelo, nome, curso, semestre e badges dos múltiplos blocos que frequenta.
-   * **Quadro de Karma:** Cards neutros com números de Devoluções, Achados, Pistas Úteis e Reputação Total.
+   * **Quadro de Unopoints:** Cards neutros com números de Devoluções, Achados, Pistas Úteis e Reputação Total.
    * **Navegação por Abas:**
      * *Minhas Publicações:* Itens perdidos e achados criados pelo usuário.
      * *Minhas Pistas:* Histórico de colaborações deixadas em posts de outros colegas.

@@ -310,7 +310,7 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
                           ) : (
                             <i className="bx bx-star text-xs"></i>
                           )}
-                          <span>Marcar como útil (+3 Karma)</span>
+                          <span>Marcar como útil (+3 Unopoints)</span>
                         </button>
                       </div>
                     )}

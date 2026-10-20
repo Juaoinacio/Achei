@@ -512,7 +512,7 @@
                   Baixa Presencial
                 </div>
                 <p class="text-[11px] font-mono text-blue-700 font-semibold">POST /api/claims/:id/confirm</p>
-                <p class="text-[11px] text-slate-600">Portaria confere o PIN. Item vira <strong>RETURNED</strong> e gera karma!</p>
+                <p class="text-[11px] text-slate-600">Portaria confere o PIN. Item vira <strong>RETURNED</strong> e gera Unopoints!</p>
               </div>
             </div>
           </div>
@@ -764,7 +764,7 @@
         method: 'PATCH',
         path: '/api/items/:id/return',
         title: 'Marcar Item como Devolvido',
-        description: 'Conclui o ciclo de vida do pertence marcando o status como RETURNED e concedendo +15 pontos de karma.',
+        description: 'Conclui o ciclo de vida do pertence marcando o status como RETURNED e concedendo +15 Unopoints.',
         authRequired: true,
         pathParams: [{ name: 'id', placeholder: 'ID do Item (UUID)' }]
       },
@@ -832,7 +832,7 @@
         method: 'POST',
         path: '/api/claims/:id/confirm',
         title: 'Validar Entrega Física por PIN (6 Dígitos)',
-        description: 'Portaria ou autor confere o PIN de 6 dígitos do solicitante. Conclui a devolução e distribui karma.',
+        description: 'Portaria ou autor confere o PIN de 6 dígitos do solicitante. Conclui a devolução e distribui Unopoints.',
         authRequired: true,
         pathParams: [{ name: 'id', placeholder: 'ID da Solicitação (UUID)' }],
         bodyTemplate: {
@@ -872,7 +872,7 @@
         method: 'GET',
         path: '/api/users/me',
         title: 'Perfil Autenticado (Meu Perfil)',
-        description: 'Retorna perfil, pontuação de reputação (karma), medalhas conquistadas e blocos favoritos.',
+        description: 'Retorna perfil, pontuação de reputação (Unopoints), medalhas conquistadas e blocos favoritos.',
         authRequired: true
       },
       {
@@ -912,7 +912,7 @@
         method: 'GET',
         path: '/api/rankings',
         title: 'Leaderboard & Ranking Geral',
-        description: 'Lista os estudantes e membros da universidade com maior karma e devoluções confirmadas.',
+        description: 'Lista os estudantes e membros da universidade com maior pontuação de Unopoints e devoluções confirmadas.',
         authRequired: false
       },
       {

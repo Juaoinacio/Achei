@@ -236,7 +236,7 @@ export default function RankPage() {
               <div className="flex items-center justify-between border-b border-brand-gray pb-2">
                 <h3 className="font-bold text-xs uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
                   <i className="bx bx-award text-brand-yellow text-base"></i>
-                  Como Ganhar Karma?
+                  Como Ganhar Unopoints?
                 </h3>
               </div>
               <div className="space-y-2.5 text-xs text-slate-600">

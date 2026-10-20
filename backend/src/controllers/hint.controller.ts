@@ -52,7 +52,7 @@ export class HintController {
         },
       });
 
-      // +1 reputation point for community collaboration
+      // +1 Unopoint for community collaboration
       await prisma.user.update({
         where: { id: userId },
         data: { reputationScore: { increment: 1 } },
@@ -112,7 +112,7 @@ export class HintController {
       data: { isHelpful: true },
     });
 
-    // Award +3 reputation points to the contributor of the helpful hint
+    // Award +3 Unopoints to the contributor of the helpful hint
     await prisma.user.update({
       where: { id: hint.authorId },
       data: { reputationScore: { increment: 3 } },
@@ -124,7 +124,7 @@ export class HintController {
         userId: hint.authorId,
         type: NotificationType.HINT_RECEIVED,
         title: 'Seu comentário foi útil! ⭐',
-        message: `O autor de "${hint.item.title}" marcou seu comentário como útil. Você ganhou +3 pontos de reputação!`,
+        message: `O autor de "${hint.item.title}" marcou seu comentário como útil. Você ganhou +3 Unopoints!`,
         referenceId: hint.itemId,
       },
     });

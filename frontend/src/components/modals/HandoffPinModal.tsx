@@ -73,7 +73,7 @@ export const HandoffPinModal: React.FC<HandoffPinModalProps> = ({
     try {
       const targetClaimId = claimId || 'sample-claim-id';
       await confirmPinDelivery(targetClaimId, code);
-      setSuccessMsg('PIN validado com sucesso! +10 pontos creditados.');
+      setSuccessMsg('PIN validado com sucesso! +10 Unopoints creditados.');
       setTimeout(() => {
         setDigits(['', '', '', '', '', '']);
         setSuccessMsg('');
@@ -149,7 +149,7 @@ export const HandoffPinModal: React.FC<HandoffPinModalProps> = ({
           <div className="text-xs">
             <p className="font-bold text-brand-dark">Recompensa Comunitária</p>
             <p className="text-slate-600 text-[11px] leading-relaxed">
-              A validação conclui o resgate, marca como <strong>DEVOLVIDO</strong> e credita 10 pontos ao ranking.
+              A validação conclui o resgate, marca como <strong>DEVOLVIDO</strong> e credita 10 Unopoints ao ranking.
             </p>
           </div>
         </div>

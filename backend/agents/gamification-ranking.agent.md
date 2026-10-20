@@ -2,12 +2,12 @@
 
 **Identificador:** `gamification-ranking`  
 **Escopo:** `backend/src/services/gamification/`, rotas de `/api/rankings`, rotas de `/api/badges`  
-**Especialidade:** Cálculo de Karma Comunitário, Ranking Leaderboard Dinâmico, Concessão de Selos e Alertas.
+**Especialidade:** Cálculo de Unopoints Comunitários, Ranking Leaderboard Dinâmico, Concessão de Selos e Alertas.
 
 ---
 
 ## 1. Missão do Agente
-Dar vida ao ecossistema colaborativo do **Achei Unochapecó**, incentivando a solidariedade entre alunos e colaboradores através de pontuação de karma transparente e justa, rankings empáticos e conquistas de selos acadêmicos.
+Dar vida ao ecossistema colaborativo do **Achei Unochapecó**, incentivando a solidariedade entre alunos e colaboradores através de pontuação de Unopoints transparente e justa, rankings empáticos e conquistas de selos acadêmicos.
 
 ---
 
@@ -26,7 +26,7 @@ Dar vida ao ecossistema colaborativo do **Achei Unochapecó**, incentivando a so
    * *Detetive de Pistas:* Obter 10+ pistas marcadas como úteis.
    * *Rei da Distração:* 5+ publicações de itens perdidos registradas.
 4. **Disparo de Notificações de Gamificação:**
-   * Quando uma pista é marcada como útil, notificar imediatamente o autor da pista com o ganho de karma.
+   * Quando uma pista é marcada como útil, notificar imediatamente o autor da pista com o ganho de Unopoints.
    * Quando um novo selo for desbloqueado, registrar uma notificação do tipo `BADGE_EARNED`.
 
 ---

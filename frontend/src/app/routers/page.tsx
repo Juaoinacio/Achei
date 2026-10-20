@@ -87,7 +87,7 @@ const API_ROUTES: ApiRouteDef[] = [
     category: 'users',
     categoryLabel: 'Usuários',
     title: 'Perfil do Usuário Logado',
-    description: 'Retorna perfil completo com pontuação de Karma, reputação e blocos frequentes.',
+    description: 'Retorna perfil completo com pontuação de Unopoints, reputação e blocos frequentes.',
     requiresAuth: true,
   },
   {
@@ -196,7 +196,7 @@ const API_ROUTES: ApiRouteDef[] = [
     category: 'claims',
     categoryLabel: 'Retirada & Segurança',
     title: 'Validar PIN de Devolução (6 Dígitos)',
-    description: 'Valida presencialmente o código de entrega para concluir a devolução e creditar Karma.',
+    description: 'Valida presencialmente o código de entrega para concluir a devolução e creditar Unopoints.',
     requiresAuth: true,
     sampleBody: {
       pinCode: '748291',
@@ -228,7 +228,7 @@ const API_ROUTES: ApiRouteDef[] = [
     category: 'gamification',
     categoryLabel: 'Gamificação & Ranking',
     title: 'Classificação de Guardiões (Leaderboard)',
-    description: 'Lista estudantes e colaboradores com maior pontuação de Karma na Unochapecó.',
+    description: 'Lista estudantes e colaboradores com maior pontuação de Unopoints na Unochapecó.',
     requiresAuth: false,
   },
   {

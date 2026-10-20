@@ -232,7 +232,7 @@ Represents an academic member of Unochapecó (student, staff/security/custody, o
   * `avatarUrl: String?` — Profile picture storage URL.
   * `banerUrl: String?` — Profile cover banner image storage URL (`banerUrl`).
   * `isVerified: Boolean` — True once institutional domain email validation is complete.
-  * `reputationScore: Int` — Accumulated community karma points from returns, finds, and helpful hints.
+  * `reputationScore: Int` — Accumulated community Unopoints from returns, finds, and helpful hints.
   * `createdAt: DateTime` — Record creation timestamp.
   * `updatedAt: DateTime` — Last profile update timestamp.
 * **Responsibilities & Methods (API Routes & Use Cases):**
@@ -243,8 +243,8 @@ Represents an academic member of Unochapecó (student, staff/security/custody, o
   | `login(credentials)` | `POST /api/auth/login` | Public | Validates email/password credentials and generates an authenticated JWT session token. |
   | `requestPasswordReset(email)` | `POST /api/auth/forgot-password` | Public | Generates a secure, 30-minute valid reset token sent to the institutional inbox. |
   | `resetPassword(token, newPass)` | `POST /api/auth/reset-password` | Public | Replaces the password hash when a valid reset token is provided. |
-  | `getMyProfile()` | `GET /api/users/me` | Authenticated | Retrieves current authenticated user profile, karma reputation, unlocked badges, and frequented campus blocks. |
-  | `getPublicProfile(userId)` | `GET /api/users/:id` | Authenticated | Retrieves another student's public card (academic course, badges, karma score, active posts). |
+  | `getMyProfile()` | `GET /api/users/me` | Authenticated | Retrieves current authenticated user profile, Unopoints reputation, unlocked badges, and frequented campus blocks. |
+  | `getPublicProfile(userId)` | `GET /api/users/:id` | Authenticated | Retrieves another student's public card (academic course, badges, Unopoints score, active posts). |
   | `updateProfile(dto)` | `PUT /api/users/me` | Authenticated | Updates course, period, avatar image (`avatarUrl`), profile cover banner (`banerUrl`), and frequented campus blocks (`frequentedBlocks`). |
   | `changePassword(oldPass, newPass)` | `PATCH /api/users/me/password` | Authenticated | Verifies old password and commits new password hash. |
   | `getMyItems(status?)` | `GET /api/users/me/items` | Authenticated | Lists all lost and found publications authored by the current user, filterable by active or resolved status. |
@@ -284,7 +284,7 @@ Represents a reported lost or found belonging posted on the campus timeline feed
   | `getById(id)` | `GET /api/items/:id` | Public | Returns full details of a single post, author summary, category, block, photos, helpful clues, and total likes. |
   | `update(dto)` | `PUT /api/items/:id` | Author / Admin | Edits post details (description, specific location, category) before the item is resolved. |
   | `delete(id)` | `DELETE /api/items/:id` | Author / Admin | Cancels and removes the item publication from the campus feed. |
-  | `markAsReturned(claimId?)` | `PATCH /api/items/:id/return` | Author / Staff | Concludes the case, transitioning status to `RETURNED`, locking new hints, and awarding community karma points. |
+  | `markAsReturned(claimId?)` | `PATCH /api/items/:id/return` | Author / Staff | Concludes the case, transitioning status to `RETURNED`, locking new hints, and awarding community Unopoints. |
   | `registerCustody(dto)` | `PATCH /api/items/:id/custody` | Staff / Admin | Flags that the item was physically surrendered to a security desk or portaria booth (`isUnderStaffCustody = true`). |
   | `listCustodyItems(blockId?)` | `GET /api/items/custody` | Staff / Admin | Lists all physical items currently stored in campus security/portaria lockers. |
 
@@ -408,8 +408,8 @@ Gamification model tracking milestones, reputational ranks, and achievement unlo
   | Method | HTTP Route | Access | Use Case / Description |
   | :--- | :--- | :--- | :--- |
   | `getLeaderboard(category, period)` | `GET /api/rankings` | Public | Computes and returns campus leaderboard filtered by category (`MOST_RETURNED`, `MOST_FOUND`, `MOST_LOST`) and period (`MONTH`, `SEMESTER`, `ALL_TIME`). |
-  | `getMyRankPosition(category)` | `GET /api/rankings/me` | Authenticated | Retrieves current student's standing, karma points, and relative position in the university leaderboard. |
-  | `listBadges()` | `GET /api/badges` | Public | Lists all available system badges (*Guardião de Ouro*, *Detetive de Pistas*, *Rei da Distração*) with required karma thresholds. |
+  | `getMyRankPosition(category)` | `GET /api/rankings/me` | Authenticated | Retrieves current student's standing, Unopoints, and relative position in the university leaderboard. |
+  | `listBadges()` | `GET /api/badges` | Public | Lists all available system badges (*Guardião de Ouro*, *Detetive de Pistas*, *Rei da Distração*) with required Unopoints thresholds. |
   | `getUserBadges(userId)` | `GET /api/users/:userId/badges` | Public | Returns all badges earned and unlocked by a specific academic user. |
 
 ---

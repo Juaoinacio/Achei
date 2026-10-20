@@ -346,12 +346,12 @@ export class ClaimController {
           resolvedById: userId,
         },
       }),
-      // Award 20 reputation points to author/staff resolving return
+      // Award 20 Unopoints to author/staff resolving return
       prisma.user.update({
         where: { id: userId },
         data: { reputationScore: { increment: 20 } },
       }),
-      // Award 5 reputation points to claimant for successful retrieval
+      // Award 5 Unopoints to claimant for successful retrieval
       prisma.user.update({
         where: { id: claim.claimantId },
         data: { reputationScore: { increment: 5 } },

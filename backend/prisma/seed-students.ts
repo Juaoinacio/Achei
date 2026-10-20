@@ -61,7 +61,7 @@ export async function seedStudents() {
       },
     });
 
-    console.log(`  ✓ Estudante: ${record.name} (${record.academicCourse}) - ${record.reputationScore} Karma pts`);
+    console.log(`  ✓ Estudante: ${record.name} (${record.academicCourse}) - ${record.reputationScore} Unopoints`);
   }
 
   console.log(`✅ ${initialStudents.length} estudantes cadastrados com sucesso! (Senha padrão: ${defaultPassword})`);

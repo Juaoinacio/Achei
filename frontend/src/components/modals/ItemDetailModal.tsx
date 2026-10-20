@@ -323,10 +323,10 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                 </button>
               )}
 
-              {/* Karma Score do Autor */}
+              {/* Unopoints do Autor */}
               <div
                 className="flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-50 border border-amber-200 text-amber-900 text-xs font-extrabold"
-                title="Pontos de reputação comunitária"
+                title="Unopoints (pontos de reputação comunitária)"
               >
                 <i className="bx bxs-star text-amber-500 text-xs"></i>
                 <span>{item.author?.reputationScore ?? 0}</span>
@@ -499,7 +499,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
                             ) : (
                               <i className="bx bx-star"></i>
                             )}
-                            <span>Marcar como útil (+3 Karma)</span>
+                            <span>Marcar como útil (+3 Unopoints)</span>
                           </button>
                         </div>
                       )}

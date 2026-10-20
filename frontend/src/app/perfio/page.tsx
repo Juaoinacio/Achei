@@ -565,7 +565,7 @@ export default function ProfilePage() {
               </div>
 
               <div className="p-3 rounded-xl bg-slate-50 border border-brand-gray">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Karma Uno</p>
+                <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Unopoints</p>
                 <div className="flex items-baseline gap-1 mt-1">
                   <span className="text-2xl font-extrabold text-amber-900">{user?.reputationScore ?? 0}</span>
                   <span className="text-xs text-slate-400 font-medium">pts</span>
@@ -613,7 +613,7 @@ export default function ProfilePage() {
                 </Link>
               </div>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Você acumulou <strong>{user?.reputationScore ?? 0} pontos de Karma</strong> este semestre e está elegível a insígnias de guardião da comunidade.
+                Você acumulou <strong>{user?.reputationScore ?? 0} Unopoints</strong> este semestre e está elegível a insígnias de guardião da comunidade.
               </p>
             </Card>
           </aside>

@@ -269,7 +269,7 @@ export class ItemController {
       },
     });
 
-    // Award reputation: +5 points only for reporting a found item
+    // Award Unopoints: +5 points only for reporting a found item
     if (data.type === ItemType.FOUND) {
       await prisma.user.update({
         where: { id: userId },
@@ -420,7 +420,7 @@ export class ItemController {
       },
     });
 
-    // Reward +15 reputation points to author for successfully resolving the item
+    // Reward +15 Unopoints to author for successfully resolving the item
     await prisma.user.update({
       where: { id: item.authorId },
       data: { reputationScore: { increment: 15 } },
