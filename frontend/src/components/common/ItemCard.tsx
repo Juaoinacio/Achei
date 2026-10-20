@@ -31,7 +31,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   const [loadingSave, setLoadingSave] = useState(false);
 
   async function handleToggleLike() {
-    if (loadingLike) return;
+    if (loadingLike || isAuthor) return;
     setLoadingLike(true);
     setLiked(!liked);
     setLikeCount(liked ? likeCount - 1 : likeCount + 1);
@@ -49,7 +49,7 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   }
 
   async function handleToggleSave() {
-    if (loadingSave) return;
+    if (loadingSave || isAuthor) return;
     setLoadingSave(true);
     setSaved(!saved);
 
@@ -183,33 +183,48 @@ export const ItemCard: React.FC<ItemCardProps> = ({
 
       {/* Ações de Rodapé: Curtir, Salvar, Pista e Reivindicação */}
       <div className="flex items-center justify-between gap-2 pt-2 border-t border-brand-gray text-xs">
-        <div className="flex items-center gap-2">
-          {/* Botão Curtir */}
-          <button
-            onClick={handleToggleLike}
-            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border transition-colors cursor-pointer ${
-              liked
-                ? 'bg-rose-50 border-rose-200 text-rose-600 font-bold'
-                : 'bg-slate-50 border-brand-gray text-slate-600 hover:bg-slate-100'
-            }`}
-            title="Curtir publicação"
-          >
-            <i className={`bx ${liked ? 'bxs-heart text-rose-500' : 'bx-heart'} text-base`}></i>
-            <span>{likeCount}</span>
-          </button>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {/* Se for o autor, exibe apenas contador informativo das curtidas da comunidade */}
+          {isAuthor ? (
+            likeCount > 0 ? (
+              <span
+                className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-500 font-semibold"
+                title="Curtidas recebidas da comunidade"
+              >
+                <i className="bx bxs-heart text-rose-500 text-sm"></i>
+                <span>{likeCount}</span>
+              </span>
+            ) : null
+          ) : (
+            <>
+              {/* Botão Curtir */}
+              <button
+                onClick={handleToggleLike}
+                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border transition-colors cursor-pointer ${
+                  liked
+                    ? 'bg-rose-50 border-rose-200 text-rose-600 font-bold'
+                    : 'bg-slate-50 border-brand-gray text-slate-600 hover:bg-slate-100'
+                }`}
+                title="Curtir publicação"
+              >
+                <i className={`bx ${liked ? 'bxs-heart text-rose-500' : 'bx-heart'} text-base`}></i>
+                <span>{likeCount}</span>
+              </button>
 
-          {/* Botão Salvar */}
-          <button
-            onClick={handleToggleSave}
-            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border transition-colors cursor-pointer ${
-              saved
-                ? 'bg-blue-50 border-blue-200 text-brand-blue font-bold'
-                : 'bg-slate-50 border-brand-gray text-slate-600 hover:bg-slate-100'
-            }`}
-            title="Salvar pertence"
-          >
-            <i className={`bx ${saved ? 'bxs-bookmark text-brand-blue' : 'bx-bookmark'} text-base`}></i>
-          </button>
+              {/* Botão Salvar */}
+              <button
+                onClick={handleToggleSave}
+                className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border transition-colors cursor-pointer ${
+                  saved
+                    ? 'bg-blue-50 border-blue-200 text-brand-blue font-bold'
+                    : 'bg-slate-50 border-brand-gray text-slate-600 hover:bg-slate-100'
+                }`}
+                title="Salvar pertence"
+              >
+                <i className={`bx ${saved ? 'bxs-bookmark text-brand-blue' : 'bx-bookmark'} text-base`}></i>
+              </button>
+            </>
+          )}
 
           {/* Botão Comentários */}
           <button

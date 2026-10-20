@@ -441,6 +441,10 @@ export class ItemController {
       throw new AppError('Item não encontrado.', 404);
     }
 
+    if (itemExists.authorId === userId) {
+      throw new AppError('Você não pode curtir sua própria publicação.', 400);
+    }
+
     const existingLike = await prisma.itemLike.findUnique({
       where: { userId_itemId: { userId, itemId: id } },
     });
@@ -470,6 +474,10 @@ export class ItemController {
     const itemExists = await prisma.item.findUnique({ where: { id } });
     if (!itemExists) {
       throw new AppError('Item não encontrado.', 404);
+    }
+
+    if (itemExists.authorId === userId) {
+      throw new AppError('Você não pode salvar sua própria publicação.', 400);
     }
 
     const existingSave = await prisma.savedItem.findUnique({

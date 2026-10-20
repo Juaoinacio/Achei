@@ -136,7 +136,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
   if (!isOpen || !item) return null;
 
   async function handleToggleLike() {
-    if (!item || loadingLike) return;
+    if (!item || loadingLike || isAuthor) return;
     setLoadingLike(true);
     setLiked(!liked);
     setLikeCount(liked ? likeCount - 1 : likeCount + 1);
@@ -155,7 +155,7 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
   }
 
   async function handleToggleSave() {
-    if (!item || loadingSave) return;
+    if (!item || loadingSave || isAuthor) return;
     setLoadingSave(true);
     setSaved(!saved);
 
@@ -514,37 +514,51 @@ export const ItemDetailModal: React.FC<ItemDetailModalProps> = ({
             {/* Ações Sociais e Reivindicação */}
             <div className="flex items-center justify-between gap-2 flex-wrap">
               <div className="flex items-center gap-1.5">
-                {/* Curtir */}
-                <button
-                  onClick={handleToggleLike}
-                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-colors cursor-pointer ${
-                    liked
-                      ? 'bg-rose-50 border-rose-200 text-rose-600'
-                      : 'bg-white border-brand-gray text-slate-600 hover:bg-slate-100'
-                  }`}
-                  title="Curtir publicação"
-                >
-                  <i
-                    className={`bx ${liked ? 'bxs-heart text-rose-500' : 'bx-heart'} text-sm`}
-                  ></i>
-                  <span>{likeCount}</span>
-                </button>
+                {isAuthor ? (
+                  likeCount > 0 ? (
+                    <span
+                      className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-slate-500 text-xs font-semibold"
+                      title="Curtidas recebidas da comunidade"
+                    >
+                      <i className="bx bxs-heart text-rose-500 text-sm"></i>
+                      <span>{likeCount} {likeCount === 1 ? 'curtida' : 'curtidas'}</span>
+                    </span>
+                  ) : null
+                ) : (
+                  <>
+                    {/* Curtir */}
+                    <button
+                      onClick={handleToggleLike}
+                      className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-colors cursor-pointer ${
+                        liked
+                          ? 'bg-rose-50 border-rose-200 text-rose-600'
+                          : 'bg-white border-brand-gray text-slate-600 hover:bg-slate-100'
+                      }`}
+                      title="Curtir publicação"
+                    >
+                      <i
+                        className={`bx ${liked ? 'bxs-heart text-rose-500' : 'bx-heart'} text-sm`}
+                      ></i>
+                      <span>{likeCount}</span>
+                    </button>
 
-                {/* Salvar */}
-                <button
-                  onClick={handleToggleSave}
-                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-colors cursor-pointer ${
-                    saved
-                      ? 'bg-blue-50 border-blue-200 text-brand-blue'
-                      : 'bg-white border-brand-gray text-slate-600 hover:bg-slate-100'
-                  }`}
-                  title="Salvar pertence"
-                >
-                  <i
-                    className={`bx ${saved ? 'bxs-bookmark text-brand-blue' : 'bx-bookmark'} text-sm`}
-                  ></i>
-                  <span className="hidden sm:inline">Salvar</span>
-                </button>
+                    {/* Salvar */}
+                    <button
+                      onClick={handleToggleSave}
+                      className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-colors cursor-pointer ${
+                        saved
+                          ? 'bg-blue-50 border-blue-200 text-brand-blue'
+                          : 'bg-white border-brand-gray text-slate-600 hover:bg-slate-100'
+                      }`}
+                      title="Salvar pertence"
+                    >
+                      <i
+                        className={`bx ${saved ? 'bxs-bookmark text-brand-blue' : 'bx-bookmark'} text-sm`}
+                      ></i>
+                      <span className="hidden sm:inline">Salvar</span>
+                    </button>
+                  </>
+                )}
               </div>
 
               {/* Botões de Ação Principal */}
