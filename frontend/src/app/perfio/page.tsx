@@ -93,15 +93,20 @@ export default function ProfilePage() {
         }
 
         const activeUser = profile || localUser;
-        setUser(activeUser);
+        if (activeUser) {
+          const banner = activeUser.banerUrl || activeUser.bannerUrl || null;
+          activeUser.banerUrl = banner;
+          activeUser.bannerUrl = banner;
+          setUser(activeUser);
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('achei_user', JSON.stringify(activeUser));
+          }
+          syncEditState(activeUser);
+        }
         setCampusBlocks(blocksData || []);
         setCategories(catsData || []);
         setMyItems(itemsData || []);
         setSavedItems(savedData || []);
-
-        if (activeUser) {
-          syncEditState(activeUser);
-        }
       } catch (err) {
         console.error('Erro ao carregar dados do perfil:', err);
       } finally {
@@ -122,20 +127,27 @@ export default function ProfilePage() {
       setMyItems(itemsData || []);
       setSavedItems(savedData || []);
       if (profile) {
+        const banner = profile.banerUrl || profile.bannerUrl || null;
+        profile.banerUrl = banner;
+        profile.bannerUrl = banner;
         setUser(profile);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('achei_user', JSON.stringify(profile));
+        }
       }
     } catch (e) {
       console.error('Erro ao recarregar dados do perfil:', e);
     }
   }
 
-  function syncEditState(targetUser: UserSummary) {
+  function syncEditState(targetUser: any) {
+    const banner = targetUser.banerUrl || targetUser.bannerUrl || '';
     setEditName(targetUser.name || '');
     setEditCourse(targetUser.academicCourse || '');
     setEditPeriod(targetUser.academicPeriod ?? '');
     setEditAvatarUrl(targetUser.avatarUrl || '');
-    setEditBanerUrl(targetUser.banerUrl || '');
-    setEditBlockIds(targetUser.frequentedBlocks ? targetUser.frequentedBlocks.map((b) => b.id) : []);
+    setEditBanerUrl(banner);
+    setEditBlockIds(targetUser.frequentedBlocks ? targetUser.frequentedBlocks.map((b: any) => b.id) : []);
   }
 
   function handleOpenEditModal() {
@@ -171,10 +183,20 @@ export default function ProfilePage() {
       // 2. Salva a URL retornada do Cloudinary no banco de dados imediatamente
       const updated = await updateMyProfile({
         banerUrl: res.url,
+        bannerUrl: res.url,
       });
 
-      setUser(updated);
+      const normalized = {
+        ...(updated || user),
+        banerUrl: res.url,
+        bannerUrl: res.url,
+      };
+
+      setUser(normalized as any);
       setEditBanerUrl(res.url);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('achei_user', JSON.stringify(normalized));
+      }
       setNotificationMsg({ type: 'success', text: 'Capa do perfil atualizada e salva com sucesso!' });
       setTimeout(() => setNotificationMsg(null), 4000);
     } catch (err: any) {
@@ -304,16 +326,27 @@ export default function ProfilePage() {
     setSavingProfile(true);
     setModalError('');
     try {
+      const bannerVal = editBanerUrl.trim() ? editBanerUrl.trim() : null;
       const updated = await updateMyProfile({
         name: editName.trim(),
         academicCourse: editCourse.trim() ? editCourse.trim() : null,
         academicPeriod: editPeriod ? Number(editPeriod) : null,
         avatarUrl: editAvatarUrl.trim() ? editAvatarUrl.trim() : null,
-        banerUrl: editBanerUrl.trim() ? editBanerUrl.trim() : null,
+        banerUrl: bannerVal,
+        bannerUrl: bannerVal,
         frequentedBlockIds: editBlockIds,
       });
 
-      setUser(updated);
+      const normalized = {
+        ...(updated || user),
+        banerUrl: bannerVal,
+        bannerUrl: bannerVal,
+      };
+
+      setUser(normalized as any);
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('achei_user', JSON.stringify(normalized));
+      }
       setIsEditModalOpen(false);
       setNotificationMsg({ type: 'success', text: 'Perfil salvo com sucesso!' });
       setTimeout(() => setNotificationMsg(null), 4000);
@@ -395,18 +428,21 @@ export default function ProfilePage() {
           />
 
           {/* Capa com Imagem do Usuário ou Gradiente Oficial (Zero Green) */}
-          <div
-            className="h-36 sm:h-52 relative overflow-hidden bg-cover bg-center transition-all"
-            style={{
-              backgroundImage: user?.banerUrl ? `url(${user.banerUrl})` : undefined,
-              background: !user?.banerUrl
-                ? 'linear-gradient(135deg, #1C4398 0%, #17377D 50%, #AC80CE 100%)'
-                : undefined,
-            }}
-          >
+          <div className="h-40 sm:h-56 relative overflow-hidden bg-gradient-to-r from-brand-blue via-[#17377D] to-brand-lilac">
+            {(user?.banerUrl || user?.bannerUrl) ? (
+              <img
+                src={user?.banerUrl || user?.bannerUrl || ''}
+                alt="Capa do perfil"
+                className="w-full h-full object-cover absolute inset-0"
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }}
+              />
+            ) : null}
+
             {/* Scrim e Efeitos de Profundidade */}
-            {user?.banerUrl ? (
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-black/20" />
+            {(user?.banerUrl || user?.bannerUrl) ? (
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-black/10 pointer-events-none" />
             ) : (
               <>
                 <div className="absolute -right-10 -bottom-10 w-48 h-48 rounded-full bg-brand-yellow/15 blur-2xl pointer-events-none" />
@@ -447,86 +483,33 @@ export default function ProfilePage() {
 
           {/* Dados do Estudante + Ações */}
           <div className="px-4 sm:px-6 pb-6 pt-0 relative">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 -mt-12 sm:-mt-16 mb-4">
-              {/* Avatar e Identificação */}
-              <div className="flex flex-col sm:flex-row sm:items-end gap-3.5">
-                <div className="relative group self-start sm:self-auto">
-                  <Avatar
-                    src={user?.avatarUrl}
-                    name={user?.name || 'Estudante'}
-                    size="lg"
-                    className="w-24 h-24 sm:w-28 sm:h-28 ring-4 ring-white text-3xl shadow-md rounded-2xl object-cover bg-white"
-                  />
-                  <button
-                    type="button"
-                    disabled={directUploadingAvatar}
-                    onClick={() => directAvatarInputRef.current?.click()}
-                    title="Alterar foto de perfil"
-                    className="absolute -bottom-1 -right-1 w-8 h-8 rounded-xl bg-brand-blue text-white shadow-md flex items-center justify-center border-2 border-white hover:bg-blue-800 transition-all cursor-pointer disabled:opacity-70"
-                  >
-                    {directUploadingAvatar ? (
-                      <i className="bx bx-loader-alt animate-spin text-sm"></i>
-                    ) : (
-                      <i className="bx bx-camera text-sm"></i>
-                    )}
-                  </button>
-                </div>
-
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h1 className="text-xl sm:text-2xl font-extrabold text-brand-dark">
-                      {user?.name || 'Estudante Unochapecó'}
-                    </h1>
-                    {user?.isVerified ? (
-                      <Badge variant="yellow">VERIFICADO</Badge>
-                    ) : (
-                      <Badge variant="blue">ESTUDANTE</Badge>
-                    )}
-                  </div>
-
-                  <p className="text-xs sm:text-sm font-semibold text-brand-blue">
-                    {user?.academicCourse || 'Graduação'}
-                    {user?.academicPeriod ? ` • ${user.academicPeriod}º Período` : ''}
-                    {' '}• Estudante Ativo
-                  </p>
-
-                  <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500 pt-0.5">
-                    <span className="flex items-center gap-1.5">
-                      <i className="bx bx-buildings text-brand-lilac"></i>
-                      <span>Campus Chapecó</span>
-                    </span>
-                    {user?.email && (
-                      <>
-                        <span>•</span>
-                        <span className="font-mono text-[11px] text-slate-400">
-                          {user.email}
-                        </span>
-                      </>
-                    )}
-                  </div>
-
-                  {/* Blocos Habituaís do Usuário */}
-                  {user?.frequentedBlocks && user.frequentedBlocks.length > 0 && (
-                    <div className="flex flex-wrap items-center gap-1.5 pt-2">
-                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mr-0.5">
-                        <i className="bx bx-map-pin text-brand-blue"></i>
-                        Blocos:
-                      </span>
-                      {user.frequentedBlocks.map((blk) => (
-                        <span
-                          key={blk.id}
-                          className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-brand-blue/10 text-brand-blue border border-brand-blue/20"
-                        >
-                          {blk.name}
-                        </span>
-                      ))}
-                    </div>
+            {/* Linha Superior: Apenas o Avatar sobreposto na borda inferior da capa + Ações */}
+            <div className="flex items-end justify-between gap-4 -mt-12 sm:-mt-16 mb-3">
+              {/* Avatar com botão de alteração rápida */}
+              <div className="relative group shrink-0">
+                <Avatar
+                  src={user?.avatarUrl}
+                  name={user?.name || 'Estudante'}
+                  size="lg"
+                  className="w-24 h-24 sm:w-28 sm:h-28 ring-4 ring-white text-3xl shadow-md rounded-2xl object-cover bg-white"
+                />
+                <button
+                  type="button"
+                  disabled={directUploadingAvatar}
+                  onClick={() => directAvatarInputRef.current?.click()}
+                  title="Alterar foto de perfil"
+                  className="absolute -bottom-1 -right-1 w-8 h-8 rounded-xl bg-brand-blue text-white shadow-md flex items-center justify-center border-2 border-white hover:bg-blue-800 transition-all cursor-pointer disabled:opacity-70"
+                >
+                  {directUploadingAvatar ? (
+                    <i className="bx bx-loader-alt animate-spin text-sm"></i>
+                  ) : (
+                    <i className="bx bx-camera text-sm"></i>
                   )}
-                </div>
+                </button>
               </div>
 
-              {/* Botões de Ação do Perfil (Sem botão de sair) */}
-              <div className="flex items-center gap-2 pt-2 sm:pt-0">
+              {/* Botões de Ação do Perfil (Direita) */}
+              <div className="flex items-center gap-2 pb-1">
                 <Button
                   variant="outline"
                   size="sm"
@@ -536,6 +519,59 @@ export default function ProfilePage() {
                   Editar Perfil
                 </Button>
               </div>
+            </div>
+
+            {/* Informações do Estudante: Nome, Badges, Curso e Blocos — 100% FORA do Banner */}
+            <div className="space-y-1.5 mb-4">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h1 className="text-xl sm:text-2xl font-extrabold text-brand-dark">
+                  {user?.name || 'Estudante Unochapecó'}
+                </h1>
+                {user?.isVerified ? (
+                  <Badge variant="yellow">VERIFICADO</Badge>
+                ) : (
+                  <Badge variant="blue">ESTUDANTE</Badge>
+                )}
+              </div>
+
+              <p className="text-xs sm:text-sm font-semibold text-brand-blue">
+                {user?.academicCourse || 'Graduação'}
+                {user?.academicPeriod ? ` • ${user.academicPeriod}º Período` : ''}
+                {' '}• Estudante Ativo
+              </p>
+
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-slate-500 pt-0.5">
+                <span className="flex items-center gap-1.5">
+                  <i className="bx bx-buildings text-brand-lilac"></i>
+                  <span>Campus Chapecó</span>
+                </span>
+                {user?.email && (
+                  <>
+                    <span>•</span>
+                    <span className="font-mono text-[11px] text-slate-400">
+                      {user.email}
+                    </span>
+                  </>
+                )}
+              </div>
+
+              {/* Blocos Habituaís do Usuário */}
+              {user?.frequentedBlocks && user.frequentedBlocks.length > 0 && (
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1 mr-0.5">
+                    <i className="bx bx-map-pin text-brand-blue"></i>
+                    Blocos:
+                  </span>
+                  {user.frequentedBlocks.map((blk) => (
+                    <span
+                      key={blk.id}
+                      className="px-2 py-0.5 rounded-md text-[11px] font-semibold bg-brand-blue/10 text-brand-blue border border-brand-blue/20"
+                    >
+                      {blk.name}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Indicadores de Impacto Comunitário */}

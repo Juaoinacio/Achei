@@ -10,6 +10,7 @@ export const initialStudents = [
     academicCourse: 'Ciência da Computação',
     academicPeriod: 6,
     avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+    banerUrl: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1200&q=80',
     reputationScore: 45,
   },
   {
@@ -18,6 +19,7 @@ export const initialStudents = [
     academicCourse: 'Medicina',
     academicPeriod: 4,
     avatarUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80',
+    banerUrl: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1200&q=80',
     reputationScore: 32,
   },
   {
@@ -26,6 +28,7 @@ export const initialStudents = [
     academicCourse: 'Direito',
     academicPeriod: 8,
     avatarUrl: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?auto=format&fit=crop&w=200&q=80',
+    banerUrl: 'https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1200&q=80',
     reputationScore: 20,
   },
 ];
@@ -44,6 +47,7 @@ export async function seedStudents() {
         academicCourse: student.academicCourse,
         academicPeriod: student.academicPeriod,
         avatarUrl: student.avatarUrl,
+        banerUrl: student.banerUrl,
         reputationScore: student.reputationScore,
         role: UserRole.STUDENT,
         isVerified: true,
@@ -55,6 +59,7 @@ export async function seedStudents() {
         academicCourse: student.academicCourse,
         academicPeriod: student.academicPeriod,
         avatarUrl: student.avatarUrl,
+        banerUrl: student.banerUrl,
         reputationScore: student.reputationScore,
         role: UserRole.STUDENT,
         isVerified: true,

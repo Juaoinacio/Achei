@@ -36,6 +36,7 @@ export interface UserSummary {
   email?: string;
   avatarUrl?: string | null;
   banerUrl?: string | null;
+  bannerUrl?: string | null;
   academicCourse?: string | null;
   academicPeriod?: number | null;
   role?: UserRole;

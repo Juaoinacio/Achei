@@ -318,6 +318,7 @@ export interface UpdateProfileDto {
   academicPeriod?: number | null;
   avatarUrl?: string | null;
   banerUrl?: string | null;
+  bannerUrl?: string | null;
   frequentedBlockIds?: string[];
 }
 
