@@ -1,0 +1,46 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: achei_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: achei_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d achei_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: achei_api
+    restart: always
+    ports:
+      - "3333:3333"
+    environment:
+      NODE_ENV: production
+      PORT: 3333
+      DATABASE_URL: postgresql://postgres:password123@postgres:5432/achei_db?schema=public
+      JWT_SECRET: achei_unochapeco_jwt_super_secret_dev_key_2026
+      JWT_EXPIRES_IN: 7d
+      CLOUDINARY_CLOUD_NAME: noprecinho
+      CLOUDINARY_API_KEY: 591293587627681
+      CLOUDINARY_API_SECRET: Le3gHHVSAdhaRvECRhsuokeRuaw
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: >
+      sh -c "npx prisma migrate deploy &&
+             npx tsx prisma/seed.ts &&
+             node dist/server.js"
+
+volumes:
+  postgres_data:
